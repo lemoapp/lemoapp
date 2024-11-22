@@ -128,7 +128,7 @@ nav .nav-items img{
 
 .second{
     background-color: #e6f3ff;
-    height: 55rem;
+    height: 75rem;
 }
 
 .second .entries{
@@ -235,4 +235,32 @@ nav .nav-items img{
 .second .container2 .transactions .transaction .right h5{
     font-size: 10px;
     color: rgb(146, 145, 145);
+}
+
+.second .container3{
+    padding: 0rem 2rem;
+    margin-top: 1rem;
+}
+
+.second .container3 .top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.second .container3 .top a{
+    font-size: 12px;
+    color: #1E88E5;
+    text-decoration: none;
+    margin-top: 7px;
+}
+
+.second .container3 .cards{
+    padding: 1rem 0rem;
+}
+
+.second .container3 .cards .card1{
+    background: linear-gradient(140deg, #1e3a8a, #7349f0);
+    height: 13rem;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
