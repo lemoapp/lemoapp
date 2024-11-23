@@ -315,6 +315,248 @@ img {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.second .container3 .cards .card1 .top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.second .container3 .cards .card1 .top a{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 1rem;
+    margin-top: 7px;
+    text-decoration: none;
+}
+
+.second .container3 .cards .card1 .mid{
+    padding: 1rem;
+    margin-top: -1rem;
+}
+
+.second .container3 .cards .card1 .mid p{
+    color: rgb(196, 196, 196);
+    font-size: 12px;
+}
+
+.second .container3 .cards .card1 .mid .value{
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 5px;
+    color: white;
+}
+
+.second .container3 .cards .card1 .bottom{
+    padding: 1rem;
+    margin-top: -1rem;
+}
+
+.second .container3 .cards .card1 .bottom p{
+    color: rgb(196, 196, 196);
+    font-size: 12px;
+}
+
+.second .container3 .cards .card1 .bottom .value{
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: white;
+}
+
+.second .container3 .cards .card1 .logo{
+    padding: 1rem;
+}
+
+.second .container3 .cards .card1 .logo img{
+    width: 4rem;
+}
+
+
+.third{
+    margin-top: 9rem;
+    margin-bottom: 10rem;
+    text-align: center;
+    background-color: white;
+    padding: 1rem 0rem;
+}
+
+
+.savings-section {
+    position: relative;
+    padding: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+    height: 15rem;
+  }
+  
+  .content {
+    z-index: 2;
+    position: relative;
+  }
+
+  .tagline{
+    font-size: 12px;
+    font-weight: 100;
+    margin-top: 15px;
+  }
+  
+  .cta {
+    background-color: #43A047;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .cta:hover {
+    background-color: #388E3C;
+    transform: scale(1.05);
+  }
+  
+  .animation {
+    position: absolute;
+    bottom: -40px;
+    right: 10%;
+    width: 140px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+
+.headline {
+    animation: slideUp 1s ease forwards;
+    opacity: 0;
+  }
+  
+  @keyframes slideUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  
+.animated-background {
+    background: linear-gradient(45deg, #1E88E5, #0b3bd8);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    padding: 1.5rem;
+    border-radius: 10px;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+  
+.news-section {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: white;
+    margin-top: -4.5rem;
+  }
+  
+  .news-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+  
+  .news-item {
+    width: 48%;
+    background: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0; /* Initially hidden */
+    transform: translateX(-100%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .news-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .news-title {
+    font-size: 1.2rem;
+    color: #1E88E5;
+    margin: 10px;
+  }
+  
+  .news-summary {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px;
+  }
+  
+  .read-more {
+    display: inline-block;
+    margin: 10px;
+    color: #1E88E5;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .read-more:hover {
+    text-decoration: underline;
+  }
+  
+  /* Progress Indicators */
+  .progress-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background-color 0.3s;
+  }
+  
+  .indicator.active {
+    background: #1E88E5;
+  }
+  
+  /* Controls */
+  .controls {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .controls button {
+    padding: 8px 16px;
+    background: #1E88E5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .controls button:hover {
+    background: #1565C0;
+  }
+  
+  
 
 /* Bottom Navigation Menu */
 .bottom-nav {
