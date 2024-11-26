@@ -246,37 +246,28 @@ app.get('/api/dashboard', async (req, res) => {
 
 
 
-
-
-
-
-// Endpoint to update user financial details
-app.post('/api/update-finances', (req, res) => {
-    const { email, balance, income, expenses, total_bills, savings } = req.body;
+app.get('/api/transactions', async (req, res) => {
+    const email = req.query.email;
 
     if (!email) {
-        return res.status(400).json({ message: 'Email is required.' });
+        return res.status(400).json({ message: 'Email is required' });
     }
 
-    // Update the user's financial details in the database
-    db.query(
-        `UPDATE users SET balance = ?, income = ?, expenses = ?, total_bills = ?, savings = ? WHERE email = ?`,
-        [balance, income, expenses, total_bills, savings, email],
-        (err, results) => {
-            if (err) {
-                console.error('Database error:', err);
-                return res.status(500).json({ message: 'Database error' });
-            }
+    try {
+        console.log('Fetching transactions for email:', email);
+        // Replace 'date' with the correct column name, e.g., 'created_at'
+        const [transactions] = await pool.query('SELECT * FROM transactions WHERE email = ? ORDER BY transaction_date DESC LIMIT 2', [email]);
 
-            if (results.affectedRows === 0) {
-                return res.status(404).json({ message: 'User not found.' });
-            }
-
-            res.status(200).json({ message: 'User financial details updated successfully.' });
+        if (transactions.length === 0) {
+            return res.status(200).json({ message: 'No transactions found', data: [] }); // No transactions for the user
         }
-    );
-});
 
+        res.status(200).json({ message: 'Transactions fetched successfully', data: transactions });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'Database error' });
+    }
+});
 
 
 // Catch-all route for invalid paths

@@ -120,7 +120,7 @@
                     <a href="">View all</a>
                 </div>
 
-                <div class="transactions">
+                <!-- <div class="transactions">
                     <div class="transaction">
                         <div class="left">
                             <img src="css/images/Checkmark.png" alt="">
@@ -189,8 +189,12 @@
                             </h5>
                         </div>
                     </div>
-                </div>
-              </div>
+                </div>-->
+                <div class="transactions"></div>
+              </div> 
+
+              
+
 
               <div class="container3">
                 <div class="top">
@@ -284,7 +288,40 @@
     </div>
 <script src="java.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
+//   document.addEventListener('DOMContentLoaded', async () => {
+//     const email = localStorage.getItem('username'); // Get email from localStorage
+
+//     if (!email) {
+//         alert('User not logged in');
+//         return;
+//     }
+
+//     try {
+//         // Make the GET request to the backend
+//         const response = await fetch(`/api/dashboard?email=${email}`, {
+//             method: 'GET',
+//             headers: { 'Content-Type': 'application/json' }
+//         });
+
+//         const data = await response.json();
+
+//         if (response.ok) {
+//             // Update dashboard with the fetched data
+//             document.getElementById('balance').textContent = `$ ${data.data.balance.toFixed(2)}`;
+//             document.getElementById('income').textContent = `$ ${data.data.income.toFixed(2)}`;
+//             document.getElementById('expenses').textContent = `$ ${data.data.expenses.toFixed(2)}`;
+//             document.getElementById('totalBills').textContent = `$ ${data.data.total_bills.toFixed(2)}`;
+//             document.getElementById('savings').textContent = `$ ${data.data.savings.toFixed(2)}`;
+//         } else {
+//             alert(data.message || 'Failed to fetch user details');
+//         }
+//     } catch (error) {
+//         console.error('Error fetching user details:', error);
+//         alert('An error occurred while fetching your data. Please try again later.');
+//     }
+// });
+
+document.addEventListener('DOMContentLoaded', async () => {
     const email = localStorage.getItem('username'); // Get email from localStorage
 
     if (!email) {
@@ -293,26 +330,57 @@
     }
 
     try {
-        // Make the GET request to the backend
-        const response = await fetch(`/api/dashboard?email=${email}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
+        // Fetch the user data (balance, income, expenses, etc.)
+        const userResponse = await fetch(`/api/dashboard?email=${email}`);
+        const userData = await userResponse.json();
 
-        const data = await response.json();
-
-        if (response.ok) {
-            // Update dashboard with the fetched data
-            document.getElementById('balance').textContent = `$ ${data.data.balance.toFixed(2)}`;
-            document.getElementById('income').textContent = `$ ${data.data.income.toFixed(2)}`;
-            document.getElementById('expenses').textContent = `$ ${data.data.expenses.toFixed(2)}`;
-            document.getElementById('totalBills').textContent = `$ ${data.data.total_bills.toFixed(2)}`;
-            document.getElementById('savings').textContent = `$ ${data.data.savings.toFixed(2)}`;
-        } else {
-            alert(data.message || 'Failed to fetch user details');
+        if (userResponse.ok) {
+            // Update balance, income, etc.
+            document.getElementById('balance').textContent = `$ ${userData.data.balance.toFixed(2)}`;
+            document.getElementById('income').textContent = `$ ${userData.data.income.toFixed(2)}`;
+            document.getElementById('expenses').textContent = `$ ${userData.data.expenses.toFixed(2)}`;
+            document.getElementById('totalBills').textContent = `$ ${userData.data.total_bills.toFixed(2)}`;
+            document.getElementById('savings').textContent = `$ ${userData.data.savings.toFixed(2)}`;
         }
+
+        // Fetch the most recent transactions
+        const transactionsResponse = await fetch(`/api/transactions?email=${email}`);
+        const transactionsData = await transactionsResponse.json();
+
+        if (transactionsResponse.ok) {
+            const transactionsContainer = document.querySelector('.transactions');
+            transactionsContainer.innerHTML = ''; // Clear any previous transaction entries
+
+            // Check if there are no transactions
+            if (transactionsData.data.length === 0) {
+                transactionsContainer.innerHTML = '<p style="color: #49af00; font-weight: bold; text-align: center; margin-top: 4rem;">No transactions yet!</p>';
+            } else {
+                // Populate the transactions container with the fetched transactions
+                transactionsData.data.forEach(transaction => {
+                    const transactionElement = document.createElement('div');
+                    transactionElement.classList.add('transaction');
+                    transactionElement.innerHTML = `
+                        <div class="left">
+                            <img src="css/images/Checkmark.png" alt="">
+                            <div class="details">
+                                <h4>${transaction.type}</h4>
+                                <p>Registered</p>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <p>${transaction.amount > 0 ? '+' : ''} $${transaction.amount.toFixed(2)}</p>
+                            <h5>${transaction.formatted_date}</h5>
+                        </div>
+                    `;
+                    transactionsContainer.appendChild(transactionElement);
+                });
+            }
+        } else {
+            alert(transactionsData.message || 'Failed to fetch transactions');
+        }
+
     } catch (error) {
-        console.error('Error fetching user details:', error);
+        console.error('Error fetching user details or transactions:', error);
         alert('An error occurred while fetching your data. Please try again later.');
     }
 });
@@ -321,43 +389,9 @@
 
 
 
-document.getElementById('depositButton').addEventListener('click', async () => {
-    const email = localStorage.getItem('username');
-    const depositAmount = prompt('Enter deposit amount:');
-    
-    if (!depositAmount || isNaN(depositAmount) || depositAmount <= 0) {
-        alert('Invalid deposit amount');
-        return;
-    }
 
-    try {
-        // Update balance (this can be customized for other financial updates)
-        const response = await fetch('/api/update-finances', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email,
-                balance: Number(depositAmount), // Update the balance (you can implement more logic here)
-                income: 0, // Just as an example, you would need to customize based on your needs
-                expenses: 0,
-                total_bills: 0,
-                savings: 0
-            })
-        });
 
-        const data = await response.json();
 
-        if (response.ok) {
-            alert('Deposit successful!');
-            window.location.reload(); // Reload to fetch updated data
-        } else {
-            alert(data.message || 'Failed to update balance');
-        }
-    } catch (error) {
-        console.error('Error during deposit:', error);
-        alert('An error occurred while updating your balance. Please try again later.');
-    }
-});
 
 
 </script>
