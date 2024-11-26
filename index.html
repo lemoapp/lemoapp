@@ -3,297 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <meta name="theme-color" content="  #1E88E5">
-    <meta name="apple-mobile-web-app-status-bar-style" content="  #1E88E5">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Lemoapp</title>
+    <title>Lemo Login & Signup</title>
+    <meta name="theme-color" content="  #49af00">
+    <meta name="apple-mobile-web-app-status-bar-style" content="  #49af00">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Jacquarda+Bastarda+9&family=Poppins:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/forms.css">
 </head>
 <body>
-    <div class="body-container">
-        <div class="container">
-            <nav>
-                <button><img src="./css/images/menu button.png" alt=""></button>
-                <div class="logo"><img src="css/images/lemo logo.png" alt=""></div>
-                <div class="nav-items"><img src="css/images/Alarm.png" alt=""></div>
-            </nav>
-    
-    
-            <div class="space">
-    
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="./css/images/lemo logo.png" alt="Bank Logo" class="logo">
+                <h1 class="title">Welcome to Your Bank</h1>
+                <p class="subtitle">Secure and seamless banking</p>
             </div>
-    
-    
-            <div class="container1">
-                <div class="top">
-                    <p>
-                        Total Balance
-                    </p>
-                    <div class="balance">
-                        <p>$ 0.00</p>
-                        <button>+</button>
-                    </div><br>
-                    <hr style="border-color: #e2effa;">
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="emailLogin">Email</label>
+                    <input type="email" id="emailLogin" placeholder="Enter your email" required>
                 </div>
-                <div class="bottom">
-                    <div class="withdraw">
-                        <button style="background-color: rgb(243, 64, 91);"><<</button>
-                        <label>withdraw</label>
-                    </div>
-                    <div class="withdraw">
-                        <button>>></button>
-                        <label style="margin-left: 12px;">Send</label>
-                    </div>
-                    <div class="withdraw">
-                        <button style="background-color: rgb(29, 213, 127);">C</button>
-                        <label style="margin-left: 10px;">Cards</label>
-                    </div>
-                    <div class="withdraw">
-                        <button style="background-color: rgb(243, 186, 64);">E</button>
-                        <label>Exchange</label>
-                    </div>
-                </div><br>
-            </div>
+                <div class="form-group">
+                    <label for="passwordLogin">Password</label>
+                    <input type="password" id="passwordLogin" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="auth-btn">Login</button>
+                <p class="toggle-link">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form">
+                <h2>Sign Up</h2>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailSignup">Email</label>
+                    <input type="email" id="emailSignup" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="passwordSignup">Password</label>
+                    <input type="password" id="passwordSignup" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="auth-btn">Sign Up</button>
+                <p class="toggle-link">Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </form>
         </div>
-        <section class="second"><br><br><br><br><br><br>
-              <div class="entries">
-                <div class="tabs1">
-                    <div class="tab">
-                        <p>Income</p>
-                        <div class="amount" style="color: rgb(29, 213, 127)">
-                            $540
-                        </div>
-                    </div>
-                    <div class="tab">
-                        <p>Expenses</p>
-                        <div class="amount" style="color: rgb(243, 64, 91);">
-                            $540
-                        </div>
-                    </div>
-                </div>
-                <div class="tabs1">
-                    <div class="tab">
-                        <p>Total Bills</p>
-                        <div class="amount">
-                            $540
-                        </div>
-                    </div>
-                    <div class="tab">
-                        <p>Savings</p>
-                        <div class="amount">
-                            $540
-                        </div>
-                    </div>
-                </div>
-              </div>
-
-              <div class="slideshow-container">
-                <!-- Slides -->
-                <div class="mySlides fade">
-                    <img src="./css/images/card1.png" alt="Item 1">
-                </div>
-                <div class="mySlides fade">
-                    <img src="./css/images/card2.png" alt="Item 2">
-                </div>
-                <div class="mySlides fade">
-                    <img src="./css/images/card3.png" alt="Item 3">
-                </div>
-                <div class="mySlides fade">
-                    <img src="./css/images/card4.png" alt="Item 4">
-                </div>
-        
-                <!-- Indicators/Dots -->
-                <div class="dots-container">
-                    <span class="dot" onclick="currentSlide(1)"></span> 
-                    <span class="dot" onclick="currentSlide(2)"></span> 
-                    <span class="dot" onclick="currentSlide(3)"></span> 
-                    <span class="dot" onclick="currentSlide(4)"></span> 
-                </div>
-            </div>
-
-              <div class="container2">
-                <div class="top">
-                    <h3>Transactions</h3>
-                    <a href="">View all</a>
-                </div>
-
-                <div class="transactions">
-                    <div class="transaction">
-                        <div class="left">
-                            <img src="css/images/Checkmark.png" alt="">
-                            <div class="details">
-                                <h4>Transfer</h4>
-                                <p>Registered</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <p>
-                               + $ 50.34
-                            </p>
-                            <h5>
-                                12th November
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="transaction">
-                        <div class="left">
-                            <img src="css/images/Checkmark.png" alt="">
-                            <div class="details">
-                                <h4>Transfer</h4>
-                                <p>Registered</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <p>
-                               + $ 50.34
-                            </p>
-                            <h5>
-                                12th November
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="transaction">
-                        <div class="left">
-                            <img src="css/images/Checkmark.png" alt="">
-                            <div class="details">
-                                <h4>Transfer</h4>
-                                <p>Registered</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <p>
-                               + $ 120.34
-                            </p>
-                            <h5>
-                                10th November
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="transaction">
-                        <div class="left">
-                            <img src="css/images/Checkmark.png" alt="">
-                            <div class="details">
-                                <h4>Transfer</h4>
-                                <p>Registered</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <p>
-                               + $ 100.34
-                            </p>
-                            <h5>
-                                17th November
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-              </div>
-
-              <div class="container3">
-                <div class="top">
-                    <h3>My Cards</h3>
-                    <a href="">View all</a>
-                </div>
-                <div class="cards">
-                    <div class="card1">
-                       <div class="top">
-                        <div class="logo"><img src="css/images/lemo logo.png" alt=""></div>
-                       <a href="">. . .</a>
-                       </div>
-
-                       <div class="mid">
-                        <p>CARD NUMBER</p>
-                        <div class="value">
-                            ..... 0352
-                        </div>
-                       </div>
-
-                       <div class="bottom">
-                        <p>EXPIRING</p>
-                        <div class="value">
-                            12/26
-                        </div>
-                       </div>
-
-                        
-                    </div>
-                </div>
-              </div>
-        </section>
-
-        <section class="third">
-            <div class="savings">
-                <h4>Start saving</h4>
-
-                <div class="savings-section">
-                    <div class="animated-background">
-                      <div class="content">
-                        <h3 class="headline">Start Saving for a Brighter Tomorrow!</h3>
-                        <p class="tagline">Set goals, save effortlessly, and watch your wealth grow.</p>
-                        <button class="cta">Start Saving Now</button>
-                      </div>
-                      <img src="./css/images/rb_13529.png" alt="Piggy Bank" class="animation">
-                    </div>
-                  </div>
-                  
-              </div>
-        </section>
-        
-            <div class="news-section">
-                
-              </div>
-
-
-              <div class="news-section">
-                <div class="news-container">
-                    <!-- News 1 -->
-                    <div class="news-item">
-                      <img src="news1.jpg" alt="News Header 1" class="news-image">
-                      <h3 class="news-title">Exciting News Headline 1</h3>
-                      <p class="news-summary">This is a short summary of the first news. It’s engaging and concise.</p>
-                      <a href="#" class="read-more">Read More</a>
-                    </div>
-                
-                    <!-- News 2 -->
-                    <div class="news-item">
-                      <img src="news2.jpg" alt="News Header 2" class="news-image">
-                      <h3 class="news-title">Exciting News Headline 2</h3>
-                      <p class="news-summary">This is a short summary of the second news. Stay updated with the latest info.</p>
-                      <a href="#" class="read-more">Read More</a>
-                    </div>
-                  </div>
-              
-                <!-- Progress indicators -->
-                <div class="progress-indicators">
-                  <span class="indicator"></span>
-                  <span class="indicator"></span>
-                  <span class="indicator"></span>
-                  <span class="indicator"></span>
-                </div>
-              
-                <!-- Play/Pause Controls -->
-                <div class="controls">
-                  <button id="playPauseBtn">Pause</button>
-                </div>
-              </div><br><br><br><br><br>
-
     </div>
+    <script>
+        // Toggle between Login and Signup Forms
+document.getElementById('showSignup').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('loginForm').classList.remove('active');
+  document.getElementById('signupForm').classList.add('active');
+});
 
-    <div class="bottom-nav">
-        <ul class="nav-links">
-            <li><a href="main-page.html"><img src="./css/images/Control Panel.png" alt="Home Icon"><span>Home</span></a></li>
-            <li><a href="chatbot.html"><img src="./css/images/Continuous Mode.png" alt="pages" ><span>Pages</span></a></li>
-            <li><a href="wallet.html"><img src="./css/images/Bank Cards.png" alt="cards" ><span>Cards</span></a></li>
-            <li><a href="settings.html"><img src="./css/images/Settings.png" alt="Settings" ><span>Settings</span></a></li>
-            <li><a href="assets.html"><img src="./css/images/WeChat.png" alt="Chat"><span>Chat</span></a></li>
-        </ul>
-    </div>
-<script src="java.js"></script>
-<script>
-    
-</script>
+document.getElementById('showLogin').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('signupForm').classList.remove('active');
+  document.getElementById('loginForm').classList.add('active');
+});
+
+
+
+    // Handle Signup Form Submission
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+        e.preventDefault(); // Prevent form from reloading the page
+
+        // Get form values
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('emailSignup').value;
+        const password = document.getElementById('passwordSignup').value;
+
+        try {
+            // Send data to the backend API
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName, email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Redirect to OTP page with email as query param
+                const otpPageUrl = `/otp.html?email=${encodeURIComponent(email)}`;
+                window.location.href = otpPageUrl;
+            } else {
+                // Display error message
+                alert(data.message || 'Signup failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error during signup:', error);
+            alert('An error occurred. Please try again later.');
+        }
+    });
+
+
+
+
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent form from reloading the page
+
+    // Get form values
+    const email = document.getElementById('emailLogin').value;
+    const password = document.getElementById('passwordLogin').value;
+
+    try {
+        // Send login data to the backend API
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // On success, store the user's email in localStorage
+            localStorage.setItem('username', email);  // Store email under 'username' key
+            console.log('Login successful, email saved to localStorage');
+            window.location.href = '/dashboard.html'; // Redirect to the dashboard after login
+        } else {
+            // Display error message if login fails
+            alert(data.message || 'Login failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred. Please try again later.');
+    }
+});
+
+    </script>
 </body>
 </html>

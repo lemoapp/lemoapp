@@ -30,66 +30,62 @@ function currentSlide(n) {
 }
 
 
+  
 
-document.addEventListener("DOMContentLoaded", () => {
-    const newsItems = [
-      { img: "news1.jpg", title: "Exciting News Headline 1", summary: "This is a short summary of the first news.", link: "#" },
-      { img: "news2.jpg", title: "Exciting News Headline 2", summary: "Short summary for the second news.", link: "#" },
-      { img: "news3.jpg", title: "Breaking News Headline 3", summary: "Another exciting update for you.", link: "#" },
-      { img: "news4.jpg", title: "Trending News Headline 4", summary: "Stay ahead with trending updates.", link: "#" },
-      { img: "news5.jpg", title: "Global News Headline 5", summary: "International updates you can't miss.", link: "#" },
-      { img: "news6.jpg", title: "Local News Headline 6", summary: "Everything happening around you.", link: "#" },
-      { img: "news7.jpg", title: "Tech News Headline 7", summary: "Discover the latest in technology.", link: "#" },
-      { img: "news8.jpg", title: "Finance News Headline 8", summary: "Updates on global financial markets.", link: "#" }
-    ];
+
+   // Handle click events on deposit options
+   document.getElementById('buyDollarOption').addEventListener('click', () => {
+    loadingSpinner.style.display = 'block';
+    window.location.href = 'stripe.html'; 
+});
+
+document.getElementById('depositCryptoOption').addEventListener('click', () => {
+    // Show the spinner
+    loadingSpinner.style.display = 'block';
+
+    // Simulate page navigation with a delay (replace with actual page navigation logic)
+    window.location.href = 'deposit-crypto.html'; // Replace with your actual page navigation
+});
+
+// Hide spinner when the page has loaded completely
+window.addEventListener('load', function () {
+    loadingSpinner.style.display = 'none';
+});
+
+
+
+const depositButton = document.getElementById('depositButton');
+const depositOverlay = document.getElementById('depositOverlay');
+const closeOverlayButton = document.getElementById('closeOverlay');
+
+// Show the overlay when the deposit button is clicked
+depositButton.addEventListener('click', function() {
+    console.log('Deposit button clicked'); // Debugging
+    depositOverlay.classList.add('show');  // Add the 'show' class
+    console.log('Overlay should slide into view now'); // Debugging
+});
+
+// Hide the overlay when the close button is clicked
+closeOverlayButton.addEventListener('click', function() {
+    console.log('Close button clicked'); // Debugging
+    depositOverlay.classList.remove('show');  // Remove the 'show' class
+    console.log('Overlay should slide out of view now'); // Debugging
+});
   
-    let currentIndex = 0;
-    let isPlaying = true;
-    const container = document.querySelector(".news-container");
-    const indicators = document.querySelectorAll(".indicator");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-  
-    function updateNews() {
-      // Create sliding-out animation
-      container.innerHTML = "";
-      const nextNews1 = newsItems[currentIndex % newsItems.length];
-      const nextNews2 = newsItems[(currentIndex + 1) % newsItems.length];
-  
-      container.innerHTML = `
-        <div class="news-item slideInFromLeft">
-          <img src="${nextNews1.img}" alt="${nextNews1.title}" class="news-image">
-          <h3 class="news-title">${nextNews1.title}</h3>
-          <p class="news-summary">${nextNews1.summary}</p>
-          <a href="${nextNews1.link}" class="read-more">Read More</a>
-        </div>
-        <div class="news-item slideInFromRight">
-          <img src="${nextNews2.img}" alt="${nextNews2.title}" class="news-image">
-          <h3 class="news-title">${nextNews2.title}</h3>
-          <p class="news-summary">${nextNews2.summary}</p>
-          <a href="${nextNews2.link}" class="read-more">Read More</a>
-        </div>
-      `;
-  
-      updateIndicators();
-      currentIndex += 2;
-    }
-  
-    function updateIndicators() {
-      indicators.forEach((indicator, index) => {
-        indicator.classList.toggle("active", index === currentIndex / 2 % 4); // Adjust for 8 tabs
-      });
-    }
-  
-    function togglePlayPause() {
-      isPlaying = !isPlaying;
-      playPauseBtn.textContent = isPlaying ? "Pause" : "Play";
-    }
-  
-    let interval = setInterval(() => {
-      if (isPlaying) updateNews();
-    }, 2000);
-  
-    playPauseBtn.addEventListener("click", togglePlayPause);
-  });
-  
-  
+
+
+
+
+
+// Toggle between Login and Signup Forms
+document.getElementById('showSignup').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('loginForm').classList.remove('active');
+  document.getElementById('signupForm').classList.add('active');
+});
+
+document.getElementById('showLogin').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('signupForm').classList.remove('active');
+  document.getElementById('loginForm').classList.add('active');
+});

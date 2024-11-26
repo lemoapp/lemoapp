@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - Your Bank</title>
+    <link rel="stylesheet" href="./css/forms.css">
+    <style>
+        /* OTP Page Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7faf5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .otp-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .otp-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .otp-container .instructions {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .otp-container input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .otp-container .error {
+            color: #e74c3c;
+            font-size: 14px;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .otp-container button {
+            padding: 10px 20px;
+            background-color: #49af00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .otp-container button:hover {
+            background-color: #1c4301;
+        }
+
+        .otp-container .loading {
+            display: none;
+        }
+
+        /* Login Redirect */
+        .redirect-container {
+            margin-top: 20px;
+        }
+
+        .redirect-container a {
+            color: #49af00;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <h2>Enter OTP</h2>
+        <p class="instructions">A 6-digit OTP has been sent to your email. Please enter it below to verify your account.</p>
+        <form id="otpForm">
+            <input type="text" id="otpInput" placeholder="Enter OTP" required>
+            <div class="error" id="errorMessage">Invalid OTP. Please try again.</div>
+            <button type="submit">
+                Verify OTP
+                <span class="loading" id="loadingSpinner">🔄</span> <!-- Loading spinner -->
+            </button>
+        </form>
+        <div class="redirect-container">
+            <p>Already verified? <a href="index.html">Login</a></p>
+        </div>
+    </div>
+
+    <script>
+       document.getElementById('otpForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const otp = document.getElementById('otpInput').value;
+    const email = new URLSearchParams(window.location.search).get('email'); // Extract email from URL
+
+    // Show loading spinner
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    loadingSpinner.style.display = 'inline';
+
+    fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ otp, email }) // No token needed here
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide loading spinner
+        loadingSpinner.style.display = 'none';
+
+        if (data.success) {
+            // Redirect user to the login page (forms.html)
+            window.location.href = 'index.html'; 
+        } else {
+            // Show error message
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Error verifying OTP:', error);
+        // Hide loading spinner
+        loadingSpinner.style.display = 'none';
+    });
+});
+
+    </script>
+</body>
+</html>

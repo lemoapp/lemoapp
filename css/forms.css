@@ -1,0 +1,133 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+  .poppins-light-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+  
+  .poppins-regular-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7faf5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Auth Container */
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Auth Header */
+.auth-header .logo {
+    width: 6rem;
+    margin-bottom: 1rem;
+    background-color: #49af00;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.auth-header .title {
+    font-size: 24px;
+    color: #49af00;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header .subtitle {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Form */
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #49af00;
+    outline: none;
+}
+
+/* Buttons */
+.auth-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: #49af00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-btn:hover {
+    background: #1c4301;
+}
+
+/* Toggle Links */
+.toggle-link {
+    margin-top: 1rem;
+    font-size: 14px;
+    color: #555;
+}
+
+.toggle-link a {
+    color: #49af00;
+    text-decoration: none;
+}
+
+.toggle-link a:hover {
+    text-decoration: underline;
+}
