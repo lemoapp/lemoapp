@@ -39,14 +39,12 @@
                     <hr style="border-color: #e2effa;">
                 </div>
                 <div class="bottom">
+                    
                     <div class="withdraw">
-                        <button style="background-color: rgb(243, 64, 91);"><<</button>
-                        <label>withdraw</label>
-                    </div>
-                    <div class="withdraw">
-                        <button>>></button>
+                        <button onclick="window.location.href='send.html';">>></button>
                         <label style="margin-left: 12px;">Send</label>
                     </div>
+                    
                     <div class="withdraw">
                         <button style="background-color: rgb(29, 213, 127);">C</button>
                         <label style="margin-left: 10px;">Cards</label>
@@ -288,39 +286,6 @@
     </div>
 <script src="java.js"></script>
 <script>
-//   document.addEventListener('DOMContentLoaded', async () => {
-//     const email = localStorage.getItem('username'); // Get email from localStorage
-
-//     if (!email) {
-//         alert('User not logged in');
-//         return;
-//     }
-
-//     try {
-//         // Make the GET request to the backend
-//         const response = await fetch(`/api/dashboard?email=${email}`, {
-//             method: 'GET',
-//             headers: { 'Content-Type': 'application/json' }
-//         });
-
-//         const data = await response.json();
-
-//         if (response.ok) {
-//             // Update dashboard with the fetched data
-//             document.getElementById('balance').textContent = `$ ${data.data.balance.toFixed(2)}`;
-//             document.getElementById('income').textContent = `$ ${data.data.income.toFixed(2)}`;
-//             document.getElementById('expenses').textContent = `$ ${data.data.expenses.toFixed(2)}`;
-//             document.getElementById('totalBills').textContent = `$ ${data.data.total_bills.toFixed(2)}`;
-//             document.getElementById('savings').textContent = `$ ${data.data.savings.toFixed(2)}`;
-//         } else {
-//             alert(data.message || 'Failed to fetch user details');
-//         }
-//     } catch (error) {
-//         console.error('Error fetching user details:', error);
-//         alert('An error occurred while fetching your data. Please try again later.');
-//     }
-// });
-
 document.addEventListener('DOMContentLoaded', async () => {
     const email = localStorage.getItem('username'); // Get email from localStorage
 
@@ -357,19 +322,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 // Populate the transactions container with the fetched transactions
                 transactionsData.data.forEach(transaction => {
+                    // Ensure that transaction.amount is a number
+                    const amount = Number(transaction.amount); // Convert amount to a number
+                    const formattedAmount = !isNaN(amount) ? amount.toFixed(2) : 'Invalid amount'; // Format amount with 2 decimals if valid
+
+                    // Handle the transaction date, ensuring it is properly formatted
+                    const transactionDate = new Date(transaction.date).toLocaleDateString();
+
                     const transactionElement = document.createElement('div');
                     transactionElement.classList.add('transaction');
                     transactionElement.innerHTML = `
                         <div class="left">
                             <img src="css/images/Checkmark.png" alt="">
                             <div class="details">
-                                <h4>${transaction.type}</h4>
+                               <h4>${transaction.transferType}</h4>
                                 <p>Registered</p>
                             </div>
                         </div>
                         <div class="right">
-                            <p>${transaction.amount > 0 ? '+' : ''} $${transaction.amount.toFixed(2)}</p>
-                            <h5>${transaction.formatted_date}</h5>
+                            <p>${amount > 0 ? '+' : ''} $${formattedAmount}</p>
+                            <h5>${transactionDate}</h5>
                         </div>
                     `;
                     transactionsContainer.appendChild(transactionElement);
@@ -384,6 +356,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('An error occurred while fetching your data. Please try again later.');
     }
 });
+
 
 
 

@@ -69,14 +69,14 @@ app.post('/api/signup', async (req, res) => {
 
     try {
         // Check if user already exists
-        const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        const [existingUser] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
         if (existingUser.length > 0) {
             return res.status(400).json({ message: 'Email already exists' });
         }
 
         // Insert user into the database
-        await db.query(
+        await pool.query(
             'INSERT INTO users (fullName, email, password, verified) VALUES (?, ?, ?, ?)', 
             [fullName, email, password, false]
         );
@@ -85,7 +85,7 @@ app.post('/api/signup', async (req, res) => {
         const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
 
         // Store the OTP in the database
-        await db.query('UPDATE users SET otp = ? WHERE email = ?', [otp, email]);
+        await pool.query('UPDATE users SET otp = ? WHERE email = ?', [otp, email]);
 
         // Send OTP to the user via email
         const subject = 'Your OTP Code for Lemo';
@@ -101,12 +101,13 @@ app.post('/api/signup', async (req, res) => {
 });
 
 
+
 app.post('/api/verify-otp', async (req, res) => {
     const { email, otp } = req.body;
 
     try {
         // Check if the email and OTP match in the database
-        const [rows] = await db.query(
+        const [rows] = await pool.query(
             'SELECT * FROM users WHERE email = ? AND otp = ? AND otp_used = 0',
             [email, otp]
         );
@@ -116,13 +117,13 @@ app.post('/api/verify-otp', async (req, res) => {
         }
 
         // Mark the OTP as used
-        await db.query(
+        await pool.query(
             'UPDATE users SET otp_used = 1 WHERE email = ?',
             [email]
         );
 
         // Mark the user as verified
-        await db.query(
+        await pool.query(
             'UPDATE users SET verified = 1 WHERE email = ?',
             [email]
         );
@@ -188,14 +189,14 @@ app.post('/send-email', async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.GMAIL_USER,
-                pass: process.env.GMAIL_PASS,
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
         });
 
         // Send email
         await transporter.sendMail({
-            from: process.env.GMAIL_USER,
+            from: process.env.EMAIL_USER,
             to,
             subject,
             text,
@@ -256,7 +257,7 @@ app.get('/api/transactions', async (req, res) => {
     try {
         console.log('Fetching transactions for email:', email);
         // Replace 'date' with the correct column name, e.g., 'created_at'
-        const [transactions] = await pool.query('SELECT * FROM transactions WHERE email = ? ORDER BY transaction_date DESC LIMIT 2', [email]);
+        const [transactions] = await pool.query('SELECT * FROM transactions WHERE email = ? ORDER BY date DESC LIMIT 2', [email]);
 
         if (transactions.length === 0) {
             return res.status(200).json({ message: 'No transactions found', data: [] }); // No transactions for the user
@@ -268,6 +269,95 @@ app.get('/api/transactions', async (req, res) => {
         res.status(500).json({ message: 'Database error' });
     }
 });
+
+
+
+app.get('/api/user-balance', async (req, res) => {
+    const { email } = req.query;
+
+    try {
+        const [rows] = await pool.query('SELECT balance FROM users WHERE email = ?', [email]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        res.json({ success: true, balance: rows[0].balance });
+    } catch (error) {
+        console.error('Error fetching user balance:', error);
+        res.status(500).json({ success: false, message: 'Error fetching balance' });
+    }
+});
+
+
+
+
+app.post('/api/send-funds', async (req, res) => {
+    const { email, amount, recipient, transferType, bankName, accountNumber, routingNumber } = req.body;
+
+    try {
+        // Get user's current balance
+        const [user] = await pool.query('SELECT balance FROM users WHERE email = ?', [email]);
+
+        if (user.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const currentBalance = user[0].balance;
+
+        // Check if sufficient balance
+        if (currentBalance < amount) {
+            return res.status(400).json({ success: false, message: 'Insufficient funds' });
+        }
+
+        // Log the transfer in the 'transfers' table first (status: pending)
+        const transferDetails = {
+            email,
+            amount,
+            recipient,
+            transferType,
+            bankName: bankName || null,
+            accountNumber: accountNumber || null,
+            routingNumber: routingNumber || null,
+            status: 'pending'
+        };
+
+        const [transferResult] = await pool.query('INSERT INTO transfers SET ?', transferDetails);
+        
+        // Check if the insert was successful
+        if (!transferResult.insertId) {
+            return res.status(500).json({ success: false, message: 'Error logging transfer' });
+        }
+
+        // Deduct amount from user's balance
+        await pool.query('UPDATE users SET balance = balance - ? WHERE email = ?', [amount, email]);
+
+        // Log the transaction in the 'transactions' table
+        const transactionDetails = {
+            email,
+            amount,
+            recipient,
+            transferType,
+            bankName: bankName || null,
+            accountNumber: accountNumber || null,
+            routingNumber: routingNumber || null,
+            date: new Date()
+        };
+
+        await pool.query('INSERT INTO transactions SET ?', transactionDetails);
+
+        // Update transfer status to 'completed'
+        await pool.query('UPDATE transfers SET status = ? WHERE id = ?', ['completed', transferResult.insertId]);
+
+        res.json({ success: true, message: 'Transaction successful' });
+    } catch (error) {
+        console.error('Error processing transaction:', error);
+        res.status(500).json({ success: false, message: 'Error processing transaction' });
+    }
+});
+
+
+
 
 
 // Catch-all route for invalid paths

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Funds</title>
+    <link rel="stylesheet" href="./css/send.css">
+    <style>
+       
+    </style>
+</head>
+<body>
+    <a href="dashboard.html" style="text-decoration: none; font-weight: bold; color: #30334B;"><<</a><br><br>
+    <div class="container">
+        <h3>Transfer</h3>
+        <p class="balance"><span id="userBalance">$ 0</span></p><br>
+        <form id="sendFundsForm">
+            <div class="form-group">
+                
+                <input type="number" id="amount"  required />
+                <label>Amount you will like to transfer</label>
+            </div>
+            <div class="form-group">
+                
+                <input type="text" id="recipient"  required />
+                <label>Recipient's Name</label>
+            </div>
+            <div class="form-group">
+                
+                <select id="transferType" required>
+                    <option value="intra">Intra-Bank</option>
+                    <option value="inter">Inter-Bank</option>
+                </select>
+                <label>Transfer Type</label>
+            </div>
+            <div id="intraBankFields" class="form-group">
+                
+                <input type="text" id="routingNumber"  />
+                <label>Routing Number</label>
+            </div>
+            <div id="interBankFields" style="display: none;">
+                <div class="form-group">
+                    
+                    <input type="text" id="bankName"  />
+                    <label>External Bank Name</label>
+                </div>
+                <div class="form-group">
+                    
+                    <input type="text" id="accountNumber"  />
+                    <label>Account Number</label>
+                </div>
+            </div>
+            <button type="submit">Send Funds</button>
+        </form>
+    </div>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', async () => {
+    const email = localStorage.getItem('username'); // Get email from local storage
+    const userBalance = document.getElementById('userBalance'); // Element to display the user's balance
+    const transferType = document.getElementById('transferType'); // Dropdown for transfer type
+    const intraBankFields = document.getElementById('intraBankFields'); // Intra-bank fields
+    const interBankFields = document.getElementById('interBankFields'); // Inter-bank fields
+
+    if (!email) {
+        alert('No user is logged in. Please log in first.');
+        window.location.href = '/login.html'; // Redirect to login page if no email found
+        return;
+    }
+
+    try {
+        // Fetch and display user's balance
+        const balanceResponse = await fetch(`/api/user-balance?email=${encodeURIComponent(email)}`);
+        const balanceData = await balanceResponse.json();
+
+        if (balanceResponse.ok && balanceData.success) {
+            userBalance.textContent = `$${balanceData.balance}`;
+        } else {
+            alert(balanceData.message || 'Failed to fetch user balance.');
+            return;
+        }
+
+        // Toggle fields based on transfer type
+        transferType.addEventListener('change', () => {
+            if (transferType.value === 'intra') {
+                intraBankFields.style.display = 'block';
+                interBankFields.style.display = 'none';
+            } else {
+                intraBankFields.style.display = 'none';
+                interBankFields.style.display = 'block';
+            }
+        });
+
+        // Handle form submission
+        const form = document.getElementById('sendFundsForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const amount = document.getElementById('amount').value;
+            const recipient = document.getElementById('recipient').value;
+            const transferTypeValue = transferType.value;
+            const routingNumber = document.getElementById('routingNumber').value;
+            const bankName = document.getElementById('bankName').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+
+            const payload = {
+                email,
+                amount,
+                recipient,
+                transferType: transferTypeValue,
+                routingNumber,
+                bankName,
+                accountNumber
+            };
+
+            try {
+                const response = await fetch('/api/send-funds', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert('Transaction successful!');
+                    location.reload(); // Reload the page to refresh balance
+                } else {
+                    alert(result.message || 'Transaction failed.');
+                }
+            } catch (error) {
+                console.error('Error sending funds:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    } catch (error) {
+        console.error('Error during initialization:', error);
+        alert('An error occurred while loading the page. Please try again.');
+    }
+});
+
+    </script>
+</body>
+</html>
