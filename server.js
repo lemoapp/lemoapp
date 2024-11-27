@@ -388,6 +388,54 @@ app.get('/api/user-details', async (req, res) => {
 
 
 
+app.post('/api/deposit-crypto', async (req, res) => {
+    const { email, amount, cryptoType } = req.body;
+
+    if (!email || !amount || !cryptoType) {
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
+
+    try {
+        // Insert into the `crypto_deposits` table
+        const cryptoDepositQuery = `
+            INSERT INTO crypto_deposits (email, crypto_type, amount, status)
+            VALUES (?, ?, ?, ?)
+        `;
+
+        await pool.query(cryptoDepositQuery, [email, cryptoType, amount, 'pending']);
+
+        // Prepare transaction details
+        const transactionQuery = `
+            INSERT INTO transactions (email, type, amount, recipient, transferType, bankName, accountNumber, routingNumber, date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const transactionValues = [
+            email,
+            'crypto deposit', // type
+            amount,
+            null, // recipient
+            'crypto deposit', // transferType
+            null, // bankName
+            null, // accountNumber
+            null, // routingNumber
+            new Date(), // current date
+        ];
+
+        await pool.query(transactionQuery, transactionValues);
+
+        res.json({ success: true, message: 'Deposit successfully logged and set to pending.' });
+    } catch (error) {
+        console.error('Error logging crypto deposit:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while logging the deposit.' });
+    }
+});
+
+
+
+
+
+
 
 
 // Catch-all route for invalid paths

@@ -76,7 +76,7 @@ nav .nav-items img{
 }
 
 .container1 .top p{
-    font-size: 15px;
+    font-size: 12px;
 }
 
 .container1 .top .balance{
@@ -87,14 +87,14 @@ nav .nav-items img{
 }
 
 .container1 .top .balance p{
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .container1 .top .balance button{
-    color: #1E88E5;
+    color: #30334B;
     font-size: 25px;
     background-color: #F3F3F7;
-    padding: 0.7rem 1rem;
+    padding: 0.4rem 0.7rem;
     border-style: none;
     border-radius: 10px;
 }
@@ -123,7 +123,8 @@ nav .nav-items img{
 }
 
 .container1 .bottom .withdraw label{
-    font-size: 11px;
+    font-size: 10px;
+    color: #747bb1;
 }
 
 .second{
@@ -151,8 +152,8 @@ nav .nav-items img{
 }
 
 .second .entries .tabs1 .tab p{
-    font-size: 12px;
-    color: rgb(146, 145, 145);
+    font-size: 10px;
+    color: #747bb1;
 }
 
 .second .entries .tabs1 .tab .amount{
@@ -561,8 +562,8 @@ img {
 
   .overlay {
     position: fixed;
-    height: 50vh;
-    bottom: -50vh; /* Start off-screen */
+    height: 40vh;
+    bottom: -40vh; /* Start off-screen */
     left: 0;
     right: 0;
     background-color: #30334B;
@@ -602,13 +603,14 @@ img {
     font-weight: bolder;
 }
 
-.overlay-content h3 {
+.overlay-content h4 {
     color: #30334B;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .overlay-content p{
-    font-size: 13px;
+    font-size: 10px;
+    color: #747bb1;
 }
 
 .overlay-content em{

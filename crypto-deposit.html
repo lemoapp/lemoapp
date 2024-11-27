@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Crypto</title>
+    <meta name="theme-color" content="  #30334B">
+    <meta name="apple-mobile-web-app-status-bar-style" content="  #30334B">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Jacquarda+Bastarda+9&family=Poppins:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/crypto-deposit.css"> <!-- Link your CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 for popup -->
+</head>
+<body>
+    <div id="cryptoDepositPage">
+        <h3>Deposit Cryptocurrency</h3><br>
+        <form id="cryptoDepositForm">
+            <div class="form-group">
+                
+                <input type="number" id="amount" name="amount" placeholder="$" required>
+                <label for="amount">Amount to Deposit:</label>
+            </div>
+
+            <div class="form-group">
+               
+                <select id="cryptoType" name="cryptoType" required>
+                    <option value="btc">Bitcoin (BTC)</option>
+                    <option value="eth">Ethereum (ETH)</option>
+                    <option value="ltc">Litecoin (LTC)</option>
+                    <option value="usdt">Tether (USDT)</option>
+                    <option value="bnb">Binance Coin (BNB)</option>
+                </select>
+                <label for="cryptoType">Select Cryptocurrency:</label>
+            </div><br>
+
+            <div id="qrCodeContainer">
+                <h5>Scan the QR Code</h5>
+                <img id="qrCodeImage" src="images/btc-qr.png" alt="Bitcoin QR Code">
+                <p id="walletAddress">Wallet Address: <span id="cryptoWallet">bc1examplebitcoinaddress</span></p><br><br>
+                <button type="button" class="copy-btn" id="copyWalletAddress">Copy Wallet Address</button>
+            </div>
+
+            <button type="submit" id="depositSubmitButton">Deposit</button>
+        </form>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const cryptoType = document.getElementById('cryptoType');
+    const qrCodeImage = document.getElementById('qrCodeImage');
+    const cryptoWallet = document.getElementById('cryptoWallet');
+    const copyWalletAddress = document.getElementById('copyWalletAddress');
+    const cryptoDepositForm = document.getElementById('cryptoDepositForm');
+
+    // Wallet addresses and QR code images for each crypto
+    const cryptoData = {
+        btc: { qr: 'images/btc-qr.png', wallet: 'bc1examplebitcoinaddress' },
+        eth: { qr: 'images/eth-qr.png', wallet: '0xexampleethereumaddress' },
+        ltc: { qr: 'images/ltc-qr.png', wallet: 'ltc1examplelitecoinaddress' },
+        usdt: { qr: 'images/usdt-qr.png', wallet: 'Tetherexampleaddress' },
+        bnb: { qr: 'images/bnb-qr.png', wallet: 'bnb1examplebinanceaddress' },
+    };
+
+    // Function to update QR code and wallet address
+    const updateCryptoDetails = () => {
+        const selectedCrypto = cryptoType.value;
+
+        if (cryptoData[selectedCrypto]) {
+            qrCodeImage.src = cryptoData[selectedCrypto].qr; // Update QR code image
+            cryptoWallet.textContent = cryptoData[selectedCrypto].wallet; // Update wallet address
+        } else {
+            console.error('Invalid crypto type selected:', selectedCrypto);
+        }
+    };
+
+    // Update details on change of crypto type
+    cryptoType.addEventListener('change', updateCryptoDetails);
+
+    // Copy wallet address to clipboard
+    copyWalletAddress.addEventListener('click', () => {
+        navigator.clipboard.writeText(cryptoWallet.textContent).then(() => {
+            alert('Wallet address copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy wallet address:', err);
+        });
+    });
+
+    cryptoDepositForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = localStorage.getItem('username'); // User's email
+    const amount = document.getElementById('amount').value;
+    const selectedCrypto = cryptoType.value;
+
+    if (!email || !amount || !selectedCrypto) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    // Confirm deposit with SweetAlert
+    Swal.fire({
+        title: 'Confirm Deposit',
+        text: `You are about to deposit ${amount} ${selectedCrypto.toUpperCase()}. Proceed?`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Proceed',
+        cancelButtonText: 'Cancel',
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                // Send data to the backend
+                const response = await fetch('/api/deposit-crypto', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email.trim(),
+                        cryptoType: selectedCrypto.trim(),
+                        amount: parseFloat(amount),
+                    }),
+                });
+
+                const responseData = await response.json();
+                if (responseData.success) {
+                    // Show success popup and delay page reload
+                    Swal.fire('Deposit Initiated', 'Your deposit request is being processed.', 'success').then(() => {
+                        setTimeout(() => {
+                            location.reload(); // Reload the page after the popup closes
+                        }, 1000); // Delay of 1 second
+                    });
+                } else {
+                    Swal.fire('Error', responseData.message || 'Failed to log deposit.', 'error');
+                }
+            } catch (error) {
+                console.error('Error logging deposit:', error);
+                Swal.fire('Error', 'An error occurred while logging the deposit. Please try again later.', 'error');
+            }
+        }
+        });
+    });
+});
+
+
+    </script>
+</body>
+</html>
