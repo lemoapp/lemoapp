@@ -432,6 +432,30 @@ app.post('/api/deposit-crypto', async (req, res) => {
 });
 
 
+app.get('/api/transactions/view', async (req, res) => {
+    const email = req.query.email;
+
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    try {
+        const [transactions] = await pool.query(
+            'SELECT type, amount, transferType, date FROM transactions WHERE email = ? ORDER BY date DESC',
+            [email]
+        );
+
+        if (transactions.length === 0) {
+            return res.json({ success: true, transactions: [] });
+        }
+
+        res.json({ success: true, transactions });
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching transactions' });
+    }
+});
+
 
 
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Transactions</title>
+    <link rel="stylesheet" href="./css/transactions.css">
+</head>
+<body>
+
+    <br>
+    <a href="dashboard.html" style="text-decoration: none; font-weight: bold; color: #30334B; margin: 1rem;"><<</a><br>
+    <div class="container">
+        <h4 style="text-align: center;">Your Transactions</h4>
+    <ul class="transaction-list" id="transactionList"></ul>
+    <h3 style="margin: 2px 0px; font-size: 10px; color: #25D0BC;"></h3>
+    </div>
+
+
+    <div class="bottom-nav">
+        <ul class="nav-links">
+            <li><a href="main-page.html"><img src="./css/images/Control Panel.png" alt="Home Icon"><span>Home</span></a></li>
+            <li><a href="chatbot.html"><img src="./css/images/Continuous Mode.png" alt="pages" ><span>Pages</span></a></li>
+            <li><a href="wallet.html"><img src="./css/images/Bank Cards.png" alt="cards" ><span>Cards</span></a></li>
+            <li><a href="settings.html"><img src="./css/images/Settings.png" alt="Settings" ><span>Settings</span></a></li>
+            <li><a href="assets.html"><img src="./css/images/WeChat.png" alt="Chat"><span>Chat</span></a></li>
+        </ul>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+    const email = localStorage.getItem('username');
+    if (!email) {
+        alert('User email not found. Please log in again.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://127.0.0.1:3000/api/transactions/view?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+
+        if (data.success && data.transactions.length > 0) {
+            const transactionList = document.getElementById('transactionList');
+
+            const transactionsHtml = data.transactions.map((txn) => {
+                const amount = isNaN(txn.amount) ? 'N/A' : parseFloat(txn.amount).toFixed(2); // Fallback for invalid amounts
+
+                return `
+                    <div class="transaction">
+                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Type:</strong> ${txn.type}</p>
+                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Amount:</strong> $${amount}</p>
+                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Transfer Type:</strong> ${txn.transferType}</p>
+                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Date:</strong> ${new Date(txn.date).toLocaleDateString()}</p>
+                    </div>
+                `;
+            }).join('');
+
+            transactionList.innerHTML = transactionsHtml;
+        } else {
+            document.getElementById('transactionList').innerHTML = `<p>No transactions found.</p>`;
+        }
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+    }
+});
+
+    </script>
+</body>
+</html>

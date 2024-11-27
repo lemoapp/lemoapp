@@ -230,8 +230,8 @@ input:checked + .slider:before {
 }
 
 .bottom-nav .nav-links li a img {
-    width: 34px;
-    height: 34px;
+    width: 29px;
+    height: 29px;
     margin-bottom: 4px;
     background-color: #ffffff;
 }
