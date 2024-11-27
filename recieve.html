@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receive Money</title>
+    <meta name="theme-color" content="  #30334B">
+    <meta name="apple-mobile-web-app-status-bar-style" content="  #30334B">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Jacquarda+Bastarda+9&family=Poppins:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/recieve.css">
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script> <!-- Clipboard.js library -->
+</head>
+<body>
+    <br>
+    <a href="dashboard.html" style="text-decoration: none; font-weight: bold; color: #30334B; margin: 1rem; text-align: left; margin-left: -22rem;"><<</a><br>
+    <div id="accountDetails">
+        <h3>Account Details</h3>
+        <div class="detail">
+            <label for="accountName">Account Name:</label>
+            <span id="accountName"></span>
+            <button class="copy-btn" data-clipboard-target="#accountName">Copy</button>
+        </div>
+        <div class="detail">
+            <label for="accountNumber">Account Number:</label>
+            <span id="accountNumber">1234567890</span>
+            <button class="copy-btn" data-clipboard-target="#accountNumber">Copy</button>
+        </div>
+        <div class="detail">
+            <label for="achRoutingNumber">ACH Routing Number:</label>
+            <span id="achRoutingNumber">9876543210</span>
+            <button class="copy-btn" data-clipboard-target="#achRoutingNumber">Copy</button>
+        </div>
+        <div class="detail">
+            <label for="accountType">Account Type:</label>
+            <span id="accountType">Checking</span>
+            <button class="copy-btn" data-clipboard-target="#accountType">Copy</button>
+        </div>
+    </div>
+
+    <div class="notice">
+        <div class="notice-content">
+            <h5>PLEASE NOTE</h5>
+    
+            <ul>
+                <li>Recieving payments via ACH has a 1% fee; please use the ACH routing number to recieve payments via ACH</li>
+                <li>
+                    The maximum amount you can recieve per transaction is $20,000.
+                </li>
+                <li>
+                    Recieving payments via Fedwire/domestic wire or SWIFT is currently not supported.
+                </li>
+                <li>
+                    USD payments cannot be recieved from countries found in the restricted list
+                </li>
+                <li>
+                    Incoming payments can take between 1-3 days depending on the payment scheme used by the sending bank
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const email = localStorage.getItem('username'); // Get email from localStorage
+
+            if (!email) {
+                alert('User not logged in');
+                return;
+            }
+
+            try {
+                // Fetch the user data for receiving money page
+                const userResponse = await fetch(`/api/user-details?email=${email}`);
+                const userData = await userResponse.json();
+
+                if (userResponse.ok) {
+                    // Display the dynamic details
+                    document.getElementById('accountName').textContent = userData.accountName;
+                } else {
+                    alert(userData.message || 'Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+                alert('An error occurred while fetching your details. Please try again later.');
+            }
+
+            // Initialize clipboard functionality for copy buttons
+            const clipboard = new ClipboardJS('.copy-btn');
+
+            clipboard.on('success', function(e) {
+                alert('Copied to clipboard!');
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                alert('Failed to copy. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

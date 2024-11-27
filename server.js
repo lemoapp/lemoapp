@@ -358,6 +358,36 @@ app.post('/api/send-funds', async (req, res) => {
 
 
 
+// Route to fetch user details for receiving money page
+app.get('/api/user-details', async (req, res) => {
+    const email = req.query.email; // Get the email from the query string
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+
+    try {
+        const [user] = await pool.query('SELECT fullName FROM users WHERE email = ?', [email]);
+
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            accountName: user[0].fullName,
+            accountNumber: '1234567890', // Static Account Number
+            achRoutingNumber: '9876543210', // Static ACH Routing Number
+            accountType: 'Checking' // Static Account Type
+        });
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        res.status(500).json({ message: 'Error fetching user details' });
+    }
+});
+
+
+
+
 
 
 // Catch-all route for invalid paths

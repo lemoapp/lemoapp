@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <div class="right">
-                            <p>${amount > 0 ? '+' : ''} $${formattedAmount}</p>
+                            <p>${amount > 0 ? '' : ''} $${formattedAmount}</p>
                             <h5>${transactionDate}</h5>
                         </div>
                     `;
@@ -287,17 +287,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('An error occurred while fetching your data. Please try again later.');
     }
 });
-
-
-
-
-
-
-
-
-
-
-
 </script>
 </body>
 </html>

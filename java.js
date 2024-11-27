@@ -35,8 +35,8 @@ function currentSlide(n) {
 
    // Handle click events on deposit options
    document.getElementById('buyDollarOption').addEventListener('click', () => {
-    loadingSpinner.style.display = 'block';
-    window.location.href = 'stripe.html'; 
+    // loadingSpinner.style.display = 'block';
+    window.location.href = 'recieve.html'; 
 });
 
 document.getElementById('depositCryptoOption').addEventListener('click', () => {
