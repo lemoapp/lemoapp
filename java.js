@@ -41,10 +41,9 @@ function currentSlide(n) {
 
 document.getElementById('depositCryptoOption').addEventListener('click', () => {
     // Show the spinner
-    loadingSpinner.style.display = 'block';
 
     // Simulate page navigation with a delay (replace with actual page navigation logic)
-    window.location.href = 'deposit-crypto.html'; // Replace with your actual page navigation
+    window.location.href = 'crypto-deposit.html'; // Replace with your actual page navigation
 });
 
 // Hide spinner when the page has loaded completely
