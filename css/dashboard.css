@@ -565,7 +565,7 @@ img {
     bottom: -40vh; /* Start off-screen */
     left: 0;
     right: 0;
-    background-color: #30334B;
+    background-color: #30334bc0;
     color: rgb(0, 0, 0);
     padding: 20px;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);

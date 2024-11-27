@@ -95,3 +95,49 @@ button {
 button:hover {
     background-color: #606693;
 }
+
+
+/* Bottom Navigation Menu */
+.bottom-nav {
+    background-color: #ffffff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-nav .nav-links {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    list-style: none;
+}
+
+.bottom-nav .nav-links li {
+    text-align: center;
+    flex: 1;
+}
+
+.bottom-nav .nav-links li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #30334B;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.bottom-nav .nav-links li a img {
+    width: 29px;
+    height: 29px;
+    margin-bottom: 4px;
+    background-color: #ffffff;
+}
+
+.bottom-nav .nav-links li a span {
+    font-size: 0.7rem;
+}
