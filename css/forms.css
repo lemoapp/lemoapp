@@ -48,14 +48,14 @@ body {
 .auth-header .logo {
     width: 6rem;
     margin-bottom: 1rem;
-    background-color: #49af00;
+    background-color: #30334B;
     padding: 1rem;
     border-radius: 10px;
 }
 
 .auth-header .title {
     font-size: 24px;
-    color: #49af00;
+    color: #30334B;
     margin-bottom: 0.5rem;
 }
 
@@ -95,7 +95,7 @@ body {
 }
 
 .form-group input:focus {
-    border-color: #49af00;
+    border-color: #F5F100;
     outline: none;
 }
 
@@ -103,7 +103,7 @@ body {
 .auth-btn {
     width: 100%;
     padding: 0.8rem;
-    background: #49af00;
+    background: #30334B;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -113,7 +113,7 @@ body {
 }
 
 .auth-btn:hover {
-    background: #1c4301;
+    background: #8c95d6;
 }
 
 /* Toggle Links */
@@ -124,7 +124,7 @@ body {
 }
 
 .toggle-link a {
-    color: #49af00;
+    color: #30334B;
     text-decoration: none;
 }
 

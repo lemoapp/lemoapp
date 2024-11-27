@@ -93,7 +93,7 @@ nav .nav-items img{
 .container1 .top .balance button{
     color: #1E88E5;
     font-size: 25px;
-    background-color: #e6f3ff;
+    background-color: #F3F3F7;
     padding: 0.7rem 1rem;
     border-style: none;
     border-radius: 10px;
@@ -565,7 +565,7 @@ img {
     bottom: -50vh; /* Start off-screen */
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.927);
+    background-color: #30334B;
     color: rgb(0, 0, 0);
     padding: 20px;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
@@ -589,11 +589,11 @@ img {
 }
 
 .close-button {
-    background-color: #49af00;
+    background-color: #ffffff;
     padding: 5px;
     border-radius: 20rem;
     border: none;
-    color: rgb(255, 255, 255);
+    color:#30334B;
     font-size: 15px;
     cursor: pointer;
     position: absolute;
@@ -603,7 +603,7 @@ img {
 }
 
 .overlay-content h3 {
-    color: #49af00;
+    color: #30334B;
     font-size: 16px;
 }
 
@@ -612,7 +612,7 @@ img {
 }
 
 .overlay-content em{
-    color: #49af00;
+    color: #ffffff;
     font-size: 10px;
     text-align: left;
 }
@@ -663,14 +663,14 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #1E88E5;
+    color: #30334B;
     text-decoration: none;
     font-size: 0.8rem;
 }
 
 .bottom-nav .nav-links li a img {
-    width: 34px;
-    height: 34px;
+    width: 29px;
+    height: 29px;
     margin-bottom: 4px;
     background-color: #ffffff;
 }
