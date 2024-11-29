@@ -34,6 +34,18 @@ body {
     height: 100vh;
 }
 
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.dark-mode .setting-item {
+    /* Apply dark theme styles to the settings section too */
+    background-color: #333;
+    color: white;
+}
+
 #cryptoDepositPage {
     background-color: #fff;
     border-radius: 10px;

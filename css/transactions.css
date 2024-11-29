@@ -29,6 +29,18 @@ body {
     padding: 0;
 }
 
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.dark-mode .setting-item {
+    /* Apply dark theme styles to the settings section too */
+    background-color: #333;
+    color: white;
+}
+
 .container {
     width: 90%;
     max-width: 800px;

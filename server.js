@@ -14,7 +14,12 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable CORS for cross-origin requests
+// Enable CORS for cross-origin requests
+app.use(cors({
+    origin: '*', // Or specify the domains allowed to access
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json()); // Parse incoming JSON requests
 app.use(express.static(path.join(__dirname))); // Serve static files
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data

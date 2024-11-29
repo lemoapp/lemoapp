@@ -74,6 +74,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+
+        // Check if dark mode is enabled in localStorage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+    const darkModeCheckbox = document.querySelector('.setting-item input[type="checkbox"]');
+    
+    // Apply dark mode if previously enabled
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        if (darkModeCheckbox) {
+            darkModeCheckbox.checked = true;  // Set checkbox to checked if dark mode was enabled
+        }
+    }
+
+    // Toggle dark mode when the checkbox is clicked
+    if (darkModeCheckbox) {
+        darkModeCheckbox.addEventListener('change', () => {
+            if (darkModeCheckbox.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+    }
+});
+
     </script>
 </body>
 </html>
