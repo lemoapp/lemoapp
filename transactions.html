@@ -33,22 +33,26 @@
     </div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const email = localStorage.getItem('username');
     if (!email) {
         alert('User email not found. Please log in again.');
         return;
     }
 
+    // Dynamically get the current host and construct the base URL
+    const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    
     try {
-        const response = await fetch(`http://127.0.0.1:3000/api/transactions/view?email=${encodeURIComponent(email)}`);
+        // Use the dynamic base URL for fetch
+        const response = await fetch(`${baseUrl}/api/transactions/view?email=${encodeURIComponent(email)}`);
         const data = await response.json();
 
         if (data.success && data.transactions.length > 0) {
             const transactionList = document.getElementById('transactionList');
 
             const transactionsHtml = data.transactions.map((txn) => {
-                const amount = isNaN(txn.amount) ? 'N/A' : parseFloat(txn.amount).toFixed(2); // Fallback for invalid amounts
+                const amount = isNaN(txn.amount) ? 'N/A' : parseFloat(txn.amount).toFixed(2);
 
                 return `
                     <div class="transaction">
@@ -68,6 +72,7 @@
         console.error('Error fetching transactions:', error);
     }
 });
+
 
     </script>
 </body>
