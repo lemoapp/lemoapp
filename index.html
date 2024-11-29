@@ -71,38 +71,42 @@ document.getElementById('showLogin').addEventListener('click', (e) => {
 
 
 
-    // Handle Signup Form Submission
-    document.getElementById('signupForm').addEventListener('submit', async function (e) {
-        e.preventDefault(); // Prevent form from reloading the page
+// Handle Signup Form Submission
+document.getElementById('signupForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent form from reloading the page
 
-        // Get form values
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('emailSignup').value;
-        const password = document.getElementById('passwordSignup').value;
+    // Get form values
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('emailSignup').value;
+    const password = document.getElementById('passwordSignup').value;
 
-        try {
-            // Send data to the backend API
-            const response = await fetch('/api/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fullName, email, password }),
-            });
+    try {
+        // Use the current hostname to build the absolute URL for the API
+        const baseUrl = `${window.location.origin}/api/signup`;
 
-            const data = await response.json();
+        // Send data to the backend API
+        const response = await fetch(baseUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fullName, email, password }),
+        });
 
-            if (response.ok) {
-                // Redirect to OTP page with email as query param
-                const otpPageUrl = `/otp.html?email=${encodeURIComponent(email)}`;
-                window.location.href = otpPageUrl;
-            } else {
-                // Display error message
-                alert(data.message || 'Signup failed. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error during signup:', error);
-            alert('An error occurred. Please try again later.');
+        const data = await response.json();
+
+        if (response.ok) {
+            // Redirect to OTP page with email as query param
+            const otpPageUrl = `${window.location.origin}/otp.html?email=${encodeURIComponent(email)}`;
+            window.location.href = otpPageUrl;
+        } else {
+            // Display error message
+            alert(data.message || 'Signup failed. Please try again.');
         }
-    });
+    } catch (error) {
+        console.error('Error during signup:', error);
+        alert('An error occurred. Please try again later.');
+    }
+});
+
 
 
 
