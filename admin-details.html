@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Details</title>
+    <link rel="stylesheet" href="./css/admin-details.css">
+</head>
+<body>
+    <h1 id="detail-title"></h1>
+    <table id="details-table">
+        <thead>
+            <tr id="table-head"></tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+
+    <script>
+        async function loadDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const type = params.get('type');
+            const titleMap = {
+                pendingDeposits: 'Pending Deposits',
+                totalWithdrawals: 'Total Withdrawals',
+                totalUsers: 'Total Users',
+                totalTransactions: 'Total Transactions',
+                activeUsers: 'Active Users'
+            };
+
+            document.getElementById('detail-title').textContent = titleMap[type] || 'Details';
+
+            try {
+                const response = await fetch(`/api/admin/details?type=${type}`);
+                if (!response.ok) throw new Error('Failed to fetch details');
+
+                const data = await response.json();
+                populateTable(data);
+            } catch (error) {
+                console.error('Error loading details:', error);
+                alert('Error loading details. Please try again.');
+            }
+        }
+
+        function populateTable(data) {
+            const tableHead = document.getElementById('table-head');
+            const tableBody = document.getElementById('table-body');
+
+            if (data.length > 0) {
+                // Populate table headers
+                Object.keys(data[0]).forEach(key => {
+                    const th = document.createElement('th');
+                    th.textContent = key;
+                    tableHead.appendChild(th);
+                });
+
+                // Populate table rows
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    Object.values(row).forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tableBody.appendChild(tr);
+                });
+            } else {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.textContent = 'No data available';
+                td.colSpan = Object.keys(data[0] || {}).length || 1;
+                tr.appendChild(td);
+                tableBody.appendChild(tr);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDetails);
+    </script>
+</body>
+</html>

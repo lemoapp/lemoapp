@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="./css/admin-dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="logo">Admin Dashboard</div><br>
+        <div class="toggle-sidebar">
+            Menu
+        </div>
+        
+        <div class="admin-actions">
+            <input type="text" placeholder="Search..." class="search-bar">
+            <div class="action-icons">
+                <img src="icons/notification-icon.png" alt="Notifications" class="icon">
+                <img src="icons/settings-icon.png" alt="Settings" class="icon">
+                <div class="profile-menu">
+                    <img src="icons/admin-avatar.png" alt="Admin" class="profile-pic">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <nav>
+            <ul>
+                <li><a href="#"><img src="icons/dashboard-icon.png" alt=""> Dashboard</a></li>
+                <li><a href="#"><img src="icons/users-icon.png" alt=""> User Management</a></li>
+                <li><a href="#"><img src="icons/transactions-icon.png" alt=""> Transactions</a></li>
+                <li><a href="#"><img src="icons/cards-icon.png" alt=""> Cards</a></li>
+                <li><a href="#"><img src="icons/reports-icon.png" alt=""> Reports</a></li>
+                <li><a href="#"><img src="icons/settings-icon.png" alt=""> System Settings</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stat-card"  data-type="pendingDeposits">
+                <h3>Pending Deposits</h3>
+                <p>$0</p>
+            </div>
+            <div class="stat-card" data-type="totalWithdrawals">
+                <h3>Pending Withdrawals</h3>
+                <p>$0</p>
+            </div>
+            <div class="stat-card" data-type="totalUsers">
+                <h3>Total Users</h3>
+                <p>0</p>
+            </div>
+            <div class="stat-card" data-type="totalTransactions">
+                <h3>Total Transactions</h3>
+                <p>0</p>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <!-- <section class="charts">
+            <div class="chart" id="user-growth-chart">User Growth Chart</div>
+            <div class="chart" id="financial-activity-chart">Financial Activity Chart</div>
+        </section> -->
+
+        <!-- Recent Activity Section -->
+        <section class="recent-activity">
+            <h2>Recent Activities</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Activity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-11-30</td>
+                        <td>John Doe</td>
+                        <td>Created a card</td>
+                        <td>Approved</td>
+                    </tr>
+                    <tr>
+                        <td>2024-11-30</td>
+                        <td>Jane Smith</td>
+                        <td>Transferred $200</td>
+                        <td>Success</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        const sidebar = document.querySelector('.admin-sidebar');
+        const toggleSidebar = document.querySelector('.toggle-sidebar');
+    
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+
+// Fetch stats from the backend and update the UI
+async function fetchAdminStats() {
+    try {
+        const response = await fetch('/api/admin/stats');
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        const stats = await response.json();
+
+        // Update the stats in the UI
+        document.querySelector('.stat-card:nth-child(1) p').textContent = `$${stats.pendingDeposits.toLocaleString()}`;
+        document.querySelector('.stat-card:nth-child(2) p').textContent = `$${stats.totalWithdrawals.toLocaleString()}`; // Fixed this line
+        document.querySelector('.stat-card:nth-child(3) p').textContent = stats.totalUsers.toLocaleString();
+        document.querySelector('.stat-card:nth-child(4) p').textContent = stats.totalTransactions.toLocaleString();
+         // Optional activeUsers
+    } catch (error) {
+        console.error('Error fetching stats:', error);
+        alert('Error fetching stats. Please try again.');
+    }
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', fetchAdminStats);
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const statCards = document.querySelectorAll('.stat-card');
+
+    statCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const type = card.getAttribute('data-type');
+            if (type) {
+                window.location.href = `/admin-details.html?type=${type}`;
+            }
+        });
+    });
+});
+
+
+    </script>
+    
+</body>
+</html>

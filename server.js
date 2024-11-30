@@ -463,6 +463,93 @@ app.get('/api/transactions/view', async (req, res) => {
 
 
 
+// Admin stats endpoint
+app.get('/api/admin/stats', async (req, res) => {
+    try {
+        // Queries for each stat
+        const [[{ pendingDeposits }]] = await pool.query(`
+            SELECT SUM(amount) AS pendingDeposits 
+            FROM crypto_deposits 
+            
+        `);
+
+        // Update the withdrawals stat to count all records from `transfers` table
+        const [[{ totalWithdrawals }]] = await pool.query(`
+            SELECT COUNT(*) AS totalWithdrawals 
+            FROM transfers
+        `);
+
+        const [[{ totalUsers }]] = await pool.query(`
+            SELECT COUNT(*) AS totalUsers 
+            FROM users
+        `);
+
+        const [[{ totalTransactions }]] = await pool.query(`
+            SELECT COUNT(*) AS totalTransactions 
+            FROM transactions
+        `);
+
+        // Respond with the updated stats
+        res.json({
+            pendingDeposits: pendingDeposits || 0,
+            totalWithdrawals: totalWithdrawals || 0, // Updated field
+            totalUsers: totalUsers || 0,
+            totalTransactions: totalTransactions || 0,
+        });
+    } catch (error) {
+        console.error('Error fetching admin stats:', error);
+        res.status(500).json({ message: 'Error fetching admin stats' });
+    }
+});
+
+
+app.get('/api/admin/details', async (req, res) => {
+    const { type } = req.query;
+
+    try {
+        let results;
+        switch (type) {
+            case 'pendingDeposits':
+                [results] = await pool.query(`
+                    SELECT * FROM crypto_deposits WHERE status = 'pending'
+                `);
+                break;
+
+            case 'totalWithdrawals':
+                [results] = await pool.query(`
+                    SELECT * FROM transfers
+                `);
+                break;
+
+            case 'totalUsers':
+                [results] = await pool.query(`
+                    SELECT * FROM users
+                `);
+                break;
+
+            case 'totalTransactions':
+                [results] = await pool.query(`
+                    SELECT * FROM transactions
+                `);
+                break;
+
+            case 'activeUsers':
+                [results] = await pool.query(`
+                    SELECT * FROM users WHERE last_login >= NOW() - INTERVAL 30 DAY
+                `);
+                break;
+
+            default:
+                return res.status(400).json({ message: 'Invalid type' });
+        }
+
+        res.json(results);
+    } catch (error) {
+        console.error('Error fetching admin details:', error);
+        res.status(500).json({ message: 'Error fetching details' });
+    }
+});
+
 
 
 
