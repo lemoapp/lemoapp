@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mysql = require('mysql2/promise'); // For MySQL database
 const cors = require('cors');
 const path = require('path');
+const axios = require('axios');
 
 // Load environment variables
 dotenv.config();
@@ -549,6 +550,201 @@ app.get('/api/admin/details', async (req, res) => {
         res.status(500).json({ message: 'Error fetching details' });
     }
 });
+
+
+// Fetch all users
+app.get('/api/admin/users', async (req, res) => {
+    try {
+        const [users] = await pool.query(`
+            SELECT fullName, email, balance, 
+                   IF(verified = true, 'Active', 'Inactive') AS status 
+            FROM users
+        `);
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Error fetching users' });
+    }
+});
+
+// Delete user
+app.post('/api/admin/delete-user', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Check if user exists
+        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Delete user
+        await pool.query('DELETE FROM users WHERE email = ?', [email]);
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Error deleting user' });
+    }
+});
+
+// Add funds to user
+app.post('/api/admin/add-funds', async (req, res) => {
+    const { email, amount } = req.body;
+
+    try {
+        // Validate amount
+        if (amount <= 0) {
+            return res.status(400).json({ message: 'Amount must be greater than zero' });
+        }
+
+        // Update balance
+        await pool.query('UPDATE users SET balance = balance + ? WHERE email = ?', [amount, email]);
+        res.json({ message: 'Funds added successfully' });
+    } catch (error) {
+        console.error('Error adding funds:', error);
+        res.status(500).json({ message: 'Error adding funds' });
+    }
+});
+
+// Remove funds from user
+app.post('/api/admin/remove-funds', async (req, res) => {
+    const { email, amount } = req.body;
+
+    try {
+        // Validate amount
+        if (amount <= 0) {
+            return res.status(400).json({ message: 'Amount must be greater than zero' });
+        }
+
+        // Check current balance
+        const [[user]] = await pool.query('SELECT balance FROM users WHERE email = ?', [email]);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.balance < amount) {
+            return res.status(400).json({ message: 'Insufficient balance' });
+        }
+
+        // Update balance
+        await pool.query('UPDATE users SET balance = balance - ? WHERE email = ?', [amount, email]);
+        res.json({ message: 'Funds removed successfully' });
+    } catch (error) {
+        console.error('Error removing funds:', error);
+        res.status(500).json({ message: 'Error removing funds' });
+    }
+});
+
+
+// Route to edit user details
+app.post('/api/admin/edit-user', async (req, res) => {
+    const { email, fullName, balance } = req.body;
+
+    // Validate input
+    if (!email || !fullName || isNaN(balance)) {
+        return res.status(400).json({ message: 'Invalid input. Please provide valid email, full name, and balance.' });
+    }
+
+    try {
+        // Check if user exists
+        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Update user details
+        await pool.query(
+            'UPDATE users SET fullName = ?, balance = ? WHERE email = ?',
+            [fullName, balance, email]
+        );
+
+        res.status(200).json({ message: 'User details updated successfully.' });
+    } catch (error) {
+        console.error('Error editing user details:', error);
+        res.status(500).json({ message: 'An error occurred while editing user details.' });
+    }
+});
+
+
+// Hardcoded conversion rates
+const conversionRates = {
+    USD: {
+        EUR: 0.85,  // Example rate: 1 USD = 0.85 EUR
+        GBP: 0.75,  // Example rate: 1 USD = 0.75 GBP
+    },
+    EUR: {
+        USD: 1.18,  // Example rate: 1 EUR = 1.18 USD
+    }
+};
+
+
+// Function to get exchange rate
+function getExchangeRate(fromCurrency, toCurrency) {
+    return conversionRates[fromCurrency] && conversionRates[fromCurrency][toCurrency];
+}
+
+
+app.post('/api/admin/convert-currency', async (req, res) => {
+    const { email, targetCurrency, amount } = req.body;
+
+    console.log('Received data:', { email, targetCurrency, amount });
+
+    // Check if required fields are provided
+    if (!email || !targetCurrency || !amount) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    try {
+        // Fetch user details
+        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+        console.log('Fetched user data:', user);
+
+        if (!user || !user.currency) {
+            return res.status(404).json({ message: 'User not found or currency not set' });
+        }
+
+        const currentCurrency = user.currency;
+
+        console.log(`User currency: ${currentCurrency}, Target currency: ${targetCurrency}`);
+
+        // If the user is trying to convert to the same currency
+        if (currentCurrency === targetCurrency) {
+            return res.status(400).json({ message: 'User is already in the selected currency' });
+        }
+
+        // Fetch the exchange rate from hardcoded conversion rates
+        const rate = getExchangeRate(currentCurrency, targetCurrency);
+
+        console.log(`Fetching rate from ${currentCurrency} to ${targetCurrency}: ${rate}`);
+
+        if (!rate) {
+            return res.status(400).json({ message: `Conversion rate not available for ${currentCurrency} to ${targetCurrency}` });
+        }
+
+        // Calculate converted amount
+        const convertedAmount = amount * rate;
+
+        // Apply the transaction fee (2%)
+        const fee = (convertedAmount * 0.02);
+        const finalAmount = convertedAmount - fee;
+
+        // Update user’s balance and currency
+        await pool.query('UPDATE users SET balance = ?, currency = ? WHERE email = ?', [finalAmount, targetCurrency, email]);
+
+        // Log the conversion in currency_conversions table
+        await pool.query('INSERT INTO currency_conversions (user_email, from_currency, to_currency, amount, converted_amount, fee, rate) VALUES (?, ?, ?, ?, ?, ?, ?)', [
+            email, currentCurrency, targetCurrency, amount, finalAmount, fee, rate
+        ]);
+
+        res.status(200).json({ message: 'Currency converted successfully', convertedAmount: finalAmount, fee });
+
+    } catch (error) {
+        console.error('Error during currency conversion:', error);
+        res.status(500).json({ message: 'Error during currency conversion' });
+    }
+});
+
+
 
 
 

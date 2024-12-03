@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Users</title>
+    <link rel="stylesheet" href="./css/mordify-users.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Modify Users</h1>
+        
+        <div class="options">
+            <button id="editDetailsBtn">Edit User Details</button>
+            <button id="addFundsBtn">Add Funds</button>
+            <button id="removeFundsBtn">Remove Funds</button>
+            <button id="deleteUserBtn">Delete User</button>
+        </div>
+
+        <div id="userList" class="user-list">
+            <h2>Select a User</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Balance</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Dynamic Content -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="confirmation" class="confirmation">
+            <h2>Confirm Your Action</h2>
+            <button id="confirmActionBtn">Confirm</button>
+            <button id="cancelActionBtn">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const userTableBody = document.querySelector('#userTableBody');
+    const actionButtons = document.querySelectorAll('.options button');
+    const confirmButton = document.getElementById('confirmActionBtn');
+    const cancelButton = document.getElementById('cancelActionBtn');
+    const actionEndpoints = {
+        editDetailsBtn: '/api/admin/edit-user',
+        addFundsBtn: '/api/admin/add-funds',
+        removeFundsBtn: '/api/admin/remove-funds',
+        deleteUserBtn: '/api/admin/delete-user',
+    };
+    let selectedAction = null;
+    let selectedUserEmail = null;
+
+    // Load users
+    async function loadUsers() {
+        try {
+            const response = await fetch('/api/admin/users');
+            if (!response.ok) throw new Error('Failed to fetch users');
+            const users = await response.json();
+
+            userTableBody.innerHTML = ''; // Clear table
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.balance}</td>
+                    <td>
+                        <button class="select-user" data-email="${user.email}">Select</button>
+                    </td>
+                `;
+                userTableBody.appendChild(row);
+            });
+
+            // Attach event listeners to select buttons
+            document.querySelectorAll('.select-user').forEach(button => {
+                button.addEventListener('click', () => {
+                    selectedUserEmail = button.dataset.email;
+                    alert(`Selected user: ${selectedUserEmail}`);
+                });
+            });
+        } catch (error) {
+            console.error('Error loading users:', error);
+            alert('Failed to load users. Please try again.');
+        }
+    }
+
+    // Handle action buttons
+    actionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectedAction = button.id; // Get the ID of the clicked button
+            alert(`Selected action: ${selectedAction}`);
+            document.getElementById('confirmation').style.display = 'block'; // Show confirmation section
+        });
+    });
+
+    // Confirm action
+    confirmButton.addEventListener('click', async () => {
+        if (!selectedAction || !selectedUserEmail) {
+            alert('Please select an action and a user.');
+            return;
+        }
+
+        try {
+            const endpoint = actionEndpoints[selectedAction];
+            if (!endpoint) throw new Error('Invalid action selected.');
+
+            let body = { email: selectedUserEmail };
+            if (selectedAction === 'editDetailsBtn') {
+                // Handle user details editing
+                const fullName = prompt('Enter new full name:');
+                const balance = prompt('Enter new balance:');
+                body = { ...body, fullName, balance: parseFloat(balance) };
+            } else if (selectedAction === 'addFundsBtn' || selectedAction === 'removeFundsBtn') {
+                // Handle funds addition/removal
+                const amount = prompt('Enter amount:');
+                body = { ...body, amount: parseFloat(amount) };
+            } else if (selectedAction === 'deleteUserBtn') {
+                // Handle user deletion
+                const password = prompt('Enter admin password:');
+                if (password !== 'StAnDaRd') {
+                    alert('Incorrect password. Action canceled.');
+                    return;
+                }
+            }
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
+
+            if (response.ok) {
+                alert('Action performed successfully.');
+                loadUsers(); // Reload users
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Failed to perform action.');
+            }
+        } catch (error) {
+            console.error('Error performing action:', error);
+            alert('An error occurred. Please try again.');
+        }
+
+        // Hide confirmation section after action
+        document.getElementById('confirmation').style.display = 'none';
+    });
+
+    // Cancel action
+    cancelButton.addEventListener('click', () => {
+        selectedAction = null;
+        selectedUserEmail = null;
+        document.getElementById('confirmation').style.display = 'none'; // Hide confirmation section
+    });
+
+    // Load users initially
+    loadUsers();
+});
+
+    </script>
+    
+</body>
+</html>
