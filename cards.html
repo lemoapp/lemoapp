@@ -40,7 +40,7 @@
                                 <p  style="display: flex; justify-content: space-between; font-size: 10px"><strong style="font-size: 10px;">Expiry Date</strong> ${card.expiry_date}</p><br>
                                 <p  style="display: flex; justify-content: space-between; font-size: 10px"><strong style="font-size: 10px;">Status</strong> ${card.isFrozen ? "Frozen" : "Active"}</p><br><br><br>
                                 <button onclick="toggleCardFreeze('${card.card_number}')">${card.isFrozen ? "Unfreeze" : "Freeze"} Card</button>
-            <button onclick="deleteCard('${card.card_number}')">Delete Card</button>
+            
                             </div>
                         `;
                     });
