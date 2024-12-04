@@ -746,6 +746,170 @@ app.post('/api/admin/convert-currency', async (req, res) => {
 
 
 
+// Route to fetch all cards for a user
+app.get('/api/cards', async (req, res) => {
+    const { email } = req.query;
+
+    console.log('Fetching cards for user:', email);
+
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    try {
+        // Fetch cards from the database
+        const [cards] = await pool.query('SELECT * FROM cards WHERE email = ?', [email]);
+
+        if (!cards || cards.length === 0) {
+            return res.status(200).json({ success: true, cards: [] }); // No cards found
+        }
+
+        console.log('Fetched cards:', cards);
+
+        res.status(200).json({ success: true, cards });
+    } catch (error) {
+        console.error('Error fetching cards:', error);
+        res.status(500).json({ success: false, message: 'Error fetching cards' });
+    }
+});
+
+
+
+app.post('/api/cards/create', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+       // Step 1: Fetch user details to check their balance
+const [users] = await pool.query('SELECT balance FROM users WHERE email = ?', [email]);
+
+if (!users || users.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+}
+
+const currentBalance = parseFloat(users[0].balance);
+
+if (isNaN(currentBalance)) {
+    return res.status(500).json({ message: 'Invalid balance value for the user' });
+}
+
+if (currentBalance < 10) {
+    return res.status(400).json({ message: 'Insufficient balance to create a card' });
+}
+
+// Step 2: Deduct $10 from user's balance
+const updatedBalance = currentBalance - 10;
+await pool.query('UPDATE users SET balance = ? WHERE email = ?', [updatedBalance, email]);
+
+
+        // Step 3: Generate card details
+        const cardNumber = generateCardNumber(); // Function to generate a Mastercard-like number
+        const cvv = generateCVV(); // Function to generate a random 3-digit CVV
+        const expiryDate = generateExpiryDate(); // Function to generate expiry date 2 years from now
+
+        // Step 4: Store the card details in the database
+        await pool.query(
+            'INSERT INTO cards (email, card_number, cvv, expiry_date, card_type, is_frozen) VALUES (?, ?, ?, ?, ?, ?)',
+            [email, cardNumber, cvv, expiryDate, 'MasterCard', 0] // Assuming 'MasterCard' is the card type
+        );
+
+        res.status(201).json({ message: 'Card created successfully', cardNumber, cvv, expiryDate });
+    } catch (error) {
+        console.error('Error creating card:', error);
+        res.status(500).json({ message: 'Error creating card' });
+    }
+});
+
+// Helper functions
+function generateCardNumber() {
+    // Mastercard card numbers start with "5" and are 16 digits long
+    let cardNumber = "5";
+    for (let i = 0; i < 15; i++) {
+        cardNumber += Math.floor(Math.random() * 10); // Add random digits
+    }
+    return cardNumber;
+}
+
+function generateCVV() {
+    // Generate a random 3-digit CVV
+    return Math.floor(100 + Math.random() * 900).toString();
+}
+
+function generateExpiryDate() {
+    // Set expiry date to 2 years from now
+    const now = new Date();
+    const expiryYear = now.getFullYear() + 2;
+    const expiryMonth = String(now.getMonth() + 1).padStart(2, '0'); // Ensure 2 digits
+    return `${expiryMonth}/${expiryYear}`;
+}
+
+
+
+// Freeze/Unfreeze Card Route
+app.post('/api/cards/freeze', async (req, res) => {
+    const { cardNumber } = req.body;
+
+    try {
+        // Step 1: Fetch the card details based on cardNumber
+        const [card] = await pool.query('SELECT * FROM cards WHERE card_number = ?', [cardNumber]);
+
+        if (!card) {
+            return res.status(404).json({ message: 'Card not found' });
+        }
+
+        // Step 2: Toggle the freeze status (1 = frozen, 0 = active)
+        const newFreezeStatus = card.is_frozen === 1 ? 0 : 1;
+
+        await pool.query('UPDATE cards SET is_frozen = ? WHERE card_number = ?', [newFreezeStatus, cardNumber]);
+
+        const message = newFreezeStatus === 1 ? 'Card frozen successfully' : 'Card unfreezed successfully';
+        res.status(200).json({ message });
+    } catch (error) {
+        console.error('Error freezing/unfreezing card:', error);
+        res.status(500).json({ message: 'Error freezing/unfreezing card' });
+    }
+});
+
+
+
+// Delete Card Route
+app.delete('/api/cards/delete', async (req, res) => {
+    const { cardNumber, transactionPassword } = req.body;
+
+    try {
+        // Fetch the card details based on cardNumber
+        const [card] = await pool.query('SELECT * FROM cards WHERE card_number = ?', [cardNumber]);
+
+        if (!card) {
+            return res.status(404).json({ message: 'Card not found' });
+        }
+
+        // Fetch the user associated with the card
+        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [card.email]);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Ensure the entered transaction password is a string (since input is a string)
+        const enteredPassword = transactionPassword.trim(); // Trim any leading/trailing spaces
+
+        // Convert the stored transaction password to a string and compare
+        const storedPassword = String(user.transaction_password).trim();
+
+        // Compare the entered password (string) with the stored password (also a string)
+        if (enteredPassword !== storedPassword) {
+            return res.status(400).json({ message: 'Incorrect transaction password' });
+        }
+
+        // Delete the card from the database
+        await pool.query('DELETE FROM cards WHERE card_number = ?', [cardNumber]);
+
+        res.status(200).json({ message: 'Card deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting card:', error);
+        res.status(500).json({ message: 'Error deleting card' });
+    }
+});
 
 
 

@@ -1,3 +1,29 @@
+/* General styles for the page */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+  .poppins-light-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+  
+  .poppins-regular-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f7f7f7;
@@ -37,7 +63,7 @@ input, select {
 
 button {
     padding: 10px;
-    background-color: #1E88E5;
+    background-color: #30334B;
     color: white;
     border: none;
     border-radius: 4px;
@@ -46,7 +72,7 @@ button {
 }
 
 button:hover {
-    background-color: #1565c0;
+    background-color: #727ab6;
 }
 
 #conversionResult {
