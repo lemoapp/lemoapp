@@ -871,7 +871,6 @@ app.post('/api/cards/freeze', async (req, res) => {
 
 
 
-// Delete Card Route
 app.delete('/api/cards/delete', async (req, res) => {
     const { cardNumber, transactionPassword } = req.body;
 
@@ -883,15 +882,23 @@ app.delete('/api/cards/delete', async (req, res) => {
             return res.status(404).json({ message: 'Card not found' });
         }
 
-        // Fetch the user associated with the card
-        const [user] = await pool.query('SELECT * FROM users WHERE email = ?', [card.email]);
+        // Assuming 'card.email' is the user's email (passed in the request)
+const [user] = await pool.query('SELECT transaction_password FROM users WHERE email = ?', [card.email]);
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+console.log("User data:", user); // Log the user object to check if it contains the transaction_password field
+
+if (user && user.transaction_password) {
+    console.log("Stored Password (from DB):", user.transaction_password);
+} else {
+    console.log("Transaction password not found or is null");
+}
 
         // Ensure the entered transaction password is a string (since input is a string)
         const enteredPassword = transactionPassword.trim(); // Trim any leading/trailing spaces
+
+        // Log the entered and stored passwords for debugging
+        console.log("Entered Password (trimmed):", enteredPassword);
+        console.log("Stored Password (from DB):", user.transaction_password);
 
         // Convert the stored transaction password to a string and compare
         const storedPassword = String(user.transaction_password).trim();
