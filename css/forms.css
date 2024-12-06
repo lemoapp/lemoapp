@@ -58,7 +58,8 @@ body.dark-mode {
 
 /* Auth Header */
 .auth-header .logo {
-    width: 6rem;
+    width: 9rem;
+    height: 3rem;
     margin-bottom: 1rem;
     background-color: #30334B;
     padding: 1rem;
