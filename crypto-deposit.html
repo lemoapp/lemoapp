@@ -26,10 +26,7 @@
                
                 <select id="cryptoType" name="cryptoType" required>
                     <option value="btc">Bitcoin (BTC)</option>
-                    <option value="eth">Ethereum (ETH)</option>
-                    <option value="ltc">Litecoin (LTC)</option>
                     <option value="usdt">Tether (USDT)</option>
-                    <option value="bnb">Binance Coin (BNB)</option>
                 </select>
                 <label for="cryptoType">Select Cryptocurrency:</label>
             </div><br>
@@ -37,7 +34,8 @@
             <div id="qrCodeContainer">
                 <h5>Scan the QR Code</h5>
                 <img id="qrCodeImage" src="images/btc-qr.png" alt="Bitcoin QR Code">
-                <p id="walletAddress">Wallet Address: <span id="cryptoWallet">bc1examplebitcoinaddress</span></p><br><br>
+                <p id="walletAddress">Wallet Address: <span id="cryptoWallet">bc1qpwjgneqczaspsqmpfyr2d48wmmnvr6qn3fmm56
+                </span></p><br><br>
                 <button type="button" class="copy-btn" id="copyWalletAddress">Copy Wallet Address</button>
             </div>
 
@@ -55,11 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Wallet addresses and QR code images for each crypto
     const cryptoData = {
-        btc: { qr: 'images/btc-qr.png', wallet: 'bc1examplebitcoinaddress' },
-        eth: { qr: 'images/eth-qr.png', wallet: '0xexampleethereumaddress' },
-        ltc: { qr: 'images/ltc-qr.png', wallet: 'ltc1examplelitecoinaddress' },
-        usdt: { qr: 'images/usdt-qr.png', wallet: 'Tetherexampleaddress' },
-        bnb: { qr: 'images/bnb-qr.png', wallet: 'bnb1examplebinanceaddress' },
+        btc: { qr: './css/images/btcqrcode.jpg', wallet: 'bc1qpwjgneqczaspsqmpfyr2d48wmmnvr6qn3fmm56' },
+        usdt: { qr: './css/images/tetherqrcode.jpg', wallet: '0x6c1539A2253777d9E5dBb3EEb4Eeec4F730fFAAd' },
     };
 
     // Function to update QR code and wallet address
