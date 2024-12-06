@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Transaction PIN</title>
+    <link rel="stylesheet" href="./css/style.css"> <!-- Assuming a common CSS file -->
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2rem;
+            color: #30334B;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #30334B;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #50576f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Transaction PIN</h1>
+        <form id="pinForm">
+            <input type="password" id="transactionPin" placeholder="Enter 4-digit PIN" maxlength="4" required>
+            <button type="submit">Save PIN</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('pinForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const transactionPin = document.getElementById('transactionPin').value;
+            const email = new URLSearchParams(window.location.search).get('email');
+
+            if (transactionPin.length !== 4 || isNaN(transactionPin)) {
+                alert('Transaction PIN must be a 4-digit number.');
+                return;
+            }
+
+            fetch('/api/set-transaction-pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transactionPin, email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/index.html';
+                } else {
+                    alert(data.message || 'Error setting transaction PIN.');
+                }
+            })
+            .catch(error => {
+                console.error('Error setting transaction PIN:', error);
+            });
+        });
+    </script>
+</body>
+</html>

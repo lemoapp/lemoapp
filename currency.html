@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Currency</title>
+    <link rel="stylesheet" href="./css/style.css"> <!-- Assuming a common CSS file -->
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2rem;
+            color: #30334B;
+            margin-bottom: 20px;
+        }
+        .currency-options {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+        .currency-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .currency-option input {
+            margin-top: 10px;
+        }
+        button {
+            background-color: #30334B;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #50576f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Your Default Currency</h1>
+        <form id="currencyForm">
+            <div class="currency-options">
+                <div class="currency-option">
+                    <label for="usd">USD ($)</label>
+                    <input type="radio" id="usd" name="currency" value="USD" required>
+                </div>
+                <div class="currency-option">
+                    <label for="eur">EUR (€)</label>
+                    <input type="radio" id="eur" name="currency" value="EUR">
+                </div>
+                <div class="currency-option">
+                    <label for="gbp">GBP (£)</label>
+                    <input type="radio" id="gbp" name="currency" value="GBP">
+                </div>
+            </div>
+            <button type="submit">Continue</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('currencyForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const currency = document.querySelector('input[name="currency"]:checked').value;
+            const email = new URLSearchParams(window.location.search).get('email');
+
+            fetch('/api/set-currency', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currency, email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = `/transaction-pin.html?email=${encodeURIComponent(email)}`;
+                } else {
+                    alert(data.message || 'Error setting currency.');
+                }
+            })
+            .catch(error => {
+                console.error('Error setting currency:', error);
+            });
+        });
+    </script>
+</body>
+</html>

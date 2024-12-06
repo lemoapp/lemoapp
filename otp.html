@@ -115,34 +115,25 @@
     const otp = document.getElementById('otpInput').value;
     const email = new URLSearchParams(window.location.search).get('email'); // Extract email from URL
 
-    // Show loading spinner
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    loadingSpinner.style.display = 'inline';
-
     fetch('/api/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ otp, email }) // No token needed here
+        body: JSON.stringify({ otp, email })
     })
     .then(response => response.json())
     .then(data => {
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
-
         if (data.success) {
-            // Redirect user to the login page (forms.html)
-            window.location.href = 'index.html'; 
+            // Redirect to currency selection page
+            window.location.href = `/currency.html?email=${encodeURIComponent(email)}`;
         } else {
-            // Show error message
-            document.getElementById('errorMessage').style.display = 'block';
+            alert(data.message || 'Invalid OTP or OTP already used.');
         }
     })
     .catch(error => {
         console.error('Error verifying OTP:', error);
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
     });
 });
+
 
 
         // Check if dark mode is enabled in localStorage on page load

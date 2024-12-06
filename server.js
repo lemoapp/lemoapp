@@ -142,6 +142,47 @@ app.post('/api/verify-otp', async (req, res) => {
     }
 });
 
+
+app.post('/api/set-currency', async (req, res) => {
+    const { email, currency } = req.body;
+
+    try {
+        // Update the user's default currency
+        await pool.query(
+            'UPDATE users SET currency = ? WHERE email = ?',
+            [currency, email]
+        );
+
+        res.json({ success: true, message: 'Currency set successfully! Proceed to transaction PIN creation.' });
+    } catch (error) {
+        console.error('Error setting currency:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while setting the currency. Please try again.' });
+    }
+});
+
+
+app.post('/api/set-transaction-pin', async (req, res) => {
+    const { email, transactionPin } = req.body;
+
+    try {
+        // Update the user's transaction PIN
+        await pool.query(
+            'UPDATE users SET transaction_password = ? WHERE email = ?',
+            [transactionPin, email]
+        );
+
+        res.json({ success: true, message: 'Transaction PIN set successfully! Proceed to login.' });
+    } catch (error) {
+        console.error('Error setting transaction PIN:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while setting the transaction PIN. Please try again.' });
+    }
+});
+
+
+
+
+
+
 app.post('/api/login', async (req, res) => { 
     console.log("Login request received");
     const { email, password } = req.body;
@@ -226,7 +267,12 @@ app.get('/api/dashboard', async (req, res) => {
 
     try {
         console.log('Fetching user data for email:', email);
-        const [rows] = await pool.query('SELECT balance, income, expenses, total_bills, savings FROM users WHERE email = ?', [email]);
+
+        // Include the `currency` column in the query
+        const [rows] = await pool.query(
+            'SELECT balance, income, expenses, total_bills, savings, currency FROM users WHERE email = ?',
+            [email]
+        );
 
         if (rows.length === 0) {
             console.log('No user found');
@@ -235,13 +281,14 @@ app.get('/api/dashboard', async (req, res) => {
 
         console.log('User data:', rows[0]);
 
-        // Ensure the values are numbers
+        // Ensure the values are properly formatted
         const userData = {
             balance: parseFloat(rows[0].balance),
             income: parseFloat(rows[0].income),
             expenses: parseFloat(rows[0].expenses),
             total_bills: parseFloat(rows[0].total_bills),
             savings: parseFloat(rows[0].savings),
+            currency: rows[0].currency || 'USD', // Default to USD if currency is not set
         };
 
         res.status(200).json({ message: 'User data fetched successfully', data: userData });
@@ -250,6 +297,7 @@ app.get('/api/dashboard', async (req, res) => {
         res.status(500).json({ message: 'Database error' });
     }
 });
+
 
 
 

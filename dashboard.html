@@ -249,17 +249,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Fetch the user data (balance, income, expenses, etc.)
+        // Fetch the user data (balance, income, expenses, etc.) including the default currency
         const userResponse = await fetch(`/api/dashboard?email=${email}`);
         const userData = await userResponse.json();
 
         if (userResponse.ok) {
-            // Update balance, income, etc.
-            document.getElementById('balance').textContent = `$ ${userData.data.balance.toFixed(2)}`;
-            document.getElementById('income').textContent = `$ ${userData.data.income.toFixed(2)}`;
-            document.getElementById('expenses').textContent = `$ ${userData.data.expenses.toFixed(2)}`;
-            document.getElementById('totalBills').textContent = `$ ${userData.data.total_bills.toFixed(2)}`;
-            document.getElementById('savings').textContent = `$ ${userData.data.savings.toFixed(2)}`;
+            const { balance, income, expenses, total_bills, savings, currency } = userData.data;
+
+            // Update balance, income, etc., with the user's default currency from the database
+            document.getElementById('balance').textContent = `${currency} ${balance.toFixed(2)}`;
+            document.getElementById('income').textContent = `${currency} ${income.toFixed(2)}`;
+            document.getElementById('expenses').textContent = `${currency} ${expenses.toFixed(2)}`;
+            document.getElementById('totalBills').textContent = `${currency} ${total_bills.toFixed(2)}`;
+            document.getElementById('savings').textContent = `${currency} ${savings.toFixed(2)}`;
+        } else {
+            alert(userData.message || 'Failed to fetch user details');
         }
 
         // Fetch the most recent transactions
@@ -276,12 +280,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 // Populate the transactions container with the fetched transactions
                 transactionsData.data.forEach(transaction => {
-                    // Ensure that transaction.amount is a number
                     const amount = Number(transaction.amount); // Convert amount to a number
-                    const formattedAmount = !isNaN(amount) ? amount.toFixed(2) : 'Invalid amount'; // Format amount with 2 decimals if valid
-
-                    // Handle the transaction date, ensuring it is properly formatted
-                    const transactionDate = new Date(transaction.date).toLocaleDateString();
+                    const formattedAmount = !isNaN(amount) ? amount.toFixed(2) : 'Invalid amount'; // Format amount with 2 decimals
+                    const transactionDate = new Date(transaction.date).toLocaleDateString(); // Format date
 
                     const transactionElement = document.createElement('div');
                     transactionElement.classList.add('transaction');
@@ -294,7 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             </div>
                         </div>
                         <div class="right">
-                            <p>${amount > 0 ? '' : ''} $${formattedAmount}</p>
+                            <p>${amount > 0 ? '' : ''} ${userData.data.currency}${formattedAmount}</p>
                             <h5>${transactionDate}</h5>
                         </div>
                     `;
