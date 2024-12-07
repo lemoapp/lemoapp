@@ -233,6 +233,46 @@ input:checked + .slider:before {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.modal-content h2{
+    font-size: 14px;
+}
+
+.modal-content form input{
+    width: 95%;
+    margin-top: 1rem;
+}
+
+
+.modal-content form input:focus {
+    border-color: #F5F100;
+    outline: none;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.modal-content form button{
+    width: 100%;
+    background-color: #30334B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 2rem;
+}
+
+    
+.modal-content form button:hover {
+    background-color: #606693;
+}
+
+
 /* Close button */
 .close {
     color: #aaa;
