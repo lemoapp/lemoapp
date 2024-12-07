@@ -966,6 +966,48 @@ if (user && user.transaction_password) {
     }
 });
 
+app.post('/api/update-username', async (req, res) => {
+    const { email, newUsername } = req.body;
+
+    try {
+        await pool.query('UPDATE users SET fullName = ? WHERE email = ?', [newUsername, email]);
+        res.json({ success: true, message: 'Username updated successfully' });
+    } catch (error) {
+        console.error('Error updating username:', error);
+        res.status(500).json({ success: false, message: 'Failed to update username' });
+    }
+});
+
+
+app.post('/api/update-address', async (req, res) => {
+    const { email, newAddress } = req.body;
+
+    try {
+        await pool.query('UPDATE users SET address = ? WHERE email = ?', [newAddress, email]);
+        res.json({ success: true, message: 'Address updated successfully' });
+    } catch (error) {
+        console.error('Error updating address:', error);
+        res.status(500).json({ success: false, message: 'Failed to update address' });
+    }
+});
+
+
+app.post('/api/update-password', async (req, res) => {
+    const { email, oldPassword, newPassword } = req.body;
+
+    try {
+        const [rows] = await pool.query('SELECT password FROM users WHERE email = ?', [email]);
+        if (rows.length === 0 || rows[0].password !== oldPassword) {
+            return res.status(400).json({ success: false, message: 'Incorrect old password' });
+        }
+
+        await pool.query('UPDATE users SET password = ? WHERE email = ?', [newPassword, email]);
+        res.json({ success: true, message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).json({ success: false, message: 'Failed to update password' });
+    }
+});
 
 
 

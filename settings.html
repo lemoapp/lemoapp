@@ -68,16 +68,12 @@
             <p>Profile Setting</p>
             <div class="setting-item">
                 <span class="setting-label">Change Username</span>
-                <a href="#" class="setting-action">→</a>
+                <a href="#" id="openUsernameModal" class="setting-action">→</a>
             </div>
             <!-- <div class="setting-item">
-                <span class="setting-label">Update E-mail</span>
-                <a href="#" class="setting-action">→</a>
-            </div> -->
-            <div class="setting-item">
                 <span class="setting-label">Address</span>
-                <a href="#" class="setting-action">Edit</a>
-            </div>
+                <a href="#" id="openAddressModal" class="setting-action">Edit</a>
+            </div> -->
             <div class="setting-item">
                 <span class="setting-label">Private Profile</span>
                 <label class="switch">
@@ -85,13 +81,12 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-
-            <!-- Security Section -->
             <p>Security</p>
             <div class="setting-item">
                 <span class="setting-label">Update Password</span>
-                <a href="#" class="setting-action">→</a>
+                <a href="#" id="openPasswordModal" class="setting-action">→</a>
             </div>
+            
             <div class="setting-item">
                 <span class="setting-label">2 Step Verification</span>
                 <label class="switch">
@@ -110,6 +105,44 @@
             </a>
            
         </div>
+
+        <!-- Change Username Modal -->
+<div id="usernameModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Change Username</h2>
+        <form id="changeUsernameForm">
+            <input type="text" id="newUsername" placeholder="Enter new username" required />
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- Update Address Modal -->
+<div id="addressModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Address</h2>
+        <form id="updateAddressForm">
+            <textarea id="newAddress" placeholder="Enter your address"></textarea>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- Update Password Modal -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Update Password</h2>
+        <form id="updatePasswordForm">
+            <input type="password" id="oldPassword" placeholder="Old Password" required />
+            <input type="password" id="newPassword" placeholder="New Password" required />
+            <button type="submit">Update Password</button>
+        </form>
+    </div>
+</div>
+
     </div><br><br><br><br>
 
     <!-- App Bottom Menu -->
@@ -147,6 +180,144 @@ window.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('darkMode', 'disabled');
             }
         });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Modal elements
+    const usernameModal = document.getElementById('usernameModal');
+    const addressModal = document.getElementById('addressModal');
+    const passwordModal = document.getElementById('passwordModal');
+
+    // Open buttons
+    const openUsernameModal = document.getElementById('openUsernameModal'); // Change Username
+    const openAddressModal = document.getElementById('openAddressModal'); // Edit Address
+    const openPasswordModal = document.getElementById('openPasswordModal'); // Update Password
+
+    // Close buttons
+    const closeButtons = document.querySelectorAll('.close');
+
+    // Functions to open and close modals
+    const openModal = (modal) => {
+        modal.style.display = 'block';
+    };
+
+    const closeModal = (modal) => {
+        modal.style.display = 'none';
+    };
+
+    // Open modals
+    if (openUsernameModal) {
+        openUsernameModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(usernameModal);
+        });
+    }
+
+    if (openAddressModal) {
+        openAddressModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(addressModal);
+        });
+    }
+
+    if (openPasswordModal) {
+        openPasswordModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(passwordModal);
+        });
+    }
+
+    // Close modals
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal');
+            closeModal(modal);
+        });
+    });
+
+    // Close modal when clicking outside of the modal content
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            closeModal(e.target);
+        }
+    });
+});
+
+// Change Username
+document.getElementById('changeUsernameForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newUsername = document.getElementById('newUsername').value;
+    const email = localStorage.getItem('username');
+
+    try {
+        const response = await fetch('/api/update-username', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, newUsername }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('Username updated successfully!');
+            modals.username.style.display = 'none';
+        } else {
+            alert(data.message || 'Failed to update username.');
+        }
+    } catch (error) {
+        console.error('Error updating username:', error);
+    }
+});
+
+// Update Address
+document.getElementById('updateAddressForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newAddress = document.getElementById('newAddress').value;
+    const email = localStorage.getItem('username');
+
+    try {
+        const response = await fetch('/api/update-address', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, newAddress }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('Address updated successfully!');
+            modals.address.style.display = 'none';
+        } else {
+            alert(data.message || 'Failed to update address.');
+        }
+    } catch (error) {
+        console.error('Error updating address:', error);
+    }
+});
+
+// Update Password
+document.getElementById('updatePasswordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const email = localStorage.getItem('username');
+
+    try {
+        const response = await fetch('/api/update-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, oldPassword, newPassword }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('Password updated successfully!');
+            modals.password.style.display = 'none';
+        } else {
+            alert(data.message || 'Failed to update password.');
+        }
+    } catch (error) {
+        console.error('Error updating password:', error);
     }
 });
 
