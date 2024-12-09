@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
     <title>Deposit Crypto</title>
     <meta name="theme-color" content="  #30334B">
     <meta name="apple-mobile-web-app-status-bar-style" content="  #30334B">
@@ -164,6 +165,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+window.onload = function() {
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }, function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        };
     </script>
 </body>
 </html>

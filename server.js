@@ -1010,6 +1010,146 @@ app.post('/api/update-password', async (req, res) => {
 });
 
 
+app.post('/api/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    try {
+        // Check if the email exists in the database
+        const [rows] = await pool.query('SELECT password FROM users WHERE email = ?', [email]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Email not found.' });
+        }
+
+        const plainTextPassword = rows[0].password;
+
+        // Send the password via email
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        await transporter.sendMail({
+            from: 'no-reply@vanguardroyalbank.com',
+            to: email,
+            subject: 'Your Vanguard Royal Bank Password',
+            html: `<p>Your password is: <strong>${plainTextPassword}</strong></p>
+                   <p>Use it to log in to your account <a href="https://lemoapp.onrender.com/index.html">here</a>.</p>`
+        });
+
+        res.status(200).json({ message: 'Password sent to your email.' });
+    } catch (error) {
+        console.error('Error retrieving password:', error);
+        res.status(500).json({ message: 'An error occurred while retrieving your password.' });
+    }
+});
+
+
+async function authenticateUser(req, res, next) {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).send({ error: 'Email is required' });
+    }
+
+    try {
+        // Use pool to query the database
+        const [results] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+
+        if (results.length === 0) {
+            return res.status(401).send({ error: 'Unauthorized: User not found' });
+        }
+
+        // Attach user ID to the request object
+        req.userId = results[0].id;
+        next();
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+
+
+app.post('/api/claim-status', authenticateUser, async (req, res) => {
+    const email = req.body.email;
+    
+    try {
+        // Get user ID based on email
+        const [userResults] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+        if (userResults.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const userId = userResults[0].user_id;
+
+        // Fetch claim data for the user
+        const [claimData] = await pool.query('SELECT claim_date, total_claims FROM claims WHERE user_id = ?', [userId]);
+
+        if (claimData.length > 0) {
+            const claim = claimData[0];
+            const claimedToday = new Date(claim.claim_date).toDateString() === new Date().toDateString();
+            res.json({
+                totalClaims: claim.total_claims,
+                claimedToday,
+            });
+        } else {
+            // No claim data found
+            res.json({
+                totalClaims: 0,
+                claimedToday: false,
+            });
+        }
+    } catch (err) {
+        console.error('Error fetching claim status:', err);
+        res.status(500).json({ error: 'Error fetching claim data' });
+    }
+});
+
+
+
+app.post('/api/claim', authenticateUser, async (req, res) => {
+    const userId = req.userId;
+
+    try {
+        // Retrieve the latest claim data for the user
+        const [results] = await pool.query(
+            'SELECT claim_date, total_claims FROM claims WHERE user_id = ?',
+            [userId]
+        );
+
+        const claimData = results[0];
+        const claimedToday = claimData && new Date(claimData.claim_date).toDateString() === new Date().toDateString();
+
+        if (claimedToday) {
+            return res.status(400).send({ message: 'Already claimed today!' });
+        }
+
+        const totalClaims = (claimData ? claimData.total_claims : 0) + 1;
+
+        // Insert or update the claim data
+        await pool.query(
+            `INSERT INTO claims (user_id, claim_date, total_claims)
+             VALUES (?, CURDATE(), ?)
+             ON DUPLICATE KEY UPDATE claim_date = CURDATE(), total_claims = ?`,
+            [userId, totalClaims, totalClaims]
+        );
+
+        res.send({ success: true, totalClaims });
+    } catch (err) {
+        console.error('Error handling claim:', err);
+        res.status(500).send({ error: 'Database error' });
+    }
+});
+
+
+
+
 
 // Catch-all route for invalid paths
 app.use((req, res) => {

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
     <title>Lemo Login & Signup</title>
     <meta name="theme-color" content="  #30334B">
     <meta name="apple-mobile-web-app-status-bar-style" content="  #30334B">
@@ -31,7 +32,8 @@
                     <label for="passwordLogin">Password</label>
                     <input type="password" id="passwordLogin" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="auth-btn">Login</button>
+                <button type="submit" class="auth-btn">Login</button><br><br>
+                <p style="font-size: 14px;">forgot password? <a href="forgot-password.html" style="font-weight: bold;">Click to retrieve</a></p>
                 <p class="toggle-link">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
             </form>
 
@@ -169,6 +171,19 @@ document.getElementById('signupForm').addEventListener('submit', async function 
         });
     }
 });
+
+
+window.onload = function() {
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }, function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        };
 
     </script>
 </body>

@@ -1,0 +1,27 @@
+{
+    "name": "Vanguard Royal Bank",
+    "short_name": "Vanguard Royal Bank",
+    "description": "A powerful banking platform to manage your funds and expenses.",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#30334B",
+    "theme_color": "#30334B",
+    "icons": [
+      {
+        "src": "/css/images/medium.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/css/images/big.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "src": "/css/images/small.png",
+        "sizes": "72x72",
+        "type": "image/png"
+      }
+    ]
+  }
+  

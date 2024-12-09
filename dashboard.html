@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="css/dashboard.css">
     <meta name="theme-color" content="  #30334B">
     <meta name="apple-mobile-web-app-status-bar-style" content="  #30334B">
@@ -169,9 +170,10 @@
                 <div class="savings-section">
                     <div class="animated-background">
                       <div class="content">
-                        <h4 class="headline">Start Saving for a Brighter Tomorrow!</h4>
-                        <p class="tagline">Set goals, save effortlessly, and watch your wealth grow.</p>
-                        <button class="cta">Start Saving Now</button>
+                        <h4 class="headline">Claims!</h4>
+                        <p class="tagline">Claim $10 everyday</p>
+                        <a href="activities.html"><button class="cta">Claim Now</button></a>
+                        
                       </div>
                       <img src="./css/images/rb_13529.png" alt="Piggy Bank" class="animation">
                     </div>
@@ -313,7 +315,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
-
+window.onload = function() {
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    }, function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        };
 
 </script>
 </body>

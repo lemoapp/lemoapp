@@ -139,6 +139,7 @@ body.dark-mode {
 .toggle-link a {
     color: #30334B;
     text-decoration: none;
+    font-weight: bold
 }
 
 .toggle-link a:hover {
