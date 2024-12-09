@@ -54,7 +54,18 @@
                 </div>
                 <button type="submit" class="auth-btn">Sign Up</button>
                 <p class="toggle-link">Already have an account? <a href="#" id="showLogin">Login</a></p>
-            </form>
+            </form><br>
+            <!-- Add a hidden install button -->
+
+            <button id="installBtn" style="display: none; width: 100%;
+            padding: 0.8rem;
+            background: #30334B;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;">Install Our App</button>
         </div>
     </div>
     <script>
@@ -184,6 +195,50 @@ window.onload = function() {
                     });
             }
         };
+
+
+        let deferredPrompt; // Variable to hold the event for the installation prompt
+
+// Listen for the beforeinstallprompt event
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the default install prompt
+  e.preventDefault();
+
+  // Save the event for later use
+  deferredPrompt = e;
+
+  // Show the install button
+  const installBtn = document.getElementById('installBtn');
+  installBtn.style.display = 'block'; // Make the button visible
+});
+
+// Handle the button click to trigger installation
+document.getElementById('installBtn').addEventListener('click', (e) => {
+  // Show the install prompt
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+      console.log(choiceResult.outcome);
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the installation prompt');
+      } else {
+        console.log('User dismissed the installation prompt');
+      }
+      deferredPrompt = null; // Reset the deferred prompt
+    });
+  }
+});
+
+
+window.addEventListener('appinstalled', (event) => {
+  console.log('App successfully installed');
+  // Hide the button after installation
+  const installBtn = document.getElementById('installBtn');
+  installBtn.style.display = 'none';
+});
+
 
     </script>
 </body>
