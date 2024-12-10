@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return `
                     <div class="transaction">
                         <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Type:</strong> ${txn.type}</p>
-                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Amount:</strong> $${amount}</p>
+                        <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Amount:</strong> ${amount}</p>
                         <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Transfer Type:</strong> ${txn.transferType}</p>
                         <p style="margin: 2px 0px; color: #25D0BC; font-size: 15px;"><strong style="margin: 2px 0px; color: #30334B;">Date:</strong> ${new Date(txn.date).toLocaleDateString()}</p>
                     </div>

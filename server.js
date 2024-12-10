@@ -43,32 +43,37 @@ app.get('/test-db', async (req, res) => {
     }
 });
 
+
 async function sendEmail(to, subject, htmlContent) {
     try {
+        // Configure the transporter with Zoho Mail's SMTP details
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.zoho.com', // SMTP server for Zoho
+            port: 465,            // Port for SSL
+            secure: true,         // Use SSL
             auth: {
-                user: process.env.EMAIL_USER, 
-                pass: process.env.EMAIL_PASS 
+                user: process.env.EMAIL_USER, // Your professional Zoho email address
+                pass: process.env.EMAIL_PASS  // Your Zoho email password or App-specific password
             }
         });
 
         // Set up email options
         const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: to,
-            subject: subject, 
-            html: htmlContent
+            from: process.env.EMAIL_USER, // Sender's email
+            to: to,                       // Recipient's email
+            subject: subject,             // Email subject
+            html: htmlContent             // HTML content of the email
         };
 
         // Send the email
         await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully');
+        console.log('Email sent successfully via Zoho Mail');
     } catch (error) {
         console.error('Error sending email:', error);
         throw error; // Ensure errors are propagated for proper handling
     }
 }
+
 
 app.post('/api/signup', async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -146,19 +151,68 @@ app.post('/api/verify-otp', async (req, res) => {
 app.post('/api/set-currency', async (req, res) => {
     const { email, currency } = req.body;
 
-    try {
-        // Update the user's default currency
-        await pool.query(
-            'UPDATE users SET currency = ? WHERE email = ?',
-            [currency, email]
-        );
+    // Predefined values for each currency
+    const currencyDetails = {
+        USD: {
+            account_number: "8398170700",
+            ach_routing_number: "026073150",
+            iban: null, // Not applicable for USD
+            swift_code: null, // Not applicable for USD
+            sort_code: null, // Not applicable for USD
+        },
+        EUR: {
+            account_number: "66908937",
+            ach_routing_number: null, // Not applicable for EUR
+            iban: null, // Not provided
+            swift_code: "CLJUGB21XXX",
+            sort_code: "041307",
+        },
+        GBP: {
+            account_number: "66908937",
+            ach_routing_number: null, // Not applicable for GBP
+            iban: "GB71CLJU04130766908937",
+            swift_code: "CLJUGB21XXX",
+            sort_code: null, // Not provided
+        }
+    };
 
-        res.json({ success: true, message: 'Currency set successfully! Proceed to transaction PIN creation.' });
+    // Get the details for the selected currency
+    const details = currencyDetails[currency];
+
+    if (!details) {
+        return res.status(400).json({ success: false, message: 'Invalid currency selected.' });
+    }
+
+    try {
+        // Update the user's details in the database
+        const query = `
+            UPDATE users 
+            SET currency = ?, 
+                account_number = ?, 
+                ach_routing_number = ?, 
+                iban = ?, 
+                swift_code = ?, 
+                sort_code = ? 
+            WHERE email = ?
+        `;
+
+        await pool.query(query, [
+            currency,
+            details.account_number,
+            details.ach_routing_number,
+            details.iban,
+            details.swift_code,
+            details.sort_code,
+            email,
+        ]);
+
+        res.json({ success: true, message: 'Currency and account details set successfully!' });
     } catch (error) {
-        console.error('Error setting currency:', error);
-        res.status(500).json({ success: false, message: 'An error occurred while setting the currency. Please try again.' });
+        console.error('Error setting currency and account details:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while setting the currency and account details.' });
     }
 });
+
 
 
 app.post('/api/set-transaction-pin', async (req, res) => {
@@ -412,32 +466,42 @@ app.post('/api/send-funds', async (req, res) => {
 
 
 
-// Route to fetch user details for receiving money page
 app.get('/api/user-details', async (req, res) => {
-    const email = req.query.email; // Get the email from the query string
-
-    if (!email) {
-        return res.status(400).json({ message: 'Email is required' });
-    }
+    const { email } = req.query;
 
     try {
-        const [user] = await pool.query('SELECT fullName FROM users WHERE email = ?', [email]);
+        // Fetch user details from the database
+        const [rows] = await pool.query(
+            'SELECT fullName, currency, account_number, swift_code, IBAN, sort_code, ach_routing_number FROM users WHERE email = ?',
+            [email]
+        );
 
-        if (user.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
         }
 
-        res.status(200).json({
-            accountName: user[0].fullName,
-            accountNumber: '1234567890', // Static Account Number
-            achRoutingNumber: '9876543210', // Static ACH Routing Number
-            accountType: 'Checking' // Static Account Type
+        const user = rows[0];
+
+        // Check for missing account details
+        const detailsMissing = !user.account_number || (!user.swift_code && !user.ach_routing_number);
+
+        res.json({
+            success: true,
+            accountName: user.fullName,
+            currency: user.currency,
+            accountNumber: user.account_number || null,
+            swiftCode: user.swift_code || null,
+            IBAN: user.IBAN || null,
+            sortCode: user.sort_code || null,
+            achRoutingNumber: user.ach_routing_number || null,
+            detailsMissing, // Flag to indicate if any details are missing
         });
     } catch (error) {
         console.error('Error fetching user details:', error);
-        res.status(500).json({ message: 'Error fetching user details' });
+        res.status(500).json({ success: false, message: 'An error occurred while fetching user details.' });
     }
 });
+
 
 
 

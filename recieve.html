@@ -21,22 +21,20 @@
         <div class="detail">
             <label for="accountName">Account Name</label>
             <span id="accountName"></span>
-            <button class="copy-btn" data-clipboard-target="#accountName">Copy</button>
         </div>
-        <div class="detail">
-            <label for="accountNumber">Account Number</label>
-            <span id="accountNumber">8398170700</span>
-            <button class="copy-btn" data-clipboard-target="#accountNumber">Copy</button>
+        <div class="detail" style="display: none;">
+            <label for="accountNumber"></label>
+            <span id="accountNumber"></span>
+            
         </div>
-        <div class="detail">
-            <label for="achRoutingNumber">ACH Routing Number</label>
-            <span id="achRoutingNumber">026073150</span>
-            <button class="copy-btn" data-clipboard-target="#achRoutingNumber">Copy</button>
+        <div class="detail" style="display: none;">
+            <label for="achRoutingNumber"></label>
+            <span id="achRoutingNumber"></span>
+            
         </div>
         <div class="detail">
             <label for="accountType">Account Type</label>
             <span id="accountType">Checking</span>
-            <button class="copy-btn" data-clipboard-target="#accountType">Copy</button>
         </div>
     </div>
 
@@ -47,7 +45,7 @@
             <ul>
                 <li>Recieving payments via ACH has a 1% fee; please use the ACH routing number to recieve payments via ACH</li>
                 <li>
-                    The maximum amount you can recieve per transaction is $20,000.
+                    The maximum amount you can recieve per transaction is 20,000 in your local currency.
                 </li>
                 <li>
                     Recieving payments via Fedwire/domestic wire or SWIFT is currently not supported.
@@ -63,42 +61,99 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const email = localStorage.getItem('username'); // Get email from localStorage
+       document.addEventListener('DOMContentLoaded', async () => {
+    const email = localStorage.getItem('username'); // Get email from localStorage
 
-            if (!email) {
-                alert('User not logged in');
-                return;
-            }
+    if (!email) {
+        alert('User not logged in');
+        return;
+    }
 
-            try {
-                // Fetch the user data for receiving money page
-                const userResponse = await fetch(`/api/user-details?email=${email}`);
-                const userData = await userResponse.json();
+    try {
+        // Fetch the user data
+        const userResponse = await fetch(`/api/user-details?email=${email}`);
+        const userData = await userResponse.json();
 
-                if (userResponse.ok) {
-                    // Display the dynamic details
-                    document.getElementById('accountName').textContent = userData.accountName;
-                } else {
-                    alert(userData.message || 'Failed to fetch user details');
+        if (userResponse.ok) {
+            const { accountName, currency, accountNumber, swiftCode, IBAN, sortCode, achRoutingNumber, detailsMissing } = userData;
+
+            document.getElementById('accountName').textContent = accountName;
+
+            if (detailsMissing) {
+                // If details are missing, show a message to contact support
+                document.getElementById('accountDetails').innerHTML = `
+                    <p style="color: red; font-weight: bold;">Some account details are missing. Please contact support.</p>
+                `;
+            } else {
+                // Dynamically update fields based on the currency
+                let dynamicDetails = '';
+
+                if (currency === 'USD') {
+                    dynamicDetails = `
+                        <div class="detail">
+                            <label for="accountNumber">Account Number</label>
+                            <span id="accountNumber">${accountNumber}</span>
+                            <button class="copy-btn" data-clipboard-target="#accountNumber">Copy</button>
+                        </div>
+                        <div class="detail">
+                            <label for="achRoutingNumber">ACH Routing Number</label>
+                            <span id="achRoutingNumber">${achRoutingNumber}</span>
+                            <button class="copy-btn" data-clipboard-target="#achRoutingNumber">Copy</button>
+                        </div>
+                    `;
+                } else if (currency === 'EUR') {
+                    dynamicDetails = `
+                        <div class="detail">
+                            <label for="accountNumber">Account Number</label>
+                            <span id="accountNumber">${accountNumber}</span>
+                            <button class="copy-btn" data-clipboard-target="#accountNumber">Copy</button>
+                        </div>
+                        <div class="detail">
+                            <label for="sortCode">Sort Code</label>
+                            <span id="sortCode">${sortCode}</span>
+                            <button class="copy-btn" data-clipboard-target="#sortCode">Copy</button>
+                        </div>
+                        <div class="detail">
+                            <label for="swiftCode">SWIFT Code</label>
+                            <span id="swiftCode">${swiftCode}</span>
+                            <button class="copy-btn" data-clipboard-target="#swiftCode">Copy</button>
+                        </div>
+                    `;
+                } else if (currency === 'GBP') {
+                    dynamicDetails = `
+                        <div class="detail">
+                            <label for="accountNumber">Account Number</label>
+                            <span id="accountNumber">${accountNumber}</span>
+                            <button class="copy-btn" data-clipboard-target="#accountNumber">Copy</button>
+                        </div>
+                        <div class="detail">
+                            <label for="IBAN">IBAN</label>
+                            <span id="IBAN">${IBAN}</span>
+                            <button class="copy-btn" data-clipboard-target="#IBAN">Copy</button>
+                        </div>
+                        <div class="detail">
+                            <label for="swiftCode">SWIFT Code</label>
+                            <span id="swiftCode">${swiftCode}</span>
+                            <button class="copy-btn" data-clipboard-target="#swiftCode">Copy</button>
+                        </div>
+                    `;
                 }
-            } catch (error) {
-                console.error('Error fetching user details:', error);
-                alert('An error occurred while fetching your details. Please try again later.');
+
+                document.getElementById('accountDetails').innerHTML += dynamicDetails;
             }
+        } else {
+            alert(userData.message || 'Failed to fetch user details');
+        }
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        alert('An error occurred while fetching your details. Please try again later.');
+    }
 
-            // Initialize clipboard functionality for copy buttons
-            const clipboard = new ClipboardJS('.copy-btn');
-
-            clipboard.on('success', function(e) {
-                alert('Copied to clipboard!');
-                e.clearSelection();
-            });
-
-            clipboard.on('error', function(e) {
-                alert('Failed to copy. Please try again.');
-            });
-        });
+    // Initialize clipboard functionality
+    const clipboard = new ClipboardJS('.copy-btn');
+    clipboard.on('success', () => alert('Copied to clipboard!'));
+    clipboard.on('error', () => alert('Failed to copy. Please try again.'));
+});
 
 
         // Check if dark mode is enabled in localStorage on page load

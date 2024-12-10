@@ -91,7 +91,7 @@
         const balanceData = await balanceResponse.json();
 
         if (balanceResponse.ok && balanceData.success) {
-            userBalance.textContent = `$${balanceData.balance}`;
+            userBalance.textContent = `${balanceData.balance}`;
         } else {
             alert(balanceData.message || 'Failed to fetch user balance.');
             return;

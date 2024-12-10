@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vanguardbank-cache-v1.0';
+const CACHE_NAME = 'vanguardbank-cache-v1.1'; // Increment version here
 const urlsToCache = [
   '/',
   '/index.html',
@@ -9,7 +9,7 @@ const urlsToCache = [
   '/chatbot.html',
   '/convert.html',
   '/crypto-deposit.html',
-  'currency.html',
+  '/currency.html',
   '/dashboard.html',
   '/forgot-password.html',
   '/index.html',
@@ -37,25 +37,33 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  console.log('[Service Worker] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
+        console.log('[Service Worker] Caching all files');
         return cache.addAll(urlsToCache);
+      })
+      .then(() => {
+        self.skipWaiting(); // Activate new service worker immediately
       })
   );
 });
 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  console.log('[Service Worker] Activating...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
+          if (cacheName !== CACHE_NAME) {
+            console.log(`[Service Worker] Deleting old cache: ${cacheName}`);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      return self.clients.claim(); // Take control of open pages
     })
   );
 });
@@ -64,7 +72,12 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        return response || fetch(event.request);
+        if (response) {
+          console.log(`[Service Worker] Fetching from cache: ${event.request.url}`);
+          return response;
+        }
+        console.log(`[Service Worker] Fetching from network: ${event.request.url}`);
+        return fetch(event.request);
       })
   );
 });
