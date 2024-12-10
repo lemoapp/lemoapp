@@ -163,16 +163,16 @@ app.post('/api/set-currency', async (req, res) => {
         EUR: {
             account_number: "66908937",
             ach_routing_number: null, // Not applicable for EUR
-            iban: null, // Not provided
+            iban: "GB71CLJU04130766908937", // Not provided
             swift_code: "CLJUGB21XXX",
-            sort_code: "041307",
+            sort_code: null,
         },
         GBP: {
             account_number: "66908937",
             ach_routing_number: null, // Not applicable for GBP
-            iban: "GB71CLJU04130766908937",
+            iban: null,
             swift_code: "CLJUGB21XXX",
-            sort_code: null, // Not provided
+            sort_code: "041307", // Not provided
         }
     };
 
