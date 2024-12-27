@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vanguardbank-cache-v1.1'; // Increment version here
+const CACHE_NAME = 'vanguardbank-cache-v1.2'; // Increment version here
 const urlsToCache = [
   '/',
   '/index.html',
@@ -20,6 +20,7 @@ const urlsToCache = [
   '/settings.html',
   '/transaction-pin.html',
   '/transactions.html',
+  '/invoice.html',
   '/css/activities.css',
   '/css/admin-dashboard.css',
   '/css/admin-details.css',

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #740000; /* Company primary color */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #740000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #950000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Receipt</h1>
+        <form id="receipt-form">
+            <div class="form-group">
+                <label for="receipt-type">Receipt Type</label>
+                <select id="receipt-type" required>
+                    <option value="withdrawal">Withdrawal</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="invoice">Invoice</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sender-name">Sender Name</label>
+                <input type="text" id="sender-name" placeholder="Enter sender name" required>
+            </div>
+            <div class="form-group">
+                <label for="recipient-name">Recipient Name</label>
+                <input type="text" id="recipient-name" placeholder="Enter recipient name" required>
+            </div>
+            <div class="form-group">
+                <label for="account-number">Account Number</label>
+                <input type="text" id="account-number" placeholder="Enter account number" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Enter amount" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Recipient Email</label>
+                <input type="email" id="email" placeholder="Enter recipient's email" required>
+            </div>
+            <button type="button" id="generate-button">Generate and Send</button>
+        </form>
+
+        <div id="receipt-link-container"></div>
+    </div>
+
+    
+
+    <script>
+        document.getElementById('generate-button').addEventListener('click', async () => {
+            // Collect form data
+            const receiptType = document.getElementById('receipt-type').value;
+            const senderName = document.getElementById('sender-name').value;
+            const recipientName = document.getElementById('recipient-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const amount = document.getElementById('amount').value;
+            const date = document.getElementById('date').value;
+            const email = document.getElementById('email').value;
+        
+            if (!senderName || !recipientName || !accountNumber || !amount || !date || !email) {
+                alert('Please fill in all fields!');
+                return;
+            }
+        
+            try {
+                // Dynamically determine the base URL based on the current environment (local or production)
+                const baseURL = window.location.origin;  // This should work for both local and deployed environments
+        
+                // Send data to the server
+                const response = await fetch(`${baseURL}/generate-receipt`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        senderName,
+                        recipientName,
+                        accountNumber,
+                        withdrawalAmount: amount,
+                        bankName: receiptType, // Using receipt type as bank name for simplicity
+                        date,
+                        email
+                    })
+                });
+        
+                const result = await response.json();
+        
+                if (response.ok) {
+                    alert('Receipt generated and sent successfully!');
+                    console.log('Receipt URL:', result.receiptUrl);
+        
+                    // Display the receipt URL on the page dynamically
+                    const receiptLinkContainer = document.getElementById('receipt-link-container');
+                    const receiptLink = document.createElement('a');
+                    receiptLink.href = result.receiptUrl;
+                    receiptLink.target = '_blank'; // Opens in a new tab
+                    receiptLink.textContent = 'Click here to view your receipt';
+                    
+                    // Append the link to the page
+                    receiptLinkContainer.innerHTML = ''; // Clear any previous content
+                    receiptLinkContainer.appendChild(receiptLink);
+                } else {
+                    alert(`Error: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error generating receipt:', error);
+                alert('An error occurred while generating the receipt.');
+            }
+        });
+        </script>
+        
+    
+</body>
+</html>

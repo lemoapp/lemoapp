@@ -6,6 +6,8 @@ const mysql = require('mysql2/promise'); // For MySQL database
 const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
+const fs = require('fs');
+const pdf = require('pdfkit'); // For PDF generation
 
 // Load environment variables
 dotenv.config();
@@ -1212,6 +1214,135 @@ app.post('/api/claim', authenticateUser, async (req, res) => {
 });
 
 
+
+
+
+app.post('/generate-receipt', async (req, res) => {
+    try {
+        const {
+            senderName,
+            recipientName,
+            accountNumber,
+            withdrawalAmount,
+            bankName,
+            date,
+            email,
+            logoUrl
+        } = req.body;
+
+        if (!senderName || !recipientName || !accountNumber || !withdrawalAmount || !bankName || !date) {
+            return res.status(400).json({ message: 'All fields are required.' });
+        }
+
+        // Generate PDF Receipt
+        const pdfDoc = new pdf();
+        const receiptFileName = `receipt-${Date.now()}.pdf`;
+        const receiptPath = path.join(__dirname, 'receipts', receiptFileName);
+
+        // Create Receipts Directory if Not Exists
+        if (!fs.existsSync(path.join(__dirname, 'receipts'))) {
+            fs.mkdirSync(path.join(__dirname, 'receipts'));
+        }
+
+        const stream = fs.createWriteStream(receiptPath);
+        pdfDoc.pipe(stream);
+
+        // Define Company Colors
+        const primaryColor = '#30334B';
+        const secondaryColor = '#7078b3';
+
+        // Add Receipt Content with Styling (Customized)
+        pdfDoc
+            .rect(50, 180, 250, 20) // Sender Name
+            .fill('#c8c9d7')
+            .image(logoUrl || 'default-logo.png', 50, 50, { width: 150 }) // Logo at the top
+            .moveDown(1)
+            .fontSize(24).fillColor(primaryColor).text('Transaction Receipt', { align: 'center', font: 'Helvetica-Bold' })
+            .moveDown(1)
+            .fontSize(12).fillColor(secondaryColor).text(`Date: ${date}`, { align: 'right' })
+            .moveDown(2)
+            .fontSize(16).fillColor(primaryColor).text('Transaction Details', { font: 'Helvetica-Bold' })
+            .moveDown(1)
+            .fontSize(12).fillColor(primaryColor)
+            .text(`Sender Name`, { continued: true }).text(senderName, { align: 'right' })
+            .moveDown(1)
+            .text(`Recipient Name`, { continued: true }).text(recipientName, { align: 'right' })
+            .moveDown(1)
+            .text(`Account Number`, { continued: true }).text(accountNumber, { align: 'right' })
+            .moveDown(1)
+            .text(`Amount`, { continued: true }).text(`$${withdrawalAmount}`, { align: 'right' })
+            .moveDown(1)
+            .text(`Transaction Type`, { continued: true }).text(bankName.charAt(0).toUpperCase() + bankName.slice(1), { align: 'right' })
+            .moveDown(2)
+            .fontSize(10).fillColor(secondaryColor).text('Thank you for using our service!', { align: 'center', font: 'Helvetica-Bold' })
+            .moveDown(1)
+            .fontSize(10).fillColor(secondaryColor)
+            .text('For support, please contact us at support@royalenterprise.online', { align: 'center' })
+            .moveDown(1)
+            .text('Terms and conditions apply. All rights reserved.', { align: 'center' })
+            .moveDown(1)
+            .fontSize(10).fillColor(primaryColor)
+            .text('Vanguard Royal Bank | royalenterprise.online', { align: 'center' })
+            .moveDown(1);
+
+        // Add clickable link to view the receipt online
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const receiptUrl = `${baseUrl}/receipts/${receiptFileName}`;
+        pdfDoc.text(`View your receipt online: ${receiptUrl}`, { link: receiptUrl, align: 'center' });
+
+        pdfDoc.end();
+
+        // Wait for the PDF to finish writing
+        stream.on('finish', () => {
+            res.json({
+                message: 'Receipt generated successfully.',
+                receiptUrl: receiptUrl
+            });
+        });
+
+        stream.on('error', (err) => {
+            console.error(err);
+            res.status(500).json({ message: 'Error generating receipt.' });
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error.' });
+    }
+});
+
+
+
+
+app.post('/send-receipt', async (req, res) => {
+    try {
+        const { email, receiptUrl } = req.body;
+
+        if (!email || !receiptUrl) {
+            return res.status(400).json({ message: 'Email and receipt URL are required.' });
+        }
+
+        const subject = 'Your Withdrawal Receipt';
+        const htmlContent = `
+            <p>Dear Customer,</p>
+            <p>Thank you for using our services. Please find your receipt attached below.</p>
+            <p>Best regards,<br>Your Company</p>
+        `;
+
+        const attachments = [
+            {
+                filename: 'receipt.pdf',
+                path: receiptUrl // Path to the generated PDF file
+            }
+        ];
+
+        await sendEmail(email, subject, htmlContent, attachments);
+
+        res.json({ message: 'Receipt sent successfully.' });
+    } catch (error) {
+        console.error('Error sending receipt:', error);
+        res.status(500).json({ message: 'Error sending receipt.' });
+    }
+});
 
 
 
