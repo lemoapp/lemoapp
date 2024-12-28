@@ -8,6 +8,7 @@ const path = require('path');
 const axios = require('axios');
 const fs = require('fs');
 const pdf = require('pdfkit'); // For PDF generation
+const crypto = require('crypto'); // For generating hash codes
 
 // Load environment variables
 dotenv.config();
@@ -1234,6 +1235,13 @@ app.post('/generate-receipt', async (req, res) => {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
+        // Generate Transaction Hash Code and Reference
+        const transactionHash = crypto.randomBytes(16).toString('hex'); // 32-character hex string
+        const transactionReference = `TXN-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`; // e.g., TXN-1672945678901-5678
+
+        // Determine Transaction Type
+        const transactionType = bankName.toLowerCase() === 'withdrawal' ? 'Outward Transfer' : 'Inward Transfer';
+
         // Generate PDF Receipt
         const pdfDoc = new pdf();
         const receiptFileName = `receipt-${Date.now()}.pdf`;
@@ -1272,7 +1280,11 @@ app.post('/generate-receipt', async (req, res) => {
             .moveDown(1)
             .text(`Amount`, { continued: true }).text(`$${withdrawalAmount}`, { align: 'right' })
             .moveDown(1)
-            .text(`Transaction Type`, { continued: true }).text(bankName.charAt(0).toUpperCase() + bankName.slice(1), { align: 'right' })
+            .text(`Transaction Type`, { continued: true }).text(transactionType, { align: 'right' })
+            .moveDown(1)
+            .text(`Transaction Reference`, { continued: true }).text(transactionReference, { align: 'right' })
+            .moveDown(1)
+            .text(`Transaction Hash`, { continued: true }).text(transactionHash, { align: 'right' })
             .moveDown(2)
             .fontSize(10).fillColor(secondaryColor).text('Thank you for using our service!', { align: 'center', font: 'Helvetica-Bold' })
             .moveDown(1)
@@ -1296,7 +1308,9 @@ app.post('/generate-receipt', async (req, res) => {
         stream.on('finish', () => {
             res.json({
                 message: 'Receipt generated successfully.',
-                receiptUrl: receiptUrl
+                receiptUrl: receiptUrl,
+                transactionHash: transactionHash,
+                transactionReference: transactionReference
             });
         });
 
@@ -1309,7 +1323,6 @@ app.post('/generate-receipt', async (req, res) => {
         res.status(500).json({ message: 'Server error.' });
     }
 });
-
 
 
 
