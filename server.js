@@ -1278,29 +1278,35 @@ app.post('/generate-receipt', async (req, res) => {
             .moveDown(1)
             .text(`Account Number`, { continued: true }).text(accountNumber, { align: 'right' })
             .moveDown(1)
+            .fontSize(16)
             .text(`Amount`, { continued: true }).text(`$${withdrawalAmount}`, { align: 'right' })
             .moveDown(1)
+            .fontSize(12)
             .text(`Transaction Type`, { continued: true }).text(transactionType, { align: 'right' })
             .moveDown(1)
+            .fontSize(12)
             .text(`Transaction Reference`, { continued: true }).text(transactionReference, { align: 'right' })
             .moveDown(1)
+            .fontSize(12)
             .text(`Transaction Hash`, { continued: true }).text(transactionHash, { align: 'right' })
             .moveDown(2)
+            .fontSize(12)
             .fontSize(10).fillColor(secondaryColor).text('Thank you for using our service!', { align: 'center', font: 'Helvetica-Bold' })
             .moveDown(1)
-            .fontSize(10).fillColor(secondaryColor)
-            .text('For support, please contact us at support@royalenterprise.online', { align: 'center' })
-            .moveDown(1)
+            // .fontSize(10).fillColor(secondaryColor)
+            // .text('For support, please contact us at support@royalenterprise.online', { align: 'center' })
+            // .moveDown(1)
+            .fontSize(12)
             .text('Terms and conditions apply. All rights reserved.', { align: 'center' })
             .moveDown(1)
-            .fontSize(10).fillColor(primaryColor)
-            .text('Vanguard Royal Bank | royalenterprise.online', { align: 'center' })
-            .moveDown(1);
+            // .fontSize(10).fillColor(primaryColor)
+            // .text('Vanguard Royal Bank | royalenterprise.online', { align: 'center' })
+            // .moveDown(1);
 
-        // Add clickable link to view the receipt online
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const receiptUrl = `${baseUrl}/receipts/${receiptFileName}`;
-        pdfDoc.text(`View your receipt online: ${receiptUrl}`, { link: receiptUrl, align: 'center' });
+            // Add clickable link to view the receipt online
+            const baseUrl = `${req.protocol}://${req.get('host')}`;
+            const receiptUrl = `${baseUrl}/receipts/${receiptFileName}`;
+            pdfDoc.text(`View your receipt online: ${receiptUrl}`, { link: receiptUrl, align: 'center' });
 
         pdfDoc.end();
 
@@ -1322,40 +1328,46 @@ app.post('/generate-receipt', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server error.' });
     }
-});
+});`
 
 
 
-app.post('/send-receipt', async (req, res) => {
-    try {
-        const { email, receiptUrl } = req.body;
+// app.post('/send-receipt', async (req, res) => {
+//     try {
+//         const { email, receiptUrl } = req.body;
 
-        if (!email || !receiptUrl) {
-            return res.status(400).json({ message: 'Email and receipt URL are required.' });
-        }
+//         // Validate required fields
+//         if (!email || !receiptUrl) {
+//             return res.status(400).json({ message: 'Email and receipt URL are required.' });
+//         }
 
-        const subject = 'Your Withdrawal Receipt';
-        const htmlContent = `
-            <p>Dear Customer,</p>
-            <p>Thank you for using our services. Please find your receipt attached below.</p>
-            <p>Best regards,<br>Your Company</p>
-        `;
+//         // Define email subject and content
+//         const subject = 'Your Withdrawal Receipt';
+//         const htmlContent = `
+//             <p>Dear Customer,</p>
+//             <p>Thank you for using our services. Please find your receipt attached below.</p>
+//             <p>Best regards,<br>Your Company</p>
+//         `;
 
-        const attachments = [
-            {
-                filename: 'receipt.pdf',
-                path: receiptUrl // Path to the generated PDF file
-            }
-        ];
+//         // Define attachment object
+//         const attachments = [
+//             {
+//                 filename: 'receipt.pdf',
+//                 path: receiptUrl // URL or local path to the receipt file
+//             }
+//         ];
 
-        await sendEmail(email, subject, htmlContent, attachments);
+//         // Send the email
+//         await sendEmail(email, subject, htmlContent, attachments);
 
-        res.json({ message: 'Receipt sent successfully.' });
-    } catch (error) {
-        console.error('Error sending receipt:', error);
-        res.status(500).json({ message: 'Error sending receipt.' });
-    }
-});
+//         // Respond with success message
+//         res.json({ message: 'Receipt sent successfully.' });
+//     } catch (error) {
+//         console.error('Error sending receipt:', error);
+//         res.status(500).json({ message: 'Error sending receipt.' });
+//     }
+// });
+
 
 
 
