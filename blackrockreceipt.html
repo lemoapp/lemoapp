@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background: #1E88E5;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1565C0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Generate Receipt</h2>
+
+        <label>Month:</label>
+        <select id="month">
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+        </select>
+
+        <label>Year:</label>
+        <input type="number" id="year" min="2000" max="2100" value="2025">
+
+        <label>Day of the Week:</label>
+        <select id="day">
+            <option>Mon</option>
+            <option>Tue</option>
+            <option>Wed</option>
+            <option>Thu</option>
+            <option>Fri</option>
+            <option>Sat</option>
+            <option>Sun</option>
+        </select>
+
+        <label>Date:</label>
+        <input type="number" id="date" min="1" max="31">
+
+        <label>Payment to:</label>
+        <input type="text" id="paymentTo">
+
+        <label>Currency:</label>
+        <select id="currency">
+            <option value="USD">USD</option>
+            <option value="TTD">TTD</option>
+            <option value="XCD">XCD</option>
+            <option value="BSD">BSD</option>
+        </select>
+
+        <label>Transaction 1:</label>
+        <input type="text" id="transaction1">
+
+        <label>Transaction 2:</label>
+        <input type="text" id="transaction2">
+
+        <label>Bank Name</label>
+        <input type="text" id="bankName">
+
+        <button onclick="generateReceipt()">Generate Receipt</button>
+
+        <p id="receiptLink" style="display:none;">
+            <a id="receiptAnchor" href="#" target="_blank">View Generated Receipt</a>
+        </p>
+    </div>
+
+    <script>
+        function generateReceipt() {
+            const data = {
+                month: document.getElementById('month').value,
+                year: document.getElementById('year').value,
+                day: document.getElementById('day').value,
+                date: document.getElementById('date').value,
+                paymentTo: document.getElementById('paymentTo').value,
+                currency: document.getElementById('currency').value,
+                transaction1: document.getElementById('transaction1').value,
+                transaction2: document.getElementById('transaction2').value,
+                bankName: document.getElementById('bankName').value
+            };
+    
+            fetch('/generate-receipts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const receiptLink = document.getElementById('receiptLink');
+                    const receiptAnchor = document.getElementById('receiptAnchor');
+                    
+                    receiptAnchor.href = result.receiptUrl;
+                    receiptLink.style.display = 'block';
+                } else {
+                    alert('Error generating receipt.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>

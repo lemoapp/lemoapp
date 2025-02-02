@@ -7,8 +7,9 @@ const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
 const fs = require('fs');
-const pdf = require('pdfkit'); // For PDF generation
+const PDFDocument = require('pdfkit'); // For PDF generation
 const crypto = require('crypto'); // For generating hash codes
+
 
 // Load environment variables
 dotenv.config();
@@ -466,6 +467,94 @@ app.post('/api/send-funds', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error processing transaction' });
     }
 });
+
+
+
+app.post('/generate-receipts', (req, res) => {
+    const {
+        month, year, day, date, paymentTo,
+        currency, transaction1, transaction2,
+        bankName, category
+    } = req.body;
+
+    // Log the received transactions to inspect their values
+    console.log("Received transaction1:", transaction1);
+    console.log("Received transaction2:", transaction2);
+
+    // Parse the transactions to ensure they're numbers
+    const transaction1Parsed = parseFloat(transaction1);
+    const transaction2Parsed = parseFloat(transaction2);
+
+    // Log the parsed transactions to confirm the values are valid
+    console.log("Parsed transaction1:", transaction1Parsed);
+    console.log("Parsed transaction2:", transaction2Parsed);
+
+    // Check if transaction1 and transaction2 are valid numbers
+    if (isNaN(transaction1Parsed) || isNaN(transaction2Parsed)) {
+        return res.status(400).json({ success: false, message: 'Invalid transaction amounts.' });
+    }
+
+    const doc = new PDFDocument({ margin: 30 });
+    const fileName = `receipt_${Date.now()}.pdf`;
+    const filePath = path.join(__dirname, 'new receipts', fileName);
+    const receiptUrl = `/new receipts/${fileName}`;
+    const bgColor = '#F4F7FE';
+
+    const stream = fs.createWriteStream(filePath);
+    doc.pipe(stream);
+
+        // Header Background (Month and Year)
+    doc.rect(0, 0, doc.page.width, 40).fill('#CAE5FF'); // Background for header
+
+    // Month and Year Text
+    doc.fontSize(18).fillColor('#47505F').text(`${month} ${year}`, 0, 15, { align: 'center' });
+
+
+    // Category (default to "UNKNOWN" if undefined)
+    const categoryText = (category || "PROFIT").toUpperCase();
+    doc.fontSize(18).fillColor('#000').text(categoryText, 100, 85); // Adjust x=100 to move sideways
+
+
+    // Left Date Block
+    doc.roundedRect(40, 80, 50, 50, 10).fill('#E5F1FF').stroke();
+    doc.fillColor('#525F68').fontSize(14).text(`${day}\n${date}`, -450, 90, { align: 'center' });
+
+   // First Transaction (Credit) - Appears at the top
+    doc.roundedRect(440, 85, 150, 25, 10).fill(bgColor); // Background box
+    doc.fontSize(18).fillColor('#52788F').text(`-${currency} ${transaction1Parsed.toFixed(2)}`, 350, 90, { align: 'right' });
+
+    // BlackRock & Investments - Centered between transactions
+    doc.fontSize(16).fillColor('#888').text('BLACKROCK $ INVESTMENT', 220, 120, { align: 'right' });
+
+        // Second Transaction (Debit) - Below BlackRock & Investments
+    doc.roundedRect(440, 145, 150, 25, 10).fill(bgColor); // Background box
+    doc.fontSize(18).fillColor('#52788F').text(`+${currency} ${transaction2Parsed.toFixed(2)}`, 350, 150, { align: 'right' });
+
+    // Bank Name - Below the second transaction
+    doc.fontSize(16).fillColor('#888').text(`${bankName}`, 120, 180, { align: 'right' });
+
+    // Arrow Connector (Adjust Position)
+    // Load and place an image at the same position as the arrow
+    doc.image('./arrow-in-receipt.png', 300, 130, { width: 40, height: 40 });
+
+
+    // Business Info Section
+    doc.moveDown(5);
+    doc.fontSize(14).fillColor('#888').text('Business', 40, 200);
+    doc.fontSize(16).fillColor('#888').text("Payment to ", 40, 220, { continued: true }) 
+   .fontSize(19).font("Times-Italic").text(paymentTo);
+
+
+
+    // Finalize PDF
+    doc.end();
+
+    stream.on('finish', () => {
+        res.json({ success: true, receiptUrl });
+    });
+});
+
+
 
 
 
