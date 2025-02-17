@@ -1,0 +1,17 @@
+{
+    "receiptType": "Kvītis tips",
+    "withdrawal": "Izmaksa",
+    "deposit": "Depozīts",
+    "invoice": "Rēķins",
+    "senderName": "Sūtītāja vārds",
+    "recipientName": "Saņēmēja vārds",
+    "accountNumber": "Kontu numurs",
+    "amount": "Summa",
+    "currency": "Valūta",
+    "date": "Datums",
+    "transactionType": "Transakcijas tips",
+    "transactionReference": "Transakcijas atsauce",
+    "inwardTransfer": "Ienākošais pārskaitījums",
+    "outwardTransfer": "Iznākot pārskaitījums",
+    "transactionHash": "Transakcijas hash"
+}

@@ -1,0 +1,17 @@
+{
+    "receiptType": "Kviitungi tüüp",
+    "withdrawal": "Võõrandamine",
+    "deposit": "Sissemakse",
+    "invoice": "Arve",
+    "senderName": "Saatja nimi",
+    "recipientName": "Saaja nimi",
+    "accountNumber": "Konto number",
+    "amount": "Summa",
+    "currency": "Valuuta",
+    "date": "Kuupäev",
+    "transactionType": "Tehingu tüüp",
+    "transactionReference": "Tehingu viide",
+    "inwardTransfer": "Sissetulev ülekandmine",
+    "outwardTransfer": "Väljaminev ülekandmine",
+    "transactionHash": "Tehingu hash"
+}

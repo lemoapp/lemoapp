@@ -1,0 +1,17 @@
+{
+    "receiptType": "Seòrsa Seilbh",
+    "withdrawal": "Tarraing a-mach",
+    "deposit": "Tasgadh",
+    "invoice": "Bill",
+    "senderName": "Ainm an t-Sealaidh",
+    "recipientName": "Ainm an Gheibhear",
+    "accountNumber": "Àireamh an t-Àireamh-aoigheachd",
+    "amount": "Meud",
+    "currency": "Airgead",
+    "date": "Ceann-latha",
+    "transactionType": "Seòrsa Ghnìomh",
+    "transactionReference": "Cuir air adhart Còd Gnìomh",
+    "inwardTransfer": "Gluasad a-steach",
+    "outwardTransfer": "Gluasad a-mach",
+    "transactionHash": "Hash Gnìomh"
+}

@@ -1,0 +1,17 @@
+{
+    "receiptType": "Kvito tipas",
+    "withdrawal": "Išėmimas",
+    "deposit": "Įmoka",
+    "invoice": "Sąskaita faktūra",
+    "senderName": "Siuntėjo vardas",
+    "recipientName": "Gavėjo vardas",
+    "accountNumber": "Paskyros numeris",
+    "amount": "Suma",
+    "currency": "Valiuta",
+    "date": "Data",
+    "transactionType": "Transakcijos tipas",
+    "transactionReference": "Transakcijos nuoroda",
+    "inwardTransfer": "Įeinamoji pervedimas",
+    "outwardTransfer": "Išeinamoji pervedimas",
+    "transactionHash": "Transakcijos hash"
+}

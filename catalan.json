@@ -1,0 +1,17 @@
+{
+    "receiptType": "Tipus de rebut",
+    "withdrawal": "Retirada",
+    "deposit": "Dipòsit",
+    "invoice": "Factura",
+    "senderName": "Nom de l'emissor",
+    "recipientName": "Nom del destinatari",
+    "accountNumber": "Número de compte",
+    "amount": "Quantitat",
+    "currency": "Moneda",
+    "date": "Data",
+    "transactionType": "Tipus de transacció",
+    "transactionReference": "Referència de la transacció",
+    "inwardTransfer": "Transferència entrant",
+    "outwardTransfer": "Transferència sortint",
+    "transactionHash": "Hash de la transacció"
+}

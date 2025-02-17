@@ -1,0 +1,17 @@
+{
+    "receiptType": "Kuittityyppi",
+    "withdrawal": "Nosto",
+    "deposit": "Talletus",
+    "invoice": "Lasku",
+    "senderName": "Lähettäjän nimi",
+    "recipientName": "Vastaanottajan nimi",
+    "accountNumber": "Tilinumero",
+    "amount": "Summa",
+    "currency": "Valuutta",
+    "date": "Päivämäärä",
+    "transactionType": "Tapahtuman tyyppi",
+    "transactionReference": "Tapahtuman viite",
+    "inwardTransfer": "Sisäänpäin suuntautuva siirto",
+    "outwardTransfer": "Ulkosuuntainen siirto",
+    "transactionHash": "Tapahtuman hash"
+}

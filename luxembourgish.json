@@ -1,0 +1,17 @@
+{
+    "receiptType": "Belegtyp",
+    "withdrawal": "Ofhuelen",
+    "deposit": "Depot",
+    "invoice": "Rechnung",
+    "senderName": "Sender Numm",
+    "recipientName": "Empfänger Numm",
+    "accountNumber": "Kontonummber",
+    "amount": "Betrag",
+    "currency": "Währung",
+    "date": "Datum",
+    "transactionType": "Transaktiounstyp",
+    "transactionReference": "Transaktiounsreferenz",
+    "inwardTransfer": "Iwwerweisung Ankommes",
+    "outwardTransfer": "Iwwerweisung Ausgesin",
+    "transactionHash": "Transaktiouns Hash"
+}

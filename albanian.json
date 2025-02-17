@@ -1,0 +1,18 @@
+{
+    "receiptType": "Lloji i faturës",
+    "withdrawal": "Tërheqje",
+    "deposit": "Depozitë",
+    "invoice": "Faturë",
+    "senderName": "Emri i Dërguesit",
+    "recipientName": "Emri i Marrësit",
+    "accountNumber": "Numri i Llogarisë",
+    "amount": "Shuma",
+    "currency": "Monedha",
+    "date": "Data",
+    "transactionType": "Lloji i Transaksionit",
+    "transactionReference": "Referenca e Transaksionit",
+    "inwardTransfer": "Transfer i Brendshëm",
+    "outwardTransfer": "Transfer i Jashtëm",
+    "transactionHash": "Hash-i i Transaksionit"
+  }
+  

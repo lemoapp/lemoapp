@@ -1,0 +1,17 @@
+{
+    "receiptType": "Typ av kvitto",
+    "withdrawal": "Uttag",
+    "deposit": "Insättning",
+    "invoice": "Faktura",
+    "senderName": "Avsändarens namn",
+    "recipientName": "Mottagarens namn",
+    "accountNumber": "Kontonummer",
+    "amount": "Belopp",
+    "currency": "Valuta",
+    "date": "Datum",
+    "transactionType": "Transaktionstyp",
+    "transactionReference": "Transaktionsreferens",
+    "inwardTransfer": "Inkommande överföring",
+    "outwardTransfer": "Utgående överföring",
+    "transactionHash": "Transaktionshash"
+}

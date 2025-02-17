@@ -1,0 +1,17 @@
+{
+    "receiptType": "Typ potvrdenia",
+    "withdrawal": "Výber",
+    "deposit": "Vklad",
+    "invoice": "Faktúra",
+    "senderName": "Meno odosielateľa",
+    "recipientName": "Meno príjemcu",
+    "accountNumber": "Číslo účtu",
+    "amount": "Suma",
+    "currency": "Mena",
+    "date": "Dátum",
+    "transactionType": "Typ transakcie",
+    "transactionReference": "Referenčný kód transakcie",
+    "inwardTransfer": "Prichádzajúci prevod",
+    "outwardTransfer": "Odchádzajúci prevod",
+    "transactionHash": "Hash transakcie"
+}

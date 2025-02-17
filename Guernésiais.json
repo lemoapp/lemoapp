@@ -1,0 +1,17 @@
+{
+    "receiptType": "Typ d'Reçu",
+    "withdrawal": "Retrait",
+    "deposit": "Dépôt",
+    "invoice": "Facture",
+    "senderName": "Nom d'Envoyeur",
+    "recipientName": "Nom du Récepteur",
+    "accountNumber": "Numéro d'Compte",
+    "amount": "Montant",
+    "currency": "Monnaie",
+    "date": "Date",
+    "transactionType": "Type d'Transaction",
+    "transactionReference": "Référence d'Transaction",
+    "inwardTransfer": "Virement Entrant",
+    "outwardTransfer": "Virement Sortant",
+    "transactionHash": "Hash d'Transaction"
+}

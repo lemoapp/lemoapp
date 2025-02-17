@@ -1,0 +1,17 @@
+{
+    "receiptType": "Tip ta' riċevuta",
+    "withdrawal": "Ħruġ",
+    "deposit": "Depożitu",
+    "invoice": "Fattura",
+    "senderName": "Isem tal-Ibgħat",
+    "recipientName": "Isem tal-Riċevitur",
+    "accountNumber": "Numru tal-Kont",
+    "amount": "Somma",
+    "currency": "Valuta",
+    "date": "Data",
+    "transactionType": "Tip ta' Transazzjoni",
+    "transactionReference": "Referenza tal-Transazzjoni",
+    "inwardTransfer": "Trasferiment Ġej",
+    "outwardTransfer": "Trasferiment Oħra",
+    "transactionHash": "Transazzjoni Hash"
+}

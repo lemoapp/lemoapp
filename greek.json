@@ -1,0 +1,17 @@
+{
+    "receiptType": "Τύπος απόδειξης",
+    "withdrawal": "Ανάληψη",
+    "deposit": "Κατάθεση",
+    "invoice": "Τιμολόγιο",
+    "senderName": "Όνομα αποστολέα",
+    "recipientName": "Όνομα παραλήπτη",
+    "accountNumber": "Αριθμός λογαριασμού",
+    "amount": "Ποσό",
+    "currency": "Νόμισμα",
+    "date": "Ημερομηνία",
+    "transactionType": "Τύπος συναλλαγής",
+    "transactionReference": "Αναφορά συναλλαγής",
+    "inwardTransfer": "Εισερχόμενη μεταφορά",
+    "outwardTransfer": "Εξερχόμενη μεταφορά",
+    "transactionHash": "Hash συναλλαγής"
+}

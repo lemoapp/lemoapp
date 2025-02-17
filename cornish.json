@@ -1,0 +1,17 @@
+{
+    "receiptType": "Kynsa Keslowena",
+    "withdrawal": "Tewghen",
+    "deposit": "Dhehenn",
+    "invoice": "Keslowena",
+    "senderName": "Hwedhl an Kelew",
+    "recipientName": "Hwedhl an Delivra",
+    "accountNumber": "Niver an Akount",
+    "amount": "Kweth",
+    "currency": "Arghans",
+    "date": "Dydh",
+    "transactionType": "Kynsa a Gyns",
+    "transactionReference": "Goweth a Gyns",
+    "inwardTransfer": "Trefys an Garth",
+    "outwardTransfer": "Trefys an Dell",
+    "transactionHash": "Kernow Hash"
+}

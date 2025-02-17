@@ -1,0 +1,17 @@
+{
+    "receiptType": "Soort ontvangstbewijs",
+    "withdrawal": "Opname",
+    "deposit": "Storting",
+    "invoice": "Factuur",
+    "senderName": "Naam van de afzender",
+    "recipientName": "Naam van de ontvanger",
+    "accountNumber": "Rekeningnummer",
+    "amount": "Bedrag",
+    "currency": "Valuta",
+    "date": "Datum",
+    "transactionType": "Transactietype",
+    "transactionReference": "Transactiereferentie",
+    "inwardTransfer": "Inkomende overschrijving",
+    "outwardTransfer": "Uitgaande overschrijving",
+    "transactionHash": "Transactiehash"
+}

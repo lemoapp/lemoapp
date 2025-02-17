@@ -1,0 +1,17 @@
+{
+    "receiptType": "Typus recepti",
+    "withdrawal": "Deprehensio",
+    "deposit": "Depositum",
+    "invoice": "Fattura",
+    "senderName": "Nomen mittentis",
+    "recipientName": "Nomen accipientis",
+    "accountNumber": "Numerus rationis",
+    "amount": "Quantitas",
+    "currency": "Moneta",
+    "date": "Dies",
+    "transactionType": "Typus transactionis",
+    "transactionReference": "Referentia transactionis",
+    "inwardTransfer": "Translatio intro",
+    "outwardTransfer": "Translatio ex",
+    "transactionHash": "Transactionis Hash"
+}

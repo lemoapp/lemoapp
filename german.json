@@ -1,0 +1,17 @@
+{
+    "receiptType": "Belegtyp",
+    "withdrawal": "Abhebung",
+    "deposit": "Einzahlung",
+    "invoice": "Rechnung",
+    "senderName": "Absender Name",
+    "recipientName": "Empfänger Name",
+    "accountNumber": "Kontonummer",
+    "amount": "Betrag",
+    "currency": "Währung",
+    "date": "Datum",
+    "transactionType": "Transaktionstyp",
+    "transactionReference": "Transaktionsreferenz",
+    "inwardTransfer": "Eingehende Überweisung",
+    "outwardTransfer": "Ausgehende Überweisung",
+    "transactionHash": "Transaktions-Hash"
+}

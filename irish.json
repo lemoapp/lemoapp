@@ -1,0 +1,17 @@
+{
+    "receiptType": "Cineál Gléacht",
+    "withdrawal": "Cuir Siar",
+    "deposit": "Taisceadh",
+    "invoice": "Sonraí",
+    "senderName": "Ainm an Seoladh",
+    "recipientName": "Ainm an Gheibhear",
+    "accountNumber": "Uimhir an Chuntais",
+    "amount": "Méid",
+    "currency": "Airgead",
+    "date": "Dáta",
+    "transactionType": "Cineál Gníomhaíochta",
+    "transactionReference": "Cód Gníomhaíochta",
+    "inwardTransfer": "Iompar Laistigh",
+    "outwardTransfer": "Iompar Amuigh",
+    "transactionHash": "Cód Hash an Gníomhaíochta"
+}

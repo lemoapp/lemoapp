@@ -1,0 +1,17 @@
+{
+    "receiptType": "Fiş türü",
+    "withdrawal": "Çekim",
+    "deposit": "Depozito",
+    "invoice": "Fatura",
+    "senderName": "Gönderenin adı",
+    "recipientName": "Alıcının adı",
+    "accountNumber": "Hesap numarası",
+    "amount": "Tutar",
+    "currency": "Para birimi",
+    "date": "Tarih",
+    "transactionType": "İşlem türü",
+    "transactionReference": "İşlem referansı",
+    "inwardTransfer": "İçeriye transfer",
+    "outwardTransfer": "Dışarıya transfer",
+    "transactionHash": "İşlem hash"
+}

@@ -1,0 +1,17 @@
+{
+    "receiptType": "Math o Dderbynneb",
+    "withdrawal": "Tynnu'n ôl",
+    "deposit": "Adneuo",
+    "invoice": "Ffasiwn",
+    "senderName": "Enw'r Anfonwr",
+    "recipientName": "Enw'r Derbynnydd",
+    "accountNumber": "Rhif y Cyfrif",
+    "amount": "Swm",
+    "currency": "Arian",
+    "date": "Dyddiad",
+    "transactionType": "Math o Drafodion",
+    "transactionReference": "Cyfeirnod y Trafodion",
+    "inwardTransfer": "Trosglwyddiad Mewnforio",
+    "outwardTransfer": "Trosglwyddiad Allforio",
+    "transactionHash": "Llun Hash y Trafodion"
+}

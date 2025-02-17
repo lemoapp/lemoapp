@@ -1,0 +1,17 @@
+{
+    "receiptType": "Tip računa",
+    "withdrawal": "Isplata",
+    "deposit": "Depozit",
+    "invoice": "Faktura",
+    "senderName": "Ime pošiljaoca",
+    "recipientName": "Ime primaoca",
+    "accountNumber": "Broj računa",
+    "amount": "Iznos",
+    "currency": "Valuta",
+    "date": "Datum",
+    "transactionType": "Vrsta transakcije",
+    "transactionReference": "Referenca transakcije",
+    "inwardTransfer": "Ulazni transfer",
+    "outwardTransfer": "Izlazni transfer",
+    "transactionHash": "Hash transakcije"
+}

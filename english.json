@@ -1,0 +1,17 @@
+{
+    "receiptType": "Receipt Type",
+    "withdrawal": "Withdrawal",
+    "deposit": "Deposit",
+    "invoice": "Invoice",
+    "senderName": "Sender's Name",
+    "recipientName": "Recipient's Name",
+    "accountNumber": "Account Number",
+    "amount": "Amount",
+    "currency": "Currency",
+    "date": "Date",
+    "transactionType": "Transaction Type",
+    "transactionReference": "Transaction Reference",
+    "inwardTransfer": "Inward Transfer",
+    "outwardTransfer": "Outward Transfer",
+    "transactionHash": "Transaction Hash"
+}
