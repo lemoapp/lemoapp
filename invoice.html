@@ -97,70 +97,104 @@
                 <label for="email">Recipient Email</label>
                 <input type="email" id="email" placeholder="Enter recipient's email" required>
             </div>
+            <div class="form-group">
+                <label for="language">Language</label>
+                <select id="language" required>
+                    <option value="en">English</option>
+                    <option value="cy">Welsh</option>
+                    <option value="gd">Scottish</option>
+                    <option value="ga">Irish</option>
+                    <option value="kw">Cornish</option>
+                    <option value="fr">French</option>
+                    <option value="jerriais">Jèrriais</option>
+                    <option value="guern">Guernésiais</option>
+                    <option value="gv">Manx</option>
+                    <option value="es">Spanish (for Gibraltar)</option>
+                    <option value="sq">Albanian</option>
+                    <option value="ca">Catalan</option>
+                    <option value="hr">Croatian</option>
+                    <option value="nl">Dutch</option>
+                    <option value="et">Estonian</option>
+                    <option value="fi">Finnish</option>
+                    <option value="gl">Galician</option>
+                    <option value="de">German</option>
+                    <option value="el">Greek</option>
+                    <option value="it">Italian</option>
+                    <option value="la">Latin</option>
+                    <option value="lv">Latvian</option>
+                    <option value="lt">Lithuanian</option>
+                    <option value="lb">Luxembourgish</option>
+                    <option value="mt">Maltese</option>
+                    <option value="me">Montenegrin</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="sr">Serbian</option>
+                    <option value="sk">Slovak</option>
+                    <option value="sl">Slovenian</option>
+                    <option value="sv">Swedish</option>
+                    <option value="tr">Turkish (for Cyprus)</option>
+                </select>
+            </div>
             <button type="button" id="generate-button">Generate and Send</button>
         </form>
 
         <div id="receipt-link-container"></div>
     </div>
 
-    
-
     <script>
-       document.getElementById('generate-button').addEventListener('click', async () => {
-    const receiptType = document.getElementById('receipt-type').value;
-    const senderName = document.getElementById('sender-name').value;
-    const recipientName = document.getElementById('recipient-name').value;
-    const accountNumber = document.getElementById('account-number').value;
-    const amount = document.getElementById('amount').value;
-    const currency = document.getElementById('currency').value; // Get selected currency
-    const date = document.getElementById('date').value;
-    const email = document.getElementById('email').value;
+        document.getElementById('generate-button').addEventListener('click', async () => {
+            const receiptType = document.getElementById('receipt-type').value;
+            const senderName = document.getElementById('sender-name').value;
+            const recipientName = document.getElementById('recipient-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const amount = document.getElementById('amount').value;
+            const currency = document.getElementById('currency').value;
+            const date = document.getElementById('date').value;
+            const email = document.getElementById('email').value;
+            const language = document.getElementById('language').value; // Get selected language
 
-    if (!senderName || !recipientName || !accountNumber || !amount || !date || !email || !currency) {
-        alert('Please fill in all fields!');
-        return;
-    }
+            if (!senderName || !recipientName || !accountNumber || !amount || !date || !email || !currency || !language) {
+                alert('Please fill in all fields!');
+                return;
+            }
 
-    try {
-        const baseURL = window.location.origin;
+            try {
+                const baseURL = window.location.origin;
 
-        const response = await fetch(`${baseURL}/generate-receipt`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                senderName,
-                recipientName,
-                accountNumber,
-                withdrawalAmount: amount,
-                currency, // Send currency
-                bankName: receiptType,
-                date,
-                email
-            })
+                const response = await fetch(`${baseURL}/generate-receipt`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        senderName,
+                        recipientName,
+                        accountNumber,
+                        withdrawalAmount: amount,
+                        currency,
+                        bankName: receiptType,
+                        date,
+                        email,
+                        language // Send language to the backend
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Receipt generated and sent successfully!');
+                    const receiptLinkContainer = document.getElementById('receipt-link-container');
+                    const receiptLink = document.createElement('a');
+                    receiptLink.href = result.receiptUrl;
+                    receiptLink.target = '_blank';
+                    receiptLink.textContent = 'Click here to view your receipt';
+                    receiptLinkContainer.innerHTML = '';
+                    receiptLinkContainer.appendChild(receiptLink);
+                } else {
+                    alert(`Error: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error generating receipt:', error);
+                alert('An error occurred while generating the receipt.');
+            }
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            alert('Receipt generated and sent successfully!');
-            const receiptLinkContainer = document.getElementById('receipt-link-container');
-            const receiptLink = document.createElement('a');
-            receiptLink.href = result.receiptUrl;
-            receiptLink.target = '_blank';
-            receiptLink.textContent = 'Click here to view your receipt';
-            receiptLinkContainer.innerHTML = '';
-            receiptLinkContainer.appendChild(receiptLink);
-        } else {
-            alert(`Error: ${result.message}`);
-        }
-    } catch (error) {
-        console.error('Error generating receipt:', error);
-        alert('An error occurred while generating the receipt.');
-    }
-});
-
-        </script>
-        
-    
+    </script>
 </body>
 </html>

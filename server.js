@@ -17,6 +17,7 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
+app.use(express.json())
 
 // Middleware
 // Enable CORS for cross-origin requests
@@ -1304,7 +1305,63 @@ app.post('/api/claim', authenticateUser, async (req, res) => {
 });
 
 
+const translationsFolder = path.join(__dirname, '../'); // Root directory
 
+const loadTranslations = (lang) => {
+    try {
+        // Map 'sq' to 'albanian.json'
+        const languageMap = {
+            'sq': 'albanian.json',
+            'en': 'english.json',
+            'cy': 'welsh.json',
+            'gd': 'scottish.json',
+            'ga': 'irish.json',
+            'kw': 'cornish.json',
+            'fr': 'french.json',
+            'jerriais': 'jerriais.json',
+            'guern': 'Guernésiais.json',
+            "gv": "manx.json",
+            "es": "spanish.json",
+            "ca": "catalan.json",
+            "hr": "croatian.json",
+            "nl": "dutch.json",
+            "et": "estonian.json",
+            "fi": "finnish.json",
+            "gl": "galician.json",
+            "de": "german.json",
+            "el": "greek.json",
+            "it": "italian.json",
+            "la": "latin.json",
+            "lv": "latvian.json",
+            "lt": "lithuanian.json",
+            "lb": "luxembourgish.json",
+            "mt": "maltese.json",
+            "me": "montenegrin.json",
+            "pt": "portuguese.json",
+            "sr": "serbian.json",
+            "sk": "slovak.json",
+            "sl": "slovenian.json",
+            "sv": "swedish.json",
+            "tr": "turkish-cyprus.json"
+        };
+
+        // Get the filename based on the language
+        const fileName = languageMap[lang] || `${lang}.json`;
+
+        // Get the full file path from the root directory
+        const filePath = path.join(__dirname, fileName);
+
+        // Check if the file exists in the root directory
+        if (fs.existsSync(filePath)) {
+            return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        } else {
+            throw new Error('Translation file not found');
+        }
+    } catch (error) {
+        console.error(`Error loading translation file for ${lang}:`, error);
+        return null;
+    }
+};
 
 
 app.post('/generate-receipt', async (req, res) => {
@@ -1314,25 +1371,38 @@ app.post('/generate-receipt', async (req, res) => {
             recipientName,
             accountNumber,
             withdrawalAmount,
-            currency, // Get currency from request
+            currency,
             bankName,
             date,
             email,
-            logoUrl
+            logoUrl,
+            language // Get selected language from request
         } = req.body;
 
-        if (!senderName || !recipientName || !accountNumber || !withdrawalAmount || !currency || !bankName || !date) {
+        // Check if all required fields are present, including the 'language'
+        if (!senderName || !recipientName || !accountNumber || !withdrawalAmount || !currency || !bankName || !date || !language) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
+        // Load translation for the selected language
+        const translations = loadTranslations(language);
+        if (!translations) {
+            return res.status(400).json({ message: 'Language not supported or error loading translation.' });
+        }
+
+        // Generate transaction-related values
         const transactionHash = crypto.randomBytes(16).toString('hex');
         const transactionReference = `TXN-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
-        const transactionType = bankName.toLowerCase() === 'withdrawal' ? 'Outward Transfer' : 'Inward Transfer';
+        const transactionType = bankName.toLowerCase() === 'withdrawal' 
+    ? translations.outwardTransfer 
+    : translations.inwardTransfer;
+
 
         const pdfDoc = new PDFDocument();
         const receiptFileName = `receipt-${Date.now()}.pdf`;
         const receiptPath = path.join(__dirname, 'receipts', receiptFileName);
 
+        // Ensure the 'receipts' directory exists
         if (!fs.existsSync(path.join(__dirname, 'receipts'))) {
             fs.mkdirSync(path.join(__dirname, 'receipts'));
         }
@@ -1343,65 +1413,69 @@ app.post('/generate-receipt', async (req, res) => {
         const primaryColor = '#30334B';
         const secondaryColor = '#7078b3';
 
+        // PDF content
         pdfDoc
             .image(logoUrl || 'default-logo.png', 50, 50, { width: 150 })
             .moveDown(1)
-            .fontSize(24).fillColor(primaryColor).text('Transaction Receipt', { align: 'center', font: 'Helvetica-Bold' })
+            .fontSize(24).fillColor(primaryColor).text(translations.receiptType, { align: 'center', font: 'Helvetica-Bold' })
             .moveDown(1)
-            .fontSize(12).fillColor(secondaryColor).text(`Date: ${date}`, { align: 'right' })
+            .fontSize(12).fillColor(secondaryColor).text(`${translations.date}: ${date}`, { align: 'right' })
             .moveDown(2)
-            .fontSize(16).fillColor(primaryColor).text('Transaction Details', { font: 'Helvetica-Bold' })
+            .fontSize(16).fillColor(primaryColor).text(translations.transactionDetails, { font: 'Helvetica-Bold' })
             .moveDown(1)
             .fontSize(12).fillColor(primaryColor)
-            .text(`Sender Name`, { continued: true }).text(senderName, { align: 'right' })
+            .text(`${translations.senderName}`, { continued: true }).text(senderName, { align: 'right' })
             .moveDown(1)
-            .text(`Recipient Name`, { continued: true }).text(recipientName, { align: 'right' })
+            .text(`${translations.recipientName}`, { continued: true }).text(recipientName, { align: 'right' })
             .moveDown(1)
-            .text(`Account Number`, { continued: true }).text(accountNumber, { align: 'right' })
+            .text(`${translations.accountNumber}`, { continued: true }).text(accountNumber, { align: 'right' })
             .moveDown(1)
             .fontSize(16)
-            .text(`Amount`, { continued: true }).text(`${currency} ${withdrawalAmount}`, { align: 'right' }) // Include currency
+            .text(`${translations.amount}`, { continued: true }).text(`${currency} ${withdrawalAmount}`, { align: 'right' })
             .moveDown(1)
             .fontSize(12)
-            .text(`Transaction Type`, { continued: true }).text(transactionType, { align: 'right' })
+            .text(`${translations.transactionType}`, { continued: true }).text(transactionType, { align: 'right' })
             .moveDown(1)
             .fontSize(12)
-            .text(`Transaction Reference`, { continued: true }).text(transactionReference, { align: 'right' })
+            .text(`${translations.transactionReference}`, { continued: true }).text(transactionReference, { align: 'right' })
             .moveDown(1)
             .fontSize(12)
-            .text(`Transaction Hash`, { continued: true }).text(transactionHash, { align: 'right' })
+            .text(`${translations.transactionHash}`, { continued: true }).text(transactionHash, { align: 'right' })
             .moveDown(2)
             .fontSize(12)
-            .fontSize(10).fillColor(secondaryColor).text('Thank you for using our service!', { align: 'center', font: 'Helvetica-Bold' })
+            .fontSize(10).fillColor(secondaryColor).text(translations.thankYouMessage, { align: 'center', font: 'Helvetica-Bold' })
             .moveDown(1)
             .fontSize(12)
-            .text('Terms and conditions apply. All rights reserved.', { align: 'center' })
+            .text(translations.termsAndConditions, { align: 'center' })
             .moveDown(1);
 
         const baseUrl = `${req.protocol}://${req.get('host')}`;
         const receiptUrl = `${baseUrl}/receipts/${receiptFileName}`;
-        pdfDoc.text(`View your receipt online: ${receiptUrl}`, { link: receiptUrl, align: 'center' });
+        pdfDoc.text(`${translations.viewReceiptText}: ${receiptUrl}`, { link: receiptUrl, align: 'center' });
 
         pdfDoc.end();
 
+        // Stream finish event
         stream.on('finish', () => {
             res.json({
-                message: 'Receipt generated successfully.',
+                message: translations.successAlert,
                 receiptUrl: receiptUrl,
                 transactionHash: transactionHash,
                 transactionReference: transactionReference
             });
         });
 
+        // Stream error event
         stream.on('error', (err) => {
             console.error(err);
-            res.status(500).json({ message: 'Error generating receipt.' });
+            res.status(500).json({ message: translations.errorAlert });
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error.' });
+        res.status(500).json({ message: translations.generalError });
     }
 });
+
 
 
 
