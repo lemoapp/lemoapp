@@ -1,5 +1,5 @@
 {
-    "receiptType": "Soort ontvangstbewijs",
+    "receiptType": "Transactiebon",
     "withdrawal": "Opname",
     "deposit": "Storting",
     "invoice": "Factuur",

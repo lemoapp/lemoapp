@@ -1,5 +1,5 @@
 {
-    "receiptType": "Typ av kvitto",
+    "receiptType": "Transaktionskvitto",
     "withdrawal": "Uttag",
     "deposit": "Insättning",
     "invoice": "Faktura",

@@ -1,5 +1,5 @@
 {
-    "receiptType": "Kuittityyppi",
+    "receiptType": "Tapahtuman Kuitti",
     "withdrawal": "Nosto",
     "deposit": "Talletus",
     "invoice": "Lasku",

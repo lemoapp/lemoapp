@@ -1,5 +1,5 @@
 {
-    "receiptType": "Belegtyp",
+    "receiptType": "Transaktionsbeleg",
     "withdrawal": "Abhebung",
     "deposit": "Einzahlung",
     "invoice": "Rechnung",

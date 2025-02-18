@@ -1,5 +1,5 @@
 {
-    "receiptType": "Tipo de recibo",
+    "receiptType": "Recibo de Transacción",
     "withdrawal": "Retiro",
     "deposit": "Depósito",
     "invoice": "Factura",

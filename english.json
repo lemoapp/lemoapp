@@ -1,5 +1,5 @@
 {
-    "receiptType": "Receipt Type",
+    "receiptType": "Transaction Receipt",
     "withdrawal": "Withdrawal",
     "deposit": "Deposit",
     "invoice": "Invoice",

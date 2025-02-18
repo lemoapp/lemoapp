@@ -1,5 +1,5 @@
 {
-    "receiptType": "Vrsta računa",
+    "receiptType": "Potvrda Transakcije",
     "withdrawal": "Isplata",
     "deposit": "Depozit",
     "invoice": "Račun",
