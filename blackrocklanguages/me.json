@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januar",
+        "February": "Februar",
+        "March": "Mart",
+        "April": "April",
+        "May": "Maj",
+        "June": "Jun",
+        "July": "Jul",
+        "August": "Avgust",
+        "September": "Septembar",
+        "October": "Oktobar",
+        "November": "Novembar",
+        "December": "Decembar"
+    },
+    "day": {
+        "Mon": "Pon",
+        "Tue": "Uto",
+        "Wed": "Sre",
+        "Thu": "Čet",
+        "Fri": "Pet",
+        "Sat": "Sub",
+        "Sun": "Ned"
+    },
+    "receiptTitle": "Potvrda",
+    "paymentTo": "Plaćeno za",
+    "currency": "Valuta",
+    "transaction1": "Transakcija 1",
+        "transaction2": "Transakcija 2",
+    "bankName": "Ime banke",
+    "category": {
+        "PROFIT": "Profit"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Posao",
+    "payment_to": "Plaćeno za",
+    "error": {
+        "invalidTransaction": "Nevažeći iznos transakcije."
+    }
+}

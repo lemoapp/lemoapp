@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Xaneiro",
+        "February": "Febreiro",
+        "March": "Marzo",
+        "April": "Abril",
+        "May": "Maio",
+        "June": "Xuño",
+        "July": "Xullo",
+        "August": "Agosto",
+        "September": "Setembro",
+        "October": "Outubro",
+        "November": "Novembro",
+        "December": "Decembro"
+    },
+    "day": {
+        "Mon": "Lun",
+        "Tue": "Mar",
+        "Wed": "Mér",
+        "Thu": "Xov",
+        "Fri": "Ven",
+        "Sat": "Sáb",
+        "Sun": "Dom"
+    },
+    "receiptTitle": "Recibo",
+    "paymentTo": "Pagamento a",
+    "currency": "Moeda",
+    "transaction1": "Transacción 1",
+    "transaction2": "Transacción 2",
+    "bankName": "Nome do banco",
+    "category": {
+        "PROFIT": "Beneficio"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Negocio",
+    "payment_to": "Pagamento a",
+    "error": {
+        "invalidTransaction": "O importe da transacción non é válido."
+    }
+}

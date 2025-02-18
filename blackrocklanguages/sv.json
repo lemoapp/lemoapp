@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januari",
+        "February": "Februari",
+        "March": "Mars",
+        "April": "April",
+        "May": "Maj",
+        "June": "Juni",
+        "July": "Juli",
+        "August": "Augusti",
+        "September": "September",
+        "October": "Oktober",
+        "November": "November",
+        "December": "December"
+    },
+    "day": {
+        "Mon": "Mån",
+        "Tue": "Tis",
+        "Wed": "Ons",
+        "Thu": "Tor",
+        "Fri": "Fre",
+        "Sat": "Lör",
+        "Sun": "Sön"
+    },
+    "receiptTitle": "Kvitto",
+    "paymentTo": "Betalning Till",
+    "currency": "Valuta",
+    "transaction1": "Transaktion 1",
+        "transaction2": "Transaktion 2",
+    "bankName": "Banknamn",
+    "category": {
+        "PROFIT": "Vinst"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Företag",
+    "payment_to": "Betalning Till",
+    "error": {
+        "invalidTransaction": "Ogiltigt transaktionsbelopp."
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Jaanuar",
+        "February": "Veebruar",
+        "March": "Märts",
+        "April": "Aprill",
+        "May": "Mai",
+        "June": "Juuni",
+        "July": "Juuli",
+        "August": "August",
+        "September": "September",
+        "October": "Oktoober",
+        "November": "November",
+        "December": "Detsember"
+    },
+    "day": {
+        "Mon": "Esm",
+        "Tue": "Tei",
+        "Wed": "Kol",
+        "Thu": "Nel",
+        "Fri": "Ree",
+        "Sat": "Lau",
+        "Sun": "Püh"
+    },
+    "receiptTitle": "Tšekk",
+    "paymentTo": "Makse saaja",
+    "currency": "Valuuta",
+    "transaction1": "Tehing 1",
+    "transaction2": "Tehing 2",
+    "bankName": "Panga nimi",
+    "category": {
+        "PROFIT": "Kasum"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Äri",
+    "payment_to": "Makse saaja",
+    "error": {
+        "invalidTransaction": "Tehingu summa on vigane."
+    }
+}

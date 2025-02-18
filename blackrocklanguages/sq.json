@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Janar",
+        "February": "Shkurt",
+        "March": "Mars",
+        "April": "Prill",
+        "May": "Maj",
+        "June": "Qershor",
+        "July": "Korrik",
+        "August": "Gusht",
+        "September": "Shtator",
+        "October": "Tetor",
+        "November": "Nëntor",
+        "December": "Dhjetor"
+    },
+    "day": {
+        "Mon": "Hën",
+        "Tue": "Mar",
+        "Wed": "Mër",
+        "Thu": "Enj",
+        "Fri": "Pre",
+        "Sat": "Sht",
+        "Sun": "Die"
+    },
+    "receiptTitle": "Faturë",
+    "paymentTo": "Pagesë për",
+    "currency": "Monedhë",
+    "transaction1": "Transaksioni 1",
+    "transaction2": "Transaksioni 2",
+    "bankName": "Emri i Bankës",
+    "category": {
+        "PROFIT": "Fitim"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Biznesi",
+    "payment_to": "Pagesë për",
+    "error": {
+        "invalidTransaction": "Shuma e transaksionit është e pavlefshme."
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Ionawr",
+        "February": "Chwefror",
+        "March": "Mawrth",
+        "April": "Ebrill",
+        "May": "Mai",
+        "June": "Mehefin",
+        "July": "Gorffennaf",
+        "August": "Awst",
+        "September": "Medi",
+        "October": "Hydref",
+        "November": "Tachwedd",
+        "December": "Rhagfyr"
+    },
+    "day": {
+        "Mon": "Llun",
+        "Tue": "Maw",
+        "Wed": "Mer",
+        "Thu": "Iau",
+        "Fri": "Gwen",
+        "Sat": "Sad",
+        "Sun": "Sul"
+    },
+    "receiptTitle": "Derbynneb",
+    "paymentTo": "Taliad i",
+    "currency": "Arian cyfred",
+    "transaction1": "Trafodiad 1",
+    "transaction2": "Trafodiad 2",
+    "bankName": "Enw'r Banc",
+    "category": {
+        "PROFIT": "Elw"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Busnes",
+    "payment_to": "Taliad i",
+    "error": {
+        "invalidTransaction": "Mae swm y trafodiad yn annilys."
+    }
+}

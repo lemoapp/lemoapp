@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Sausis",
+        "February": "Vasaris",
+        "March": "Kovas",
+        "April": "Balandis",
+        "May": "Gegužė",
+        "June": "Birželis",
+        "July": "Liepa",
+        "August": "Rugpjūtis",
+        "September": "Rugsėjis",
+        "October": "Spalis",
+        "November": "Lapkritis",
+        "December": "Gruodis"
+    },
+    "day": {
+        "Mon": "Pir",
+        "Tue": "Ant",
+        "Wed": "Tre",
+        "Thu": "Ket",
+        "Fri": "Pen",
+        "Sat": "Šeš",
+        "Sun": "Sek"
+    },
+    "receiptTitle": "Kvitas",
+    "paymentTo": "Mokėjimas į",
+    "currency": "Valiuta",
+    "transaction1": "Transakcija 1",
+        "transaction2": "Transakcija 2",
+    "bankName": "Banko pavadinimas",
+    "category": {
+        "PROFIT": "Pelno"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Verslas",
+    "payment_to": "Mokėjimas į",
+    "error": {
+        "invalidTransaction": "Neteisinga transakcijos suma."
+    }
+}

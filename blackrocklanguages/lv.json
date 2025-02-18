@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Janvāris",
+        "February": "Februāris",
+        "March": "Marts",
+        "April": "Aprīlis",
+        "May": "Maijs",
+        "June": "Jūnijs",
+        "July": "Jūlijs",
+        "August": "Augusts",
+        "September": "Septembris",
+        "October": "Oktobris",
+        "November": "Novembris",
+        "December": "Decembris"
+    },
+    "day": {
+        "Mon": "Pirm",
+        "Tue": "Otr",
+        "Wed": "Treš",
+        "Thu": "Cetur",
+        "Fri": "Piekt",
+        "Sat": "Sest",
+        "Sun": "Svētd"
+    },
+    "receiptTitle": "Čeks",
+    "paymentTo": "Maksājums uz",
+    "currency": "Valūta",
+    "transaction1": "Transakcija 1",
+        "transaction2": "Transakcija 2",
+    "bankName": "Bankas nosaukums",
+    "category": {
+        "PROFIT": "Peļņa"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Uzņēmējdarbība",
+    "payment_to": "Maksājums uz",
+    "error": {
+        "invalidTransaction": "Nederīga transakcijas summa."
+    }
+}

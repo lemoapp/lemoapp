@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Jannar",
+        "February": "Frar",
+        "March": "Marzu",
+        "April": "April",
+        "May": "Mejju",
+        "June": "Ġunju",
+        "July": "Lulju",
+        "August": "Awwissu",
+        "September": "Settembru",
+        "October": "Ottubru",
+        "November": "Novembru",
+        "December": "Diċembru"
+    },
+    "day": {
+        "Mon": "Tnejn",
+        "Tue": "Tlieta",
+        "Wed": "Erbgħa",
+        "Thu": "Ħamis",
+        "Fri": "Ġimgħa",
+        "Sat": "Sibt",
+        "Sun": "Ħadd"
+    },
+    "receiptTitle": "Rikievuta",
+    "paymentTo": "Ħlas lil",
+    "currency": "Munita",
+    "transaction1": "Tranżazzjoni 1",
+        "transaction2": "Tranżazzjoni 2",
+    "bankName": "Isem tal-bank",
+    "category": {
+        "PROFIT": "Profitt"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Negozju",
+    "payment_to": "Ħlas lil",
+    "error": {
+        "invalidTransaction": "Amont ta' tranżazzjoni invalidu."
+    }
+}

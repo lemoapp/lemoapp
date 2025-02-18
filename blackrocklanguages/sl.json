@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januar",
+        "February": "Februar",
+        "March": "Marec",
+        "April": "April",
+        "May": "Maj",
+        "June": "Junij",
+        "July": "Julij",
+        "August": "Avgust",
+        "September": "September",
+        "October": "Oktober",
+        "November": "November",
+        "December": "December"
+    },
+    "day": {
+        "Mon": "Pon",
+        "Tue": "Tor",
+        "Wed": "Sre",
+        "Thu": "Čet",
+        "Fri": "Pet",
+        "Sat": "Sob",
+        "Sun": "Ned"
+    },
+    "receiptTitle": "Potrdilo",
+    "paymentTo": "Plačano za",
+    "currency": "Valuta",
+    "transaction1": "Transakcija 1",
+        "transaction2": "Transakcija 2",
+    "bankName": "Ime banke",
+    "category": {
+        "PROFIT": "Dobiček"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Posel",
+    "payment_to": "Plačano za",
+    "error": {
+        "invalidTransaction": "Neveljavna znesek transakcije."
+    }
+}

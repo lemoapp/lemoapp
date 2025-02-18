@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Ιανουάριος",
+        "February": "Φεβρουάριος",
+        "March": "Μάρτιος",
+        "April": "Απρίλιος",
+        "May": "Μάιος",
+        "June": "Ιούνιος",
+        "July": "Ιούλιος",
+        "August": "Αύγουστος",
+        "September": "Σεπτέμβριος",
+        "October": "Οκτώβριος",
+        "November": "Νοέμβριος",
+        "December": "Δεκέμβριος"
+    },
+    "day": {
+        "Mon": "Δευ",
+        "Tue": "Τρι",
+        "Wed": "Τετ",
+        "Thu": "Πεμ",
+        "Fri": "Παρ",
+        "Sat": "Σαβ",
+        "Sun": "Κυρ"
+    },
+    "receiptTitle": "Απόδειξη",
+    "paymentTo": "Πληρωμή προς",
+    "currency": "Νόμισμα",
+    "transaction1": "Συναλλαγή 1",
+    "transaction2": "Συναλλαγή 2",
+    "bankName": "Όνομα τράπεζας",
+    "category": {
+        "PROFIT": "Κέρδος"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Επιχείρηση",
+    "payment_to": "Πληρωμή προς",
+    "error": {
+        "invalidTransaction": "Το ποσό της συναλλαγής δεν είναι έγκυρο."
+    }
+}

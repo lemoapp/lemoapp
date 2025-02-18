@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Január",
+        "February": "Február",
+        "March": "Marec",
+        "April": "Apríl",
+        "May": "Máj",
+        "June": "Jún",
+        "July": "Júl",
+        "August": "August",
+        "September": "September",
+        "October": "Október",
+        "November": "November",
+        "December": "December"
+    },
+    "day": {
+        "Mon": "Pon",
+        "Tue": "Uto",
+        "Wed": "Str",
+        "Thu": "Štv",
+        "Fri": "Pia",
+        "Sat": "Sob",
+        "Sun": "Ned"
+    },
+    "receiptTitle": "Potvrdenie",
+    "paymentTo": "Platba pre",
+    "currency": "Mena",
+    "transaction1": "Transakcia 1",
+        "transaction2": "Transakcia 2",
+    "bankName": "Názov banky",
+    "category": {
+        "PROFIT": "Zisk"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Podnikanie",
+    "payment_to": "Platba pre",
+    "error": {
+        "invalidTransaction": "Neplatná suma transakcie."
+    }
+}

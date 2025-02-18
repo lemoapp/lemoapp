@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Am Faoilleach",
+        "February": "An Gearran",
+        "March": "Am Màrt",
+        "April": "An Giblean",
+        "May": "An Cèitean",
+        "June": "An t-Ògmhios",
+        "July": "An t-Iuchar",
+        "August": "An Lùnastal",
+        "September": "An t-Sultain",
+        "October": "An Dàmhair",
+        "November": "An t-Samhain",
+        "December": "An Dùbhlachd"
+    },
+    "day": {
+        "Mon": "Dilu",
+        "Tue": "Dimà",
+        "Wed": "Dic",
+        "Thu": "Diar",
+        "Fri": "Dih",
+        "Sat": "Disa",
+        "Sun": "Did"
+    },
+    "receiptTitle": "Fàirdeal",
+    "paymentTo": "Pàigheadh gu",
+    "currency": "Airgeadra",
+    "transaction1": "Gnothach 1",
+    "transaction2": "Gnothach 2",
+    "bankName": "Ainm a’ Bhanca",
+    "category": {
+        "PROFIT": "Bhuannachd"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Gnothachas",
+    "payment_to": "Pàigheadh gu",
+    "error": {
+        "invalidTransaction": "Tha an t-suim tar-ghnothaich mì-dhligheach."
+    }
+}

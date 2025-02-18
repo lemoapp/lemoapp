@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Ianuarius",
+        "February": "Februarius",
+        "March": "Martius",
+        "April": "Aprilis",
+        "May": "Maius",
+        "June": "Iunius",
+        "July": "Iulius",
+        "August": "Augustus",
+        "September": "September",
+        "October": "October",
+        "November": "November",
+        "December": "December"
+    },
+    "day": {
+        "Mon": "Lun",
+        "Tue": "Mar",
+        "Wed": "Merc",
+        "Thu": "Iov",
+        "Fri": "Fri",
+        "Sat": "Sat",
+        "Sun": "Sol"
+    },
+    "receiptTitle": "Receptrum",
+    "paymentTo": "Solutio ad",
+    "currency": "Moneta",
+    "transaction1": "Transactio 1",
+    "transaction2": "Transactio 2",
+    "bankName": "Nomen ripae",
+    "category": {
+        "PROFIT": "Lucrum"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Negotia",
+    "payment_to": "Solutio ad",
+    "error": {
+        "invalidTransaction": "Summa transationis invalida."
+    }
+}

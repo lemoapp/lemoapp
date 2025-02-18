@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Gener",
+        "February": "Febrer",
+        "March": "Març",
+        "April": "Abril",
+        "May": "Maig",
+        "June": "Juny",
+        "July": "Juliol",
+        "August": "Agost",
+        "September": "Setembre",
+        "October": "Octubre",
+        "November": "Novembre",
+        "December": "Desembre"
+    },
+    "day": {
+        "Mon": "Dl",
+        "Tue": "Dt",
+        "Wed": "Dc",
+        "Thu": "Dj",
+        "Fri": "Dv",
+        "Sat": "Ds",
+        "Sun": "Dg"
+    },
+    "receiptTitle": "Rebut",
+    "paymentTo": "Pagament a",
+    "currency": "Moneda",
+    "transaction1": "Transacció 1",
+    "transaction2": "Transacció 2",
+    "bankName": "Nom del Banc",
+    "category": {
+        "PROFIT": "Benefici"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Negoci",
+    "payment_to": "Pagament a",
+    "error": {
+        "invalidTransaction": "L'import de la transacció no és vàlid."
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januar",
+        "February": "Februar",
+        "March": "Mäerz",
+        "April": "Abrëll",
+        "May": "Mee",
+        "June": "Juni",
+        "July": "Juli",
+        "August": "August",
+        "September": "September",
+        "October": "Oktober",
+        "November": "November",
+        "December": "Dezember"
+    },
+    "day": {
+        "Mon": "Mé",
+        "Tue": "Dëns",
+        "Wed": "Mëds",
+        "Thu": "Don",
+        "Fri": "Fre",
+        "Sat": "Sams",
+        "Sun": "Son"
+    },
+    "receiptTitle": "Recept",
+    "paymentTo": "Zahlung un",
+    "currency": "Währung",
+    "transaction1": "Transaktioun 1",
+        "transaction2": "Transaktioun 2",
+    "bankName": "Bank Numm",
+    "category": {
+        "PROFIT": "Gewënn"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Geschäft",
+    "payment_to": "Zahlung un",
+    "error": {
+        "invalidTransaction": "Falsche Transaktiounsbetrag."
+    }
+}

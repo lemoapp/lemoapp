@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Jerrey-geuree",
+        "February": "Toshiaght-arree",
+        "March": "Mart",
+        "April": "Averil",
+        "May": "Boaldyn",
+        "June": "Mean-souree",
+        "July": "Jerrey-souree",
+        "August": "Luanistyn",
+        "September": "Mean-fouyir",
+        "October": "Jerrey-fouyir",
+        "November": "Mee Houney",
+        "December": "Mee ny Nollick"
+    },
+    "day": {
+        "Mon": "Jel",
+        "Tue": "Mys",
+        "Wed": "Cre",
+        "Thu": "Jou",
+        "Fri": "Jei",
+        "Sat": "Jes",
+        "Sun": "Jel"
+    },
+    "receiptTitle": "Fowail",
+    "paymentTo": "Earroo erbee",
+    "currency": "Argid",
+    "transaction1": "Co-chur 1",
+    "transaction2": "Co-chur 2",
+    "bankName": "Ennym y Vank",
+    "category": {
+        "PROFIT": "Bonnaghtyn"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Gurneilys",
+    "payment_to": "Earroo erbee",
+    "error": {
+        "invalidTransaction": "Shee argid baccal."
+    }
+}

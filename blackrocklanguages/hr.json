@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Siječanj",
+        "February": "Veljača",
+        "March": "Ožujak",
+        "April": "Travanj",
+        "May": "Svibanj",
+        "June": "Lipanj",
+        "July": "Srpanj",
+        "August": "Kolovoz",
+        "September": "Rujan",
+        "October": "Listopad",
+        "November": "Studeni",
+        "December": "Prosinac"
+    },
+    "day": {
+        "Mon": "Pon",
+        "Tue": "Uto",
+        "Wed": "Sri",
+        "Thu": "Čet",
+        "Fri": "Pet",
+        "Sat": "Sub",
+        "Sun": "Ned"
+    },
+    "receiptTitle": "Račun",
+    "paymentTo": "Plaćanje za",
+    "currency": "Valuta",
+    "transaction1": "Transakcija 1",
+    "transaction2": "Transakcija 2",
+    "bankName": "Naziv banke",
+    "category": {
+        "PROFIT": "Profit"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Posao",
+    "payment_to": "Plaćanje za",
+    "error": {
+        "invalidTransaction": "Iznos transakcije nije valjan."
+    }
+}

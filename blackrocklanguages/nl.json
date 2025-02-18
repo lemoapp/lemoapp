@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januari",
+        "February": "Februari",
+        "March": "Maart",
+        "April": "April",
+        "May": "Mei",
+        "June": "Juni",
+        "July": "Juli",
+        "August": "Augustus",
+        "September": "September",
+        "October": "Oktober",
+        "November": "November",
+        "December": "December"
+    },
+    "day": {
+        "Mon": "Ma",
+        "Tue": "Di",
+        "Wed": "Wo",
+        "Thu": "Do",
+        "Fri": "Vr",
+        "Sat": "Za",
+        "Sun": "Zo"
+    },
+    "receiptTitle": "Bon",
+    "paymentTo": "Betaling aan",
+    "currency": "Valuta",
+    "transaction1": "Transactie 1",
+    "transaction2": "Transactie 2",
+    "bankName": "Banknaam",
+    "category": {
+        "PROFIT": "Winst"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Bedrijf",
+    "payment_to": "Betaling aan",
+    "error": {
+        "invalidTransaction": "Het transactiebedrag is ongeldig."
+    }
+}

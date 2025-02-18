@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Januar",
+        "February": "Februar",
+        "March": "März",
+        "April": "April",
+        "May": "Mai",
+        "June": "Juni",
+        "July": "Juli",
+        "August": "August",
+        "September": "September",
+        "October": "Oktober",
+        "November": "November",
+        "December": "Dezember"
+    },
+    "day": {
+        "Mon": "Mo",
+        "Tue": "Di",
+        "Wed": "Mi",
+        "Thu": "Do",
+        "Fri": "Fr",
+        "Sat": "Sa",
+        "Sun": "So"
+    },
+    "receiptTitle": "Beleg",
+    "paymentTo": "Zahlung an",
+    "currency": "Währung",
+    "transaction1": "Transaktion 1",
+    "transaction2": "Transaktion 2",
+    "bankName": "Bankname",
+    "category": {
+        "PROFIT": "Gewinn"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Geschäft",
+    "payment_to": "Zahlung an",
+    "error": {
+        "invalidTransaction": "Der Transaktionsbetrag ist ungültig."
+    }
+}

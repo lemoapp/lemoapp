@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Janvier",
+        "February": "Février",
+        "March": "Mars",
+        "April": "Avril",
+        "May": "Mai",
+        "June": "Juin",
+        "July": "Juillet",
+        "August": "Août",
+        "September": "Septembre",
+        "October": "Octobre",
+        "November": "Novembre",
+        "December": "Décembre"
+    },
+    "day": {
+        "Mon": "Lun",
+        "Tue": "Mar",
+        "Wed": "Mer",
+        "Thu": "Jeu",
+        "Fri": "Ven",
+        "Sat": "Sam",
+        "Sun": "Dim"
+    },
+    "receiptTitle": "Reçu",
+    "paymentTo": "Paiement à",
+    "currency": "Devise",
+    "transaction1": "Transaction 1",
+    "transaction2": "Transaction 2",
+    "bankName": "Nom de la Banque",
+    "category": {
+        "PROFIT": "Profit"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Entreprise",
+    "payment_to": "Paiement à",
+    "error": {
+        "invalidTransaction": "Le montant de la transaction est invalide."
+    }
+}

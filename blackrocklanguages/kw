@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Genver",
+        "February": "Hwevrer",
+        "March": "Meurth",
+        "April": "Ebrel",
+        "May": "Me",
+        "June": "Metheven",
+        "July": "Gortheren",
+        "August": "Est",
+        "September": "Gwynngala",
+        "October": "Hedra",
+        "November": "Du",
+        "December": "Kevardhu"
+    },
+    "day": {
+        "Mon": "Lun",
+        "Tue": "Mth",
+        "Wed": "Mhr",
+        "Thu": "Yow",
+        "Fri": "Gw",
+        "Sat": "Sad",
+        "Sun": "Sul"
+    },
+    "receiptTitle": "Reseyth",
+    "paymentTo": "Trelyans dhe",
+    "currency": "Monee",
+    "transaction1": "Transaksyon 1",
+    "transaction2": "Transaksyon 2",
+    "bankName": "Hanow an Vank",
+    "category": {
+        "PROFIT": "Gwennydh"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Gweres",
+    "payment_to": "Trelyans dhe",
+    "error": {
+        "invalidTransaction": "An som transaksyon yw anbalys."
+    }
+}
