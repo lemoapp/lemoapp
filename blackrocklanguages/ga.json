@@ -1,0 +1,40 @@
+{
+    "month": {
+        "January": "Eanáir",
+        "February": "Feabhra",
+        "March": "Márta",
+        "April": "Aibreán",
+        "May": "Bealtaine",
+        "June": "Meitheamh",
+        "July": "Iúil",
+        "August": "Lúnasa",
+        "September": "Meán Fómhair",
+        "October": "Deireadh Fómhair",
+        "November": "Samhain",
+        "December": "Nollaig"
+    },
+    "day": {
+        "Mon": "Luan",
+        "Tue": "Máirt",
+        "Wed": "Céad",
+        "Thu": "Déar",
+        "Fri": "Aoine",
+        "Sat": "Sath",
+        "Sun": "Domh"
+    },
+    "receiptTitle": "Admháil",
+    "paymentTo": "Íocaíocht chuig",
+    "currency": "Airgeadra",
+    "transaction1": "Idirbheart 1",
+    "transaction2": "Idirbheart 2",
+    "bankName": "Ainm an Bhainc",
+    "category": {
+        "PROFIT": "Brabús"
+    },
+    "blackrock_investments": "BLACKROCK & INVESTMENT",
+    "business": "Gnó",
+    "payment_to": "Íocaíocht chuig",
+    "error": {
+        "invalidTransaction": "Tá méid an idirbhirt neamhbhailí."
+    }
+}
