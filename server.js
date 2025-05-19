@@ -1609,7 +1609,7 @@ doc.fillColor('white').font('Helvetica')
    .font('Helvetica-Bold').text(originAccount, 270, 300, { align: 'right' });
 
 doc.font('Helvetica')
-   .text(`Bank`, 30, 315)
+   .text(``, 30, 315)
    .font('Helvetica-Bold').text(originBank, 280, 315, { align: 'right' });
 
 // Credit section
@@ -1621,7 +1621,7 @@ doc.fillColor('#D3D3D3').font('Helvetica')
    .font('Helvetica-Bold').text(destinationAccount, 280, 345, { align: 'right' });
 
 doc.font('Helvetica')
-   .text(`Bank`, 30, 360
+   .text(``, 30, 360
    )
    .font('Helvetica-Bold').text(destinationBank, 280, 360, { align: 'right' });
 
