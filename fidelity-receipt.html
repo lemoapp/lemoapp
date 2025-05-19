@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fidelity Investment Receipt Generator</title>
+  <style>
+    body {
+      background: #0f1115;
+      color: white;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, select, button {
+      width: 90%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      background: #1E88E5;
+      color: white;
+      cursor: pointer;
+    }
+    #download-section {
+      margin-top: 20px;
+      display: none;
+    }
+    a {
+      color: #4caf50;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Fidelity Receipt Generator</h2>
+  <form id="receipt-form">
+    <input type="date" name="date" required />
+    <input type="text" name="amount" placeholder="Amount (e.g. 81,00.09)" required />
+    <select name="currency" required>
+  <option value="" disabled selected>Select Currency</option>
+  <option value="TTD">TTD</option>
+  <option value="XCD">XCD</option>
+  <option value="USD">USD</option>
+  <option value="GBP">GBP</option>
+  <option value="EUR">EUR</option>
+</select>
+
+    <input type="text" name="originAccount" placeholder="Origin Account" required />
+    <input type="text" name="originBank" placeholder="Origin Bank" required />
+    <input type="text" name="destinationAccount" placeholder="Destination Account" required />
+    <input type="text" name="destinationBank" placeholder="Destination Bank" required />
+    <button type="submit">Generate Receipt</button>
+  </form>
+
+  <div id="download-section">
+    <p>✅ Receipt generated! <a id="download-link" href="#" target="_blank">Download PDF</a></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('receipt-form');
+    const downloadSection = document.getElementById('download-section');
+    const downloadLink = document.getElementById('download-link');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const res = await fetch('/generate-fidelity-receipt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        downloadLink.href = result.file;
+        downloadSection.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

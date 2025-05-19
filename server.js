@@ -565,163 +565,6 @@ app.post('/generate-receipts', (req, res) => {
 });
 
 
-// app.post('/generate-receipts', (req, res) => {
-//     const { month, year, day, date, paymentTo, currency, transaction1, transaction2, bankName, category, language } = req.body;
-
-//     // Load the selected language file
-//     const translations = loadBlackrockTranslations(language);
-//     if (!translations) {
-//         return res.status(400).json({ success: false, message: 'Invalid or missing language file.' });
-//     }
-
-//     // Parse transaction amounts
-//     const transaction1Parsed = parseFloat(transaction1);
-//     const transaction2Parsed = parseFloat(transaction2);
-//     if (isNaN(transaction1Parsed) || isNaN(transaction2Parsed)) {
-//         return res.status(400).json({ success: false, message: 'Invalid transaction amounts.' });
-//     }
-
-//     const doc = new PDFDocument({ margin: 30 });
-//     const fileName = `receipt_${Date.now()}.pdf`;
-//     const filePath = path.join(__dirname, 'new receipts', fileName);
-//     const receiptUrl = `/new receipts/${fileName}`;
-//     const bgColor = '#F4F7FE';
-
-//     const stream = fs.createWriteStream(filePath);
-//     doc.pipe(stream);
-
-//     // Header Background (Month and Year)
-//     doc.rect(0, 0, doc.page.width, 40).fill('#CAE5FF');
-//     doc.fontSize(18).fillColor('#47505F').text(`${month} ${year}`, 0, 15, { align: 'center' });
-
-//     // Category
-//     const categoryText = (category || translations['profit']).toUpperCase();
-//     doc.fontSize(18).fillColor('#000').text(categoryText, 100, 85);
-
-//     // Left Date Block
-//     doc.roundedRect(40, 80, 50, 50, 10).fill('#E5F1FF').stroke();
-//     doc.fillColor('#525F68').fontSize(14).text(`${translations[day] || day}\n${date}`, -450, 90, { align: 'center' });
-
-//     // First Transaction (Credit)
-//     doc.roundedRect(440, 85, 150, 25, 10).fill(bgColor);
-//     doc.fontSize(18).fillColor('#52788F').text(`-${currency} ${transaction1Parsed.toFixed(2)}`, 350, 90, { align: 'right' });
-
-//     // BlackRock & Investments
-//     doc.fontSize(16).fillColor('#888').text(translations['blackrock_investments'], 220, 120, { align: 'right' });
-
-//     // Second Transaction (Debit)
-//     doc.roundedRect(440, 145, 150, 25, 10).fill(bgColor);
-//     doc.fontSize(18).fillColor('#52788F').text(`+${currency} ${transaction2Parsed.toFixed(2)}`, 350, 150, { align: 'right' });
-
-//     // Bank Name
-//     doc.fontSize(16).fillColor('#888').text(bankName, 120, 180, { align: 'right' });
-
-//     // Arrow Connector
-//     doc.image('./arrow-in-receipt.png', 300, 130, { width: 40, height: 40 });
-
-//     // Business Info Section
-//     doc.moveDown(5);
-//     doc.fontSize(14).fillColor('#888').text(translations['business'], 40, 200);
-//     doc.fontSize(16).fillColor('#888').text(`${translations['payment_to']} `, 40, 220, { continued: true })
-//         .fontSize(19).font('Times-Italic').text(paymentTo);
-
-//     // Finalize PDF
-//     doc.end();
-
-//     stream.on('finish', () => {
-//         res.json({ success: true, receiptUrl });
-//     });
-// });
-
-
-
-
-
-// app.post('/generate-receipts', (req, res) => {
-//     const {
-//         month, year, day, date, paymentTo,
-//         currency, transaction1, transaction2,
-//         bankName, category
-//     } = req.body;
-
-//     // Log the received transactions to inspect their values
-//     console.log("Received transaction1:", transaction1);
-//     console.log("Received transaction2:", transaction2);
-
-//     // Parse the transactions to ensure they're numbers
-//     const transaction1Parsed = parseFloat(transaction1);
-//     const transaction2Parsed = parseFloat(transaction2);
-
-//     // Log the parsed transactions to confirm the values are valid
-//     console.log("Parsed transaction1:", transaction1Parsed);
-//     console.log("Parsed transaction2:", transaction2Parsed);
-
-//     // Check if transaction1 and transaction2 are valid numbers
-//     if (isNaN(transaction1Parsed) || isNaN(transaction2Parsed)) {
-//         return res.status(400).json({ success: false, message: 'Invalid transaction amounts.' });
-//     }
-
-//     const doc = new PDFDocument({ margin: 30 });
-//     const fileName = `receipt_${Date.now()}.pdf`;
-//     const filePath = path.join(__dirname, 'new receipts', fileName);
-//     const receiptUrl = `/new receipts/${fileName}`;
-//     const bgColor = '#F4F7FE';
-
-//     const stream = fs.createWriteStream(filePath);
-//     doc.pipe(stream);
-
-//         // Header Background (Month and Year)
-//     doc.rect(0, 0, doc.page.width, 40).fill('#CAE5FF'); // Background for header
-
-//     // Month and Year Text
-//     doc.fontSize(18).fillColor('#47505F').text(`${month} ${year}`, 0, 15, { align: 'center' });
-
-
-//     // Category (default to "UNKNOWN" if undefined)
-//     const categoryText = (category || "PROFIT").toUpperCase();
-//     doc.fontSize(18).fillColor('#000').text(categoryText, 100, 85); // Adjust x=100 to move sideways
-
-
-//     // Left Date Block
-//     doc.roundedRect(40, 80, 50, 50, 10).fill('#E5F1FF').stroke();
-//     doc.fillColor('#525F68').fontSize(14).text(`${day}\n${date}`, -450, 90, { align: 'center' });
-
-//    // First Transaction (Credit) - Appears at the top
-//     doc.roundedRect(440, 85, 150, 25, 10).fill(bgColor); // Background box
-//     doc.fontSize(18).fillColor('#52788F').text(`-${currency} ${transaction1Parsed.toFixed(2)}`, 350, 90, { align: 'right' });
-
-//     // BlackRock & Investments - Centered between transactions
-//     doc.fontSize(16).fillColor('#888').text('BLACKROCK $ INVESTMENT', 220, 120, { align: 'right' });
-
-//         // Second Transaction (Debit) - Below BlackRock & Investments
-//     doc.roundedRect(440, 145, 150, 25, 10).fill(bgColor); // Background box
-//     doc.fontSize(18).fillColor('#52788F').text(`+${currency} ${transaction2Parsed.toFixed(2)}`, 350, 150, { align: 'right' });
-
-//     // Bank Name - Below the second transaction
-//     doc.fontSize(16).fillColor('#888').text(`${bankName}`, 120, 180, { align: 'right' });
-
-//     // Arrow Connector (Adjust Position)
-//     // Load and place an image at the same position as the arrow
-//     doc.image('./arrow-in-receipt.png', 300, 130, { width: 40, height: 40 });
-
-
-//     // Business Info Section
-//     doc.moveDown(5);
-//     doc.fontSize(14).fillColor('#888').text('Business', 40, 200);
-//     doc.fontSize(16).fillColor('#888').text("Payment to ", 40, 220, { continued: true }) 
-//    .fontSize(19).font("Times-Italic").text(paymentTo);
-
-
-
-//     // Finalize PDF
-//     doc.end();
-
-//     stream.on('finish', () => {
-//         res.json({ success: true, receiptUrl });
-//     });
-// });
-
-
 
 
 
@@ -1643,46 +1486,158 @@ app.post('/generate-receipt', async (req, res) => {
 });
 
 
+// const docPath = path.join(__dirname, 'receipts');
+// if (!fs.existsSync(docPath)) fs.mkdirSync(docPath);
 
+// app.post('/generate-fidelity-receipt', async (req, res) => {
+//   const {
+//     date,
+//     amount,
+//     currency,
+//     originAccount,
+//     originBank,
+//     destinationAccount,
+//     destinationBank
+//   } = req.body;
 
+//   const timestamp = Date.now();
+//   const fileName = `fidelity_${timestamp}.pdf`;
+//   const filePath = path.join(docPath, fileName);
 
-// app.post('/send-receipt', async (req, res) => {
-//     try {
-//         const { email, receiptUrl } = req.body;
+//   const doc = new PDFDocument({ size: 'A4', margin: 50 });
+//   const writeStream = fs.createWriteStream(filePath);
+//   doc.pipe(writeStream);
 
-//         // Validate required fields
-//         if (!email || !receiptUrl) {
-//             return res.status(400).json({ message: 'Email and receipt URL are required.' });
-//         }
+//   // Background
+//   doc.rect(0, 0, doc.page.width, doc.page.height).fill('#0f1115');
+//   doc.fillColor('white');
 
-//         // Define email subject and content
-//         const subject = 'Your Withdrawal Receipt';
-//         const htmlContent = `
-//             <p>Dear Customer,</p>
-//             <p>Thank you for using our services. Please find your receipt attached below.</p>
-//             <p>Best regards,<br>Your Company</p>
-//         `;
+//   // Logo
+//   doc.image('Frame 114.png', doc.page.width / 2 - 25, 40, { width: 30 });
 
-//         // Define attachment object
-//         const attachments = [
-//             {
-//                 filename: 'receipt.pdf',
-//                 path: receiptUrl // URL or local path to the receipt file
-//             }
-//         ];
+//   doc.moveDown(4);
+//   doc.fontSize(16).text('Fidelity Investments', { align: 'center' });
 
-//         // Send the email
-//         await sendEmail(email, subject, htmlContent, attachments);
+//   doc.moveDown(4);
+//   doc.moveTo(70, 140).lineTo(doc.page.width - 70, 140).strokeColor('#6B7F9A').stroke();
 
-//         // Respond with success message
-//         res.json({ message: 'Receipt sent successfully.' });
-//     } catch (error) {
-//         console.error('Error sending receipt:', error);
-//         res.status(500).json({ message: 'Error sending receipt.' });
-//     }
+//   // Checkmark
+//   doc.image('checkmark.png', doc.page.width / 2 - 40, 155, { width: 50 });
+
+//   doc.moveDown(3);
+//   doc.fontSize(12).fillColor('white').text('Transaction in progress', { align: 'center' });
+//   doc.moveDown(0.5);
+//   doc.fontSize(20).font('Helvetica-Bold').text(`${amount} ${currency}`, { align: 'center' });
+
+//   doc.moveTo(70, 290).lineTo(doc.page.width - 70, 290).strokeColor('#6B7F9A').stroke();
+
+//   // Details
+//   doc.moveDown();
+//   doc.fontSize(10).fillColor('white').text(`${date}`, 70, 270);
+  
+//   doc.fillColor('#FFB300').text('Debit Account', { align: 'right', continued: false });
+//   doc.fillColor('white').text(`Origin Account`, 70, 290).text(originAccount, 200, 290);
+//   doc.text(`Origin Bank`, 70, 305).text(originBank, 200, 305);
+
+//   doc.fillColor('green').text('Credit account', { align: 'right', continued: false });
+//   doc.fillColor('white').text(`Destination Account`, 70, 330).text(destinationAccount, 200, 330);
+//   doc.text(`Destination Bank`, 70, 345).text(destinationBank, 200, 345);
+
+//   doc.moveTo(70, 370).lineTo(doc.page.width - 70, 370).strokeColor('#6B7F9A').stroke();
+
+//   doc.end();
+
+//   writeStream.on('finish', () => {
+//     res.json({ success: true, file: `/receipts/${fileName}` });
+//   });
 // });
 
+const docPath = path.join(__dirname, 'receipts');
+if (!fs.existsSync(docPath)) fs.mkdirSync(docPath);
 
+app.post('/generate-fidelity-receipt', async (req, res) => {
+  const {
+    date,
+    amount,
+    currency,
+    originAccount,
+    originBank,
+    destinationAccount,
+    destinationBank
+  } = req.body;
+
+  const timestamp = Date.now();
+  const fileName = `fidelity_${timestamp}.pdf`;
+  const filePath = path.join(docPath, fileName);
+
+  const doc = new PDFDocument({ size: 'A5', margin: 40 });
+  const writeStream = fs.createWriteStream(filePath);
+  doc.pipe(writeStream);
+
+  // Background
+  doc.rect(0, 0, doc.page.width, doc.page.height).fill('#00050C');
+  doc.fillColor('white');
+
+  // Logo
+  doc.image('Frame 114.png', doc.page.width / 2 - 20, 40, { width: 30 });
+
+  doc.moveDown(3);
+  doc.fontSize(16).text('Fidelity Investments', { align: 'center' });
+
+  doc.moveTo(30, 110).lineTo(doc.page.width - 30, 110).strokeColor('#6B7F9A').stroke();
+
+  // Checkmark
+  doc.image('checkmark.png', doc.page.width / 2 - 30, 130, { width: 50 });
+
+  doc.moveDown(5);
+  doc.fontSize(12).fillColor('white').text('Transaction in progress', { align: 'center' });
+  doc.moveDown(0.5);
+  doc.fontSize(20).font('Helvetica-Bold').text(`${amount} ${currency}`, { align: 'center' });
+
+  doc.moveTo(30, 250).lineTo(doc.page.width - 30, 250).strokeColor('#6B7F9A').stroke();
+
+  // Details
+  doc.moveDown();
+  doc.fontSize(10).fillColor('white').text(`${date}`, 30, 270);
+  
+// Debit section
+doc.moveDown(0.5);
+doc.fillColor('#FFB300').font('Helvetica-Bold').text('Debit Account', { align: 'right' });
+
+doc.fillColor('white').font('Helvetica')
+   .text(`Origin Account`, 30, 300)
+   .font('Helvetica-Bold').text(originAccount, 270, 300, { align: 'right' });
+
+doc.font('Helvetica')
+   .text(`Origin Bank`, 30, 315)
+   .font('Helvetica-Bold').text(originBank, 280, 315, { align: 'right' });
+
+// Credit section
+doc.moveDown(0.5);
+doc.fillColor('green').font('Helvetica-Bold').text('Credit account', { align: 'right' });
+
+doc.fillColor('#D3D3D3').font('Helvetica')
+   .text(`Destination Account`, 30, 345)
+   .font('Helvetica-Bold').text(destinationAccount, 280, 345, { align: 'right' });
+
+doc.font('Helvetica')
+   .text(`Destination Bank`, 30, 360
+   )
+   .font('Helvetica-Bold').text(destinationBank, 280, 360, { align: 'right' });
+
+
+  doc.moveTo(30, 390).lineTo(doc.page.width - 30, 390).strokeColor('#6B7F9A').stroke();
+
+  doc.end();
+
+  writeStream.on('finish', () => {
+    res.json({ success: true, file: `/receipts/${fileName}` });
+  });
+});
+
+
+
+app.use('/receipts', express.static(path.join(__dirname, 'receipts')));
 
 
 // Catch-all route for invalid paths
