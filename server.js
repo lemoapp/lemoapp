@@ -1605,11 +1605,11 @@ doc.moveDown(0.5);
 doc.fillColor('#FFB300').font('Helvetica-Bold').text('Debit Account', { align: 'right' });
 
 doc.fillColor('white').font('Helvetica')
-   .text(`Origin Account`, 30, 300)
+   .text(`Asset origin`, 30, 300)
    .font('Helvetica-Bold').text(originAccount, 270, 300, { align: 'right' });
 
 doc.font('Helvetica')
-   .text(`Origin Bank`, 30, 315)
+   .text(`Bank`, 30, 315)
    .font('Helvetica-Bold').text(originBank, 280, 315, { align: 'right' });
 
 // Credit section
@@ -1617,11 +1617,11 @@ doc.moveDown(0.5);
 doc.fillColor('green').font('Helvetica-Bold').text('Credit account', { align: 'right' });
 
 doc.fillColor('#D3D3D3').font('Helvetica')
-   .text(`Destination Account`, 30, 345)
+   .text(`Asset destination`, 30, 345)
    .font('Helvetica-Bold').text(destinationAccount, 280, 345, { align: 'right' });
 
 doc.font('Helvetica')
-   .text(`Destination Bank`, 30, 360
+   .text(`Bank`, 30, 360
    )
    .font('Helvetica-Bold').text(destinationBank, 280, 360, { align: 'right' });
 
