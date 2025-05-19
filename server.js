@@ -1575,7 +1575,7 @@ app.post('/generate-fidelity-receipt', async (req, res) => {
   doc.pipe(writeStream);
 
   // Background
-  doc.rect(0, 0, doc.page.width, doc.page.height).fill('#00050C');
+  doc.rect(0, 0, doc.page.width, doc.page.height).fill('#080C12');
   doc.fillColor('white');
 
   // Logo
