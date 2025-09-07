@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 30px;
+    }
+    .form-container {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .form-container h2 {
+      text-align: center;
+      color: #d32f2f;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 12px 0 5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #d32f2f;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #b71c1c;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Generate New Receipt</h2>
+    <form id="receiptForm">
+      <label>Date</label>
+      <input type="date" name="date" required>
+
+      <label>Time</label>
+      <input type="time" name="time" required>
+
+      <label>Debit Account Type</label>
+      <input type="text" name="debitType" placeholder="e.g. BUSINESS ACCOUNT" required>
+
+      <label>Debit Bank</label>
+      <input type="text" name="debitBank" placeholder="e.g. Fidelity Investments" required>
+
+      <label>Debit Account Name</label>
+      <input type="text" name="debitName" placeholder="e.g. John Doe" required>
+
+      <label>Credit Bank</label>
+      <input type="text" name="creditBank" placeholder="e.g. Republic Bank" required>
+
+      <label>Credit Account Name</label>
+      <input type="text" name="creditName" placeholder="e.g. Dwain Peter" required>
+
+            <!-- Amount Section -->
+        <div class="form-group">
+        <label for="currency">Currency</label>
+        <select id="currency" name="currency" required>
+            <option value="TTD">TTD</option>
+            <option value="XCD">XCD</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="EUR">EUR</option>
+        </select>
+        </div>
+
+        <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" name="amount" step="0.01" required />
+        </div>
+
+
+      <button type="submit">Generate Receipt</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("receiptForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      const response = await fetch("/newreceipt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "receipt.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        alert("Error generating receipt");
+      }
+    });
+  </script>
+</body>
+</html>

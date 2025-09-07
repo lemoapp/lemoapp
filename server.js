@@ -1486,71 +1486,6 @@ app.post('/generate-receipt', async (req, res) => {
 });
 
 
-// const docPath = path.join(__dirname, 'receipts');
-// if (!fs.existsSync(docPath)) fs.mkdirSync(docPath);
-
-// app.post('/generate-fidelity-receipt', async (req, res) => {
-//   const {
-//     date,
-//     amount,
-//     currency,
-//     originAccount,
-//     originBank,
-//     destinationAccount,
-//     destinationBank
-//   } = req.body;
-
-//   const timestamp = Date.now();
-//   const fileName = `fidelity_${timestamp}.pdf`;
-//   const filePath = path.join(docPath, fileName);
-
-//   const doc = new PDFDocument({ size: 'A4', margin: 50 });
-//   const writeStream = fs.createWriteStream(filePath);
-//   doc.pipe(writeStream);
-
-//   // Background
-//   doc.rect(0, 0, doc.page.width, doc.page.height).fill('#0f1115');
-//   doc.fillColor('white');
-
-//   // Logo
-//   doc.image('Frame 114.png', doc.page.width / 2 - 25, 40, { width: 30 });
-
-//   doc.moveDown(4);
-//   doc.fontSize(16).text('Fidelity Investments', { align: 'center' });
-
-//   doc.moveDown(4);
-//   doc.moveTo(70, 140).lineTo(doc.page.width - 70, 140).strokeColor('#6B7F9A').stroke();
-
-//   // Checkmark
-//   doc.image('checkmark.png', doc.page.width / 2 - 40, 155, { width: 50 });
-
-//   doc.moveDown(3);
-//   doc.fontSize(12).fillColor('white').text('Transaction in progress', { align: 'center' });
-//   doc.moveDown(0.5);
-//   doc.fontSize(20).font('Helvetica-Bold').text(`${amount} ${currency}`, { align: 'center' });
-
-//   doc.moveTo(70, 290).lineTo(doc.page.width - 70, 290).strokeColor('#6B7F9A').stroke();
-
-//   // Details
-//   doc.moveDown();
-//   doc.fontSize(10).fillColor('white').text(`${date}`, 70, 270);
-  
-//   doc.fillColor('#FFB300').text('Debit Account', { align: 'right', continued: false });
-//   doc.fillColor('white').text(`Origin Account`, 70, 290).text(originAccount, 200, 290);
-//   doc.text(`Origin Bank`, 70, 305).text(originBank, 200, 305);
-
-//   doc.fillColor('green').text('Credit account', { align: 'right', continued: false });
-//   doc.fillColor('white').text(`Destination Account`, 70, 330).text(destinationAccount, 200, 330);
-//   doc.text(`Destination Bank`, 70, 345).text(destinationBank, 200, 345);
-
-//   doc.moveTo(70, 370).lineTo(doc.page.width - 70, 370).strokeColor('#6B7F9A').stroke();
-
-//   doc.end();
-
-//   writeStream.on('finish', () => {
-//     res.json({ success: true, file: `/receipts/${fileName}` });
-//   });
-// });
 
 const docPath = path.join(__dirname, 'receipts');
 if (!fs.existsSync(docPath)) fs.mkdirSync(docPath);
@@ -1640,12 +1575,159 @@ doc.font('Helvetica')
 app.use('/receipts', express.static(path.join(__dirname, 'receipts')));
 
 
+app.post("/newreceipt", (req, res) => {
+  try {
+    const {
+      date,
+      time,
+      debitType,
+      debitBank,
+      debitName,
+      creditBank,
+      creditName,
+      amount,
+      currency
+    } = req.body;
+
+    // Generate 9-digit reference number
+    const referenceNumber = Math.floor(100000000 + Math.random() * 900000000);
+
+    // Setup PDF
+    const doc = new PDFDocument({ size: "A4", margin: 30 });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+    doc.pipe(res);
+
+    // ==========================
+    // HEADER (Red Bar)
+    // ==========================
+    doc.rect(0, 0, doc.page.width, 60).fill("#d32f2f");
+    doc.fillColor("#fff")
+   .fontSize(20)
+   .text("Transfer Money", 0, 20, { align: "center", width: doc.page.width });
+
+
+    // ==========================
+    // SUCCESS BLOCK
+    // ==========================
+    doc.rect(30, 80, doc.page.width - 60, 90).fill("#f2f2f2");
+    // Replace this:
+    doc.image("checkmark.png", 40, 95, { width: 20, height: 20 }); // ✅ Use your image
+    doc.fillColor("green").fontSize(16).text("Successful", 70, 98);
+
+    doc.fillColor("black").fontSize(12).text(`Ref ${referenceNumber}`, 40, 120);
+    doc.text(`${date}, ${time}`, 40, 140);
+
+    // ==========================
+    // "TO" SECTION
+    // ==========================
+    // "To" on the left
+doc.fillColor("black").fontSize(14).text("To", 40, 190);
+
+// "To" on the left
+doc.fillColor("black").fontSize(14).text("To", 40, 190);
+
+// Position for the Share box (far right)
+const shareBoxWidth = 60;
+const shareBoxHeight = 22;
+const pageWidth = doc.page.width;
+
+const shareBoxX = pageWidth - shareBoxWidth - 40; // 40px right margin
+const shareBoxY = 185; // Independent from other sections
+
+// Draw grey rounded rectangle
+// Use a solid grey (no alpha in hex)
+doc.roundedRect(shareBoxX, shareBoxY, shareBoxWidth, shareBoxHeight, 6).fill("#e0e0e0");
+
+// Share text
+doc.fillColor("black")
+   .fontSize(9)
+   .text("Share", shareBoxX, shareBoxY + 5, {
+     width: shareBoxWidth,
+     align: "center"
+   });
+
+
+
+    // ==========================
+    // ACCOUNT DETAILS BLOCK
+    // ==========================
+const boxY = 220;
+const boxWidth = doc.page.width - 60;
+const textRightMargin = 40; // right padding inside the box
+const textWidth = boxWidth - 200; // width for right-aligned texts
+
+// Background
+doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
+
+// Labels (left side)
+doc.fillColor("black").fontSize(12).text("Asset origin", 40, boxY + 20);
+
+// Right-aligned text
+doc.fillColor("#FFB300").fontSize(12).text("Debit Account", 40, boxY + 20, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+doc.fillColor("black").fontSize(12).text(debitType, 40, boxY + 40, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+doc.fillColor("gray").fontSize(12).text(debitBank, 40, boxY + 60, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+doc.fillColor("gray").fontSize(12).text(debitName, 40, boxY + 80, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+
+// Second block
+doc.fillColor("black").fontSize(12).text("Asset destination", 40, boxY + 120);
+
+doc.fillColor("green").fontSize(12).text("Credit account", 40, boxY + 120, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+doc.fillColor("black").fontSize(12).text(creditBank, 40, boxY + 140, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+doc.fillColor("gray").fontSize(12).text(creditName, 40, boxY + 160, {
+  width: boxWidth - textRightMargin - -20,
+  align: "right"
+});
+
+
+ const amountY = 450;
+
+    doc.fillColor("black").fontSize(14).text("Amount", 40, amountY, {
+      width: doc.page.width - 80,
+      align: "left"
+    });
+
+    doc.fillColor("black")
+      .fontSize(20)
+      .text(`${currency} ${parseFloat(amount).toFixed(2)}`, 40, amountY + 25, {
+        width: doc.page.width - 80,
+        align: "left"
+      });
+
+
+    // End PDF
+    doc.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error generating receipt");
+  }
+});
+
+
 // Catch-all route for invalid paths
 app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Start the server
+// // Start the server
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
