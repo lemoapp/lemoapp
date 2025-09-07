@@ -1601,7 +1601,7 @@ app.post("/newreceipt", (req, res) => {
     // ==========================
     // HEADER (Red Bar)
     // ==========================
-    doc.rect(0, 0, doc.page.width, 60).fill("#d32f2f");
+    doc.rect(0, 0, doc.page.width, 60).fill("#30334B");
     doc.fillColor("#fff")
    .fontSize(20)
    .text("Transfer Money", 0, 20, { align: "center", width: doc.page.width });
