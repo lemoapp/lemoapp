@@ -1602,7 +1602,7 @@ app.post("/newreceipt", (req, res) => {
     doc.rect(0, 0, doc.page.width, 60).fill("#30334B");
     doc.fillColor("#fff")
    .fontSize(20)
-   .text("Transfer Money", 0, 20, { align: "center", width: doc.page.width });
+   .text("Vanguard Royal Enterprise", 0, 20, { align: "center", width: doc.page.width });
 
 
     // ==========================
@@ -1620,10 +1620,10 @@ app.post("/newreceipt", (req, res) => {
     // "TO" SECTION
     // ==========================
     // "To" on the left
-doc.fillColor("black").fontSize(14).text("To", 40, 190);
+doc.fillColor("black").fontSize(16).text("To", 40, 190);
 
 // "To" on the left
-doc.fillColor("black").fontSize(14).text("To", 40, 190);
+doc.fillColor("black").fontSize(16).text("To", 40, 190);
 
 // Position for the Share box (far right)
 const shareBoxWidth = 60;
@@ -1639,7 +1639,7 @@ doc.roundedRect(shareBoxX, shareBoxY, shareBoxWidth, shareBoxHeight, 6).fill("#e
 
 // Share text
 doc.fillColor("black")
-   .fontSize(9)
+   .fontSize(12)
    .text("Share", shareBoxX, shareBoxY + 5, {
      width: shareBoxWidth,
      align: "center"
@@ -1659,18 +1659,18 @@ const textWidth = boxWidth - 200; // width for right-aligned texts
 doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
 
 // Labels (left side)
-doc.fillColor("black").fontSize(12).text("Asset origin", 40, boxY + 20);
+doc.fillColor("black").fontSize(16).text("Asset origin", 40, boxY + 20);
 
 // Debit account section (without sender name)
-doc.fillColor("#FFB300").fontSize(14).text("Debit Account", 40, boxY + 20, {
+doc.fillColor("#FFB300").fontSize(16).text("Debit Account", 40, boxY + 20, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("black").fontSize(14).text(debitType, 40, boxY + 40, {
+doc.fillColor("black").fontSize(16).text(debitType, 40, boxY + 40, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("gray").fontSize(14).text(debitBank, 40, boxY + 60, {
+doc.fillColor("gray").fontSize(16).text(debitBank, 40, boxY + 60, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
@@ -1679,17 +1679,17 @@ doc.fillColor("gray").fontSize(14).text(debitBank, 40, boxY + 60, {
 
 
 // Second block
-doc.fillColor("black").fontSize(12).text("Asset destination", 40, boxY + 120);
+doc.fillColor("black").fontSize(16).text("Asset destination", 40, boxY + 120);
 
-doc.fillColor("green").fontSize(14).text("Credit account", 40, boxY + 120, {
+doc.fillColor("green").fontSize(16).text("Credit account", 40, boxY + 120, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("black").fontSize(14).text(creditBank, 40, boxY + 140, {
+doc.fillColor("black").fontSize(16).text(creditBank, 40, boxY + 140, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("gray").fontSize(14).text(creditName, 40, boxY + 160, {
+doc.fillColor("gray").fontSize(16).text(creditName, 40, boxY + 160, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
@@ -1697,7 +1697,7 @@ doc.fillColor("gray").fontSize(14).text(creditName, 40, boxY + 160, {
 
  const amountY = 450;
 
-    doc.fillColor("black").fontSize(14).text("Amount", 40, amountY, {
+    doc.fillColor("black").fontSize(16).text("Amount", 40, amountY, {
       width: doc.page.width - 80,
       align: "left"
     });
@@ -1714,7 +1714,7 @@ doc.fillColor("gray").fontSize(14).text(creditName, 40, boxY + 160, {
 // MORE TRANSFER DETAILS LINK
 // ==========================
 doc.fillColor("red")
-   .fontSize(14)
+   .fontSize(16)
    .text("More transfer details >", 40, amountY + 85, {
      underline: true
    });
@@ -1735,18 +1735,18 @@ app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-// const PORT = process.env.PORT || 8080;
-// const HOST = '0.0.0.0';
-
-// app.listen(PORT, HOST, () => {
-//     console.log(`Server is running on http://${HOST}:${PORT}`);
+// // Start the server
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
 // });
+
+const PORT = process.env.PORT || 8080;
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on http://${HOST}:${PORT}`);
+});
 
 
 
