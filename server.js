@@ -1579,10 +1579,8 @@ app.post("/newreceipt", (req, res) => {
   try {
     const {
       date,
-      time,
       debitType,
       debitBank,
-      debitName,
       creditBank,
       creditName,
       amount,
@@ -1616,7 +1614,7 @@ app.post("/newreceipt", (req, res) => {
     doc.fillColor("green").fontSize(18).text("Successful", 70, 98);
 
     doc.fillColor("black").fontSize(14).text(`Ref ${referenceNumber}`, 40, 120);
-    doc.text(`${date}, ${time}`, 40, 140);
+    doc.text(`${date}`, 40, 140);
 
     // ==========================
     // "TO" SECTION
