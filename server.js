@@ -1613,9 +1613,9 @@ app.post("/newreceipt", (req, res) => {
     doc.rect(30, 80, doc.page.width - 60, 90).fill("#f2f2f2");
     // Replace this:
     doc.image("checkmark.png", 40, 95, { width: 20, height: 20 }); // ✅ Use your image
-    doc.fillColor("green").fontSize(16).text("Successful", 70, 98);
+    doc.fillColor("green").fontSize(18).text("Successful", 70, 98);
 
-    doc.fillColor("black").fontSize(12).text(`Ref ${referenceNumber}`, 40, 120);
+    doc.fillColor("black").fontSize(14).text(`Ref ${referenceNumber}`, 40, 120);
     doc.text(`${date}, ${time}`, 40, 140);
 
     // ==========================
@@ -1663,36 +1663,35 @@ doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
 // Labels (left side)
 doc.fillColor("black").fontSize(12).text("Asset origin", 40, boxY + 20);
 
-// Right-aligned text
-doc.fillColor("#FFB300").fontSize(12).text("Debit Account", 40, boxY + 20, {
+// Debit account section (without sender name)
+doc.fillColor("#FFB300").fontSize(14).text("Debit Account", 40, boxY + 20, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("black").fontSize(12).text(debitType, 40, boxY + 40, {
+doc.fillColor("black").fontSize(14).text(debitType, 40, boxY + 40, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("gray").fontSize(12).text(debitBank, 40, boxY + 60, {
+doc.fillColor("gray").fontSize(14).text(debitBank, 40, boxY + 60, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("gray").fontSize(12).text(debitName, 40, boxY + 80, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
+
+
+
 
 // Second block
 doc.fillColor("black").fontSize(12).text("Asset destination", 40, boxY + 120);
 
-doc.fillColor("green").fontSize(12).text("Credit account", 40, boxY + 120, {
+doc.fillColor("green").fontSize(14).text("Credit account", 40, boxY + 120, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("black").fontSize(12).text(creditBank, 40, boxY + 140, {
+doc.fillColor("black").fontSize(14).text(creditBank, 40, boxY + 140, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
-doc.fillColor("gray").fontSize(12).text(creditName, 40, boxY + 160, {
+doc.fillColor("gray").fontSize(14).text(creditName, 40, boxY + 160, {
   width: boxWidth - textRightMargin - -20,
   align: "right"
 });
@@ -1713,6 +1712,17 @@ doc.fillColor("gray").fontSize(12).text(creditName, 40, boxY + 160, {
       });
 
 
+    // ==========================
+// MORE TRANSFER DETAILS LINK
+// ==========================
+doc.fillColor("red")
+   .fontSize(14)
+   .text("More transfer details >", 40, amountY + 85, {
+     underline: true
+   });
+
+
+
     // End PDF
     doc.end();
   } catch (err) {
@@ -1727,18 +1737,18 @@ app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// // Start the server
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-
-const PORT = process.env.PORT || 8080;
-const HOST = '0.0.0.0';
-
-app.listen(PORT, HOST, () => {
-    console.log(`Server is running on http://${HOST}:${PORT}`);
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
+
+// const PORT = process.env.PORT || 8080;
+// const HOST = '0.0.0.0';
+
+// app.listen(PORT, HOST, () => {
+//     console.log(`Server is running on http://${HOST}:${PORT}`);
+// });
 
 
 
