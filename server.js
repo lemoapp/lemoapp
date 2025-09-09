@@ -1960,14 +1960,14 @@ app.use((req, res) => {
 });
 
 // // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
-
-// const PORT = process.env.PORT || 8080;
-// const HOST = '0.0.0.0';
-
-// app.listen(PORT, HOST, () => {
-//     console.log(`Server is running on http://${HOST}:${PORT}`);
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
 // });
+
+const PORT = process.env.PORT || 8080;
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on http://${HOST}:${PORT}`);
+});
