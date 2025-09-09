@@ -1729,6 +1729,230 @@ doc.fillColor("red")
   }
 });
 
+const fontsPath = path.join(__dirname, "fonts");
+const inriaRegular = path.join(fontsPath, "InriaSans-Regular.ttf");
+const inriaBold = path.join(fontsPath, "InriaSans-Bold.ttf");
+
+// Helper to trim wallet address / txid
+function trimMiddle(str, front = 6, back = 5) {
+  if (str.length <= front + back) return str;
+  return `${str.slice(0, front)}...${str.slice(-back)}`;
+}
+
+app.post("/generate-withdrawal-receipt", (req, res) => {
+  const {
+    status,
+    date,
+    source,
+    coin,
+    withdrawAmount,
+    networkFee,
+    address,
+    network,
+    txid
+  } = req.body;
+
+  const doc = new PDFDocument({
+    size: "A4",
+    margin: 30,
+    font: inriaRegular
+  });
+  let buffers = [];
+  doc.on("data", buffers.push.bind(buffers));
+  doc.on("end", () => {
+    const pdfData = Buffer.concat(buffers);
+    res.writeHead(200, {
+      "Content-Length": Buffer.byteLength(pdfData),
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=withdrawal-receipt.pdf",
+    }).end(pdfData);
+  });
+
+  // Register fonts
+  doc.registerFont("InriaSans", inriaRegular);
+  doc.registerFont("InriaSans-Bold", inriaBold);
+
+  // Background
+  doc.rect(0, 0, doc.page.width, doc.page.height).fill("#1E2329");
+  doc.fillColor("#fff");
+
+  // ==================
+  // HEADER
+  // ==================
+  doc.fontSize(24).font("InriaSans-Bold").text("Withdrawal Details", 30, 30);
+
+  // Close "X" icon
+  const closeIcon = path.join(__dirname, "icons", "close.png");
+  if (fs.existsSync(closeIcon)) {
+    doc.image(closeIcon, doc.page.width - 50, 25, { width: 15, height: 15 });
+  }
+
+  // ==================
+  // TIMELINE
+  // ==================
+  const startY = 100;
+  const stepGap = 95;
+  const leftX = 50;
+
+  function drawDiamond(doc, x, y, size, bgColor, number, textColor = "#fff") {
+    doc.save();
+    doc.translate(x, y);
+    doc.rotate(45);
+    doc.rect(-size / 2, -size / 2, size, size).fill(bgColor);
+    doc.restore();
+
+    doc.fillColor(textColor).fontSize(14).font("InriaSans-Bold")
+      .text(number, x - 5, y - 8, { width: 14, align: "center" });
+  }
+
+  const diamondSize = 22;
+  const textOffsetX = 45;
+
+  // Step 1
+  drawDiamond(doc, leftX, startY, diamondSize, "#ffffff", "1", "#000000");
+  doc.fillColor("#fff").fontSize(16).font("InriaSans-Bold")
+    .text("Withdrawal order submitted", leftX + textOffsetX, startY - 14);
+  doc.font("InriaSans").fillColor("#bbb").fontSize(16)
+    .text(date, leftX + textOffsetX, startY + 12);
+
+  // Step 2
+  drawDiamond(doc, leftX, startY + stepGap, diamondSize, "#ffffff", "2", "#000000");
+  doc.fillColor("#fff").fontSize(16).font("InriaSans-Bold")
+    .text("System processing", leftX + textOffsetX, startY + stepGap - 14);
+  doc.font("InriaSans").fillColor("#bbb").fontSize(16)
+    .text(date, leftX + textOffsetX, startY + stepGap + 12);
+  doc.fillColor("#bbb").fontSize(15)
+    .text("Need help about crypto withdrawal?", leftX + textOffsetX, startY + stepGap + 32);
+  doc.fillColor("#ffcc00").fontSize(15)
+    .underline(leftX + textOffsetX, startY + stepGap + 52, 80, 15, { color: "#ffcc00" })
+    .text("View FAQs", leftX + textOffsetX, startY + stepGap + 52);
+
+  // Step 3
+  drawDiamond(doc, leftX, startY + stepGap * 2, diamondSize, "#555", "3");
+  doc.fillColor("#fff").fontSize(16).font("InriaSans-Bold")
+    .text("Estimated withdrawal successful", leftX + textOffsetX, startY + stepGap * 2 - 14);
+  doc.font("InriaSans").fillColor("#bbb").fontSize(16)
+    .text(date + " (Estimated)", leftX + textOffsetX, startY + stepGap * 2 + 12);
+  doc.fillColor("#bbb").fontSize(15).text(
+    "Please note that you will receive an email once it is completed.",
+    leftX + textOffsetX, startY + stepGap * 2 + 32
+  );
+  doc.fillColor("#ffcc00").fontSize(15)
+    .underline(leftX + textOffsetX, startY + stepGap * 2 + 52, 100, 15, { color: "#ffcc00" })
+    .text("Report Scam", leftX + textOffsetX, startY + stepGap * 2 + 52);
+
+  // Divider
+  doc.moveTo(30, startY + stepGap * 2 + 100)
+    .lineTo(doc.page.width - 30, startY + stepGap * 2 + 100)
+    .strokeColor("#333")
+    .stroke();
+
+  // ==================
+  // DETAILS BLOCK
+  // ==================
+  const blockY = startY + stepGap * 2 + 130;
+  const labelX = 40;
+  const rightMargin = 40;
+  let y = blockY;
+
+  function alignRight() {
+    return { width: doc.page.width - labelX - rightMargin, align: "right" };
+  }
+
+  // Status
+  doc.fillColor("#bbb").fontSize(16).text("Status", labelX, y);
+  doc.fillColor("#fff").font("InriaSans-Bold").fontSize(16).text(status, labelX, y, alignRight());
+  y += 38;
+
+  // Date
+  doc.fillColor("#bbb").fontSize(16).text("Date", labelX, y);
+  doc.fillColor("#fff").font("InriaSans").fontSize(16).text(date, labelX, y, alignRight());
+  y += 38;
+
+  // Source
+  doc.fillColor("#bbb").fontSize(16).text("Source", labelX, y);
+  doc.fillColor("#fff").fontSize(16).text(source, labelX, y, alignRight());
+  y += 38;
+
+  // Coin + icon
+  doc.fillColor("#bbb").fontSize(16).text("Coin", labelX, y);
+  const coinIcon = path.join(__dirname, "icons", `${coin.toLowerCase()}.png`);
+  if (fs.existsSync(coinIcon)) {
+    const textWidth = doc.widthOfString(coin);
+    const textX = doc.page.width - rightMargin - textWidth;
+    doc.image(coinIcon, textX - 22, y - 0, { width: 17, height: 17 });
+    doc.fillColor("#fff").fontSize(16).text(coin, labelX, y, alignRight());
+  } else {
+    doc.fillColor("#fff").fontSize(16).text(coin, labelX, y, alignRight());
+  }
+  y += 38;
+
+  // Withdraw amount
+  doc.fillColor("#bbb").fontSize(16).text("Withdraw amount", labelX, y);
+  doc.fillColor("#fff").fontSize(16).text(withdrawAmount, labelX, y, alignRight());
+  y += 38;
+
+  // Network fee
+  doc.fillColor("#bbb").fontSize(16).text("Network fee", labelX, y);
+  doc.fillColor("#fff").fontSize(16).text(networkFee, labelX, y, alignRight());
+  y += 38;
+
+// Address
+doc.fillColor("#bbb").fontSize(16).text("Address", labelX, y);
+const trimmedAddress = trimMiddle(address);
+doc.fillColor("#fff").fontSize(16).text(trimmedAddress, labelX, y, alignRight());
+
+// icons: link + copy
+const linkIcon = path.join(__dirname, "icons", "link.png");
+const copyIcon = path.join(__dirname, "icons", "copy.png");
+if (fs.existsSync(linkIcon) && fs.existsSync(copyIcon)) {
+  const addrWidth = doc.widthOfString(trimmedAddress);
+  const addrX = doc.page.width - rightMargin - addrWidth;
+
+  // link icon right after text
+  doc.image(linkIcon, addrX - 22, y - 0, { width: 17, height: 17 });
+
+  // copy icon after link
+  doc.image(copyIcon, addrX - 44, y - 0, { width: 17, height: 17 });
+}
+y += 38;
+
+// Network
+doc.fillColor("#bbb").fontSize(16).text("Network", labelX, y);
+doc.fillColor("#fff").fontSize(16).text(network, labelX, y, alignRight());
+y += 38;
+
+// TxID
+doc.fillColor("#bbb").fontSize(16).text("TxID", labelX, y);
+const trimmedTxid = trimMiddle(txid);
+doc.fillColor("#fff").fontSize(16).text(trimmedTxid, labelX, y, alignRight());
+
+if (fs.existsSync(linkIcon) && fs.existsSync(copyIcon)) {
+  const txidWidth = doc.widthOfString(trimmedTxid);
+  const txidX = doc.page.width - rightMargin - txidWidth;
+
+  // link icon right after text
+  doc.image(linkIcon, txidX - 22, y - 0, { width: 17, height: 17 });
+
+  // copy icon after link
+  doc.image(copyIcon, txidX - 44, y - 0, { width: 17, height: 17 });
+}
+y += 38;
+
+
+  // ==================
+  // FOOTER
+  // ==================
+  doc.fillColor("#ffcc00")
+    .font("InriaSans-Bold")
+    .fontSize(16)
+    .underline(doc.page.width / 2 - 100, doc.page.height - 70, 200, 18, { color: "#ffcc00" })
+    .text("Need help? Chat with us", 0, doc.page.height - 70, { align: "center" });
+
+  doc.end();
+});
+
+
 
 // Catch-all route for invalid paths
 app.use((req, res) => {
@@ -1736,17 +1960,14 @@ app.use((req, res) => {
 });
 
 // // Start the server
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-
-const PORT = process.env.PORT || 8080;
-const HOST = '0.0.0.0';
-
-app.listen(PORT, HOST, () => {
-    console.log(`Server is running on http://${HOST}:${PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
+// const PORT = process.env.PORT || 8080;
+// const HOST = '0.0.0.0';
 
-
+// app.listen(PORT, HOST, () => {
+//     console.log(`Server is running on http://${HOST}:${PORT}`);
+// });
