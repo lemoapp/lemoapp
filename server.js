@@ -1601,16 +1601,14 @@ app.post("/newreceipt", (req, res) => {
     // ==========================
     doc.rect(0, 0, doc.page.width, 60).fill("#30334B");
     doc.fillColor("#fff")
-   .fontSize(20)
-   .text("Vanguard Royal Enterprise", 0, 20, { align: "center", width: doc.page.width });
-
+      .fontSize(20)
+      .text("Vanguard Royal Enterprise", 0, 20, { align: "center", width: doc.page.width });
 
     // ==========================
     // SUCCESS BLOCK
     // ==========================
     doc.rect(30, 80, doc.page.width - 60, 90).fill("#f2f2f2");
-    // Replace this:
-    doc.image("checkmark.png", 40, 95, { width: 20, height: 20 }); // ✅ Use your image
+    doc.image("checkmark.png", 40, 95, { width: 20, height: 20 });
     doc.fillColor("green").fontSize(18).text("Successful", 70, 98);
 
     doc.fillColor("black").fontSize(14).text(`Ref ${referenceNumber}`, 40, 120);
@@ -1619,115 +1617,258 @@ app.post("/newreceipt", (req, res) => {
     // ==========================
     // "TO" SECTION
     // ==========================
-    // "To" on the left
-doc.fillColor("black").fontSize(16).text("To", 40, 190);
+    doc.fillColor("black").fontSize(16).text("To", 40, 190);
 
-// "To" on the left
-doc.fillColor("black").fontSize(16).text("To", 40, 190);
+    doc.fillColor("black").fontSize(16).text("To", 40, 190);
 
-// Position for the Share box (far right)
-const shareBoxWidth = 60;
-const shareBoxHeight = 22;
-const pageWidth = doc.page.width;
+    const shareBoxWidth = 60;
+    const shareBoxHeight = 22;
+    const pageWidth = doc.page.width;
+    const shareBoxX = pageWidth - shareBoxWidth - 40;
+    const shareBoxY = 185;
 
-const shareBoxX = pageWidth - shareBoxWidth - 40; // 40px right margin
-const shareBoxY = 185; // Independent from other sections
-
-// Draw grey rounded rectangle
-// Use a solid grey (no alpha in hex)
-doc.roundedRect(shareBoxX, shareBoxY, shareBoxWidth, shareBoxHeight, 6).fill("#e0e0e0");
-
-// Share text
-doc.fillColor("black")
-   .fontSize(12)
-   .text("Share", shareBoxX, shareBoxY + 5, {
-     width: shareBoxWidth,
-     align: "center"
-   });
-
-
+    doc.roundedRect(shareBoxX, shareBoxY, shareBoxWidth, shareBoxHeight, 6).fill("#e0e0e0");
+    doc.fillColor("black")
+      .fontSize(12)
+      .text("Share", shareBoxX, shareBoxY + 5, {
+        width: shareBoxWidth,
+        align: "center"
+      });
 
     // ==========================
     // ACCOUNT DETAILS BLOCK
     // ==========================
-const boxY = 220;
-const boxWidth = doc.page.width - 60;
-const textRightMargin = 40; // right padding inside the box
-const textWidth = boxWidth - 200; // width for right-aligned texts
+    const boxY = 220;
+    const boxWidth = doc.page.width - 60;
+    const textRightMargin = 40;
+    const textWidth = boxWidth - 200;
 
-// Background
-doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
+    doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
 
-// Labels (left side)
-doc.fillColor("black").fontSize(16).text("Asset origin", 40, boxY + 20);
+    doc.fillColor("black").fontSize(16).text("Asset origin", 40, boxY + 20);
 
-// Debit account section (without sender name)
-doc.fillColor("#FFB300").fontSize(16).text("Debit Account", 40, boxY + 20, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
-doc.fillColor("black").fontSize(16).text(debitType, 40, boxY + 40, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
-doc.fillColor("gray").fontSize(16).text(debitBank, 40, boxY + 60, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
+    doc.fillColor("#FFB300").fontSize(16).text("Debit Account", 40, boxY + 20, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
+    doc.fillColor("black").fontSize(16).text(debitType, 40, boxY + 40, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
+    doc.fillColor("gray").fontSize(16).text(debitBank, 40, boxY + 60, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
 
+    doc.fillColor("black").fontSize(16).text("Asset destination", 40, boxY + 120);
 
+    doc.fillColor("green").fontSize(16).text("Credit account", 40, boxY + 120, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
+    doc.fillColor("black").fontSize(16).text(creditBank, 40, boxY + 140, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
+    doc.fillColor("gray").fontSize(16).text(creditName, 40, boxY + 160, {
+      width: boxWidth - textRightMargin - -20,
+      align: "right"
+    });
 
-
-// Second block
-doc.fillColor("black").fontSize(16).text("Asset destination", 40, boxY + 120);
-
-doc.fillColor("green").fontSize(16).text("Credit account", 40, boxY + 120, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
-doc.fillColor("black").fontSize(16).text(creditBank, 40, boxY + 140, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
-doc.fillColor("gray").fontSize(16).text(creditName, 40, boxY + 160, {
-  width: boxWidth - textRightMargin - -20,
-  align: "right"
-});
-
-
- const amountY = 450;
+    // ==========================
+    // AMOUNT SECTION (MODIFIED)
+    // ==========================
+    const amountY = 450;
 
     doc.fillColor("black").fontSize(16).text("Amount", 40, amountY, {
       width: doc.page.width - 80,
       align: "left"
     });
 
+    // Clean commas before parsing
+    const cleanAmount = amount.toString().replace(/,/g, "");
+    const formattedAmount = Number(cleanAmount).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
     doc.fillColor("black")
       .fontSize(20)
-      .text(`${currency} ${parseFloat(amount).toFixed(2)}`, 40, amountY + 25, {
+      .text(`${currency} ${formattedAmount}`, 40, amountY + 25, {
         width: doc.page.width - 80,
         align: "left"
       });
 
-
     // ==========================
-// MORE TRANSFER DETAILS LINK
-// ==========================
-doc.fillColor("red")
-   .fontSize(16)
-   .text("More transfer details >", 40, amountY + 85, {
-     underline: true
-   });
+    // MORE TRANSFER DETAILS LINK
+    // ==========================
+    doc.fillColor("red")
+      .fontSize(16)
+      .text("More transfer details >", 40, amountY + 85, {
+        underline: true
+      });
 
-
-
-    // End PDF
     doc.end();
   } catch (err) {
     console.error(err);
     res.status(500).send("Error generating receipt");
   }
 });
+
+
+// app.post("/newreceipt", (req, res) => {
+//   try {
+//     const {
+//       date,
+//       debitType,
+//       debitBank,
+//       creditBank,
+//       creditName,
+//       amount,
+//       currency
+//     } = req.body;
+
+//     // Generate 9-digit reference number
+//     const referenceNumber = Math.floor(100000000 + Math.random() * 900000000);
+
+//     // Setup PDF
+//     const doc = new PDFDocument({ size: "A4", margin: 30 });
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+//     doc.pipe(res);
+
+//     // ==========================
+//     // HEADER (Red Bar)
+//     // ==========================
+//     doc.rect(0, 0, doc.page.width, 60).fill("#30334B");
+//     doc.fillColor("#fff")
+//    .fontSize(20)
+//    .text("Vanguard Royal Enterprise", 0, 20, { align: "center", width: doc.page.width });
+
+
+//     // ==========================
+//     // SUCCESS BLOCK
+//     // ==========================
+//     doc.rect(30, 80, doc.page.width - 60, 90).fill("#f2f2f2");
+//     // Replace this:
+//     doc.image("checkmark.png", 40, 95, { width: 20, height: 20 }); // ✅ Use your image
+//     doc.fillColor("green").fontSize(18).text("Successful", 70, 98);
+
+//     doc.fillColor("black").fontSize(14).text(`Ref ${referenceNumber}`, 40, 120);
+//     doc.text(`${date}`, 40, 140);
+
+//     // ==========================
+//     // "TO" SECTION
+//     // ==========================
+//     // "To" on the left
+// doc.fillColor("black").fontSize(16).text("To", 40, 190);
+
+// // "To" on the left
+// doc.fillColor("black").fontSize(16).text("To", 40, 190);
+
+// // Position for the Share box (far right)
+// const shareBoxWidth = 60;
+// const shareBoxHeight = 22;
+// const pageWidth = doc.page.width;
+
+// const shareBoxX = pageWidth - shareBoxWidth - 40; // 40px right margin
+// const shareBoxY = 185; // Independent from other sections
+
+// // Draw grey rounded rectangle
+// // Use a solid grey (no alpha in hex)
+// doc.roundedRect(shareBoxX, shareBoxY, shareBoxWidth, shareBoxHeight, 6).fill("#e0e0e0");
+
+// // Share text
+// doc.fillColor("black")
+//    .fontSize(12)
+//    .text("Share", shareBoxX, shareBoxY + 5, {
+//      width: shareBoxWidth,
+//      align: "center"
+//    });
+
+
+
+//     // ==========================
+//     // ACCOUNT DETAILS BLOCK
+//     // ==========================
+// const boxY = 220;
+// const boxWidth = doc.page.width - 60;
+// const textRightMargin = 40; // right padding inside the box
+// const textWidth = boxWidth - 200; // width for right-aligned texts
+
+// // Background
+// doc.rect(30, boxY, boxWidth, 200).fill("#F5F5F5");
+
+// // Labels (left side)
+// doc.fillColor("black").fontSize(16).text("Asset origin", 40, boxY + 20);
+
+// // Debit account section (without sender name)
+// doc.fillColor("#FFB300").fontSize(16).text("Debit Account", 40, boxY + 20, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+// doc.fillColor("black").fontSize(16).text(debitType, 40, boxY + 40, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+// doc.fillColor("gray").fontSize(16).text(debitBank, 40, boxY + 60, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+
+
+
+
+// // Second block
+// doc.fillColor("black").fontSize(16).text("Asset destination", 40, boxY + 120);
+
+// doc.fillColor("green").fontSize(16).text("Credit account", 40, boxY + 120, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+// doc.fillColor("black").fontSize(16).text(creditBank, 40, boxY + 140, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+// doc.fillColor("gray").fontSize(16).text(creditName, 40, boxY + 160, {
+//   width: boxWidth - textRightMargin - -20,
+//   align: "right"
+// });
+
+
+//  const amountY = 450;
+
+//     doc.fillColor("black").fontSize(16).text("Amount", 40, amountY, {
+//       width: doc.page.width - 80,
+//       align: "left"
+//     });
+
+//     doc.fillColor("black")
+//       .fontSize(20)
+//       .text(`${currency} ${parseFloat(amount).toFixed(2)}`, 40, amountY + 25, {
+//         width: doc.page.width - 80,
+//         align: "left"
+//       });
+
+
+//     // ==========================
+// // MORE TRANSFER DETAILS LINK
+// // ==========================
+// doc.fillColor("red")
+//    .fontSize(16)
+//    .text("More transfer details >", 40, amountY + 85, {
+//      underline: true
+//    });
+
+
+
+//     // End PDF
+//     doc.end();
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error generating receipt");
+//   }
+// });
 
 const fontsPath = path.join(__dirname, "fonts");
 const inriaRegular = path.join(fontsPath, "InriaSans-Regular.ttf");
