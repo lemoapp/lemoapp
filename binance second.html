@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Withdrawal Receipt</title>
+  <style>
+    body {
+      font-family: "Inria Sans", sans-serif;
+      background: #1E2329;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #2C3138;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffcc00;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #ffcc00;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e6b800;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Generate Withdrawal Receipt</h2>
+    
+    <label for="amount">Amount</label>
+    <input type="text" id="amount" placeholder="Enter amount" required>
+
+    <label for="coin">Coin</label>
+    <select id="coin" required>
+      <option value="USDT">USDT</option>
+      <option value="BTC">BTC</option>
+      <option value="ETH">ETH</option>
+      <option value="BNB">BNB</option>
+    </select>
+
+    <label for="completionTime">Completion Time</label>
+    <input type="text" id="completionTime" placeholder="YYYY-MM-DD HH:mm:ss" required>
+
+    <button onclick="generateReceipt()">Download Receipt</button>
+  </div>
+
+  <script>
+    async function generateReceipt() {
+      const amount = document.getElementById("amount").value;
+      const coin = document.getElementById("coin").value;
+      const completionTime = document.getElementById("completionTime").value;
+
+      if (!amount || !coin || !completionTime) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      const res = await fetch("/generate-simple-withdrawal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, coin, completionTime })
+      });
+
+      if (!res.ok) {
+        alert("Failed to generate receipt");
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "simple-withdrawal-receipt.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+  </script>
+</body>
+</html>

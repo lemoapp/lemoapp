@@ -1954,20 +1954,106 @@ y += 38;
 
 
 
+// ✅ Load Inria Sans font
+const inriaSans = path.join(__dirname, "fonts", "InriaSans-Regular.ttf");
+if (!fs.existsSync(inriaSans)) {
+  console.error("⚠️ Missing InriaSans-Regular.ttf in fonts/ folder");
+}
+
+
+app.post("/generate-simple-withdrawal", (req, res) => {
+  try {
+    let { amount, coin, completionTime } = req.body;
+
+    if (!amount || !coin || !completionTime) {
+      return res.status(400).send("Missing required fields");
+    }
+
+    // Clean commas in amount
+    amount = amount.toString().replace(/,/g, "");
+
+    // Create PDF
+    const doc = new PDFDocument({ size: "A4", margin: 0 });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=withdrawal-receipt.pdf");
+    doc.pipe(res);
+
+    // Background
+    doc.rect(0, 0, doc.page.width, doc.page.height).fill("#1E2329");
+
+    // Reset text fill
+    doc.fillColor("#fff");
+
+    // Font
+    if (fs.existsSync(inriaSans)) {
+      doc.font(inriaSans);
+    }
+
+    let pageCenter = doc.page.width / 2;
+
+    // Hourglass icon
+    const hourglassIcon = path.join(__dirname, "icons", "hourglass.png");
+    if (fs.existsSync(hourglassIcon)) {
+      doc.image(hourglassIcon, pageCenter - 30, 150, { width: 60, height: 60 });
+    }
+
+    // Withdrawal Processing text
+    doc.fontSize(20).fillColor("#fff").text("Withdrawal Processing", 0, 230, { align: "center" });
+
+    // Amount + Coin
+    doc.fontSize(28).fillColor("#fff").font(inriaSans).text(`${amount} ${coin}`, 0, 270, { align: "center" });
+
+    // Estimated completion time
+    doc.fontSize(12).fillColor("#aaa").text(`Estimated completion time: ${completionTime}`, 0, 320, { align: "center" });
+
+    // Info lines
+    doc.moveDown(1);
+    doc.fontSize(12).fillColor("#aaa").text(
+      "You will receive an email once withdrawal is completed.",
+      { align: "center" }
+    );
+    doc.moveDown(0.5);
+    doc.fontSize(12).fillColor("#aaa").text(
+      "View history for the latest updates.",
+      { align: "center" }
+    );
+
+    // Yellow button at bottom
+    const buttonWidth = 500;
+    const buttonHeight = 40;
+    const buttonX = pageCenter - buttonWidth / 2;
+    const buttonY = doc.page.height - 100;
+
+    doc.roundedRect(buttonX, buttonY, buttonWidth, buttonHeight, 8).fill("#F6C547");
+    doc.fillColor("#000").fontSize(14).text("View History", buttonX, buttonY + 12, {
+      align: "center",
+      width: buttonWidth
+    });
+
+    doc.end();
+  } catch (err) {
+    console.error("PDF Generation Error:", err);
+    res.status(500).send("Server Error while generating receipt");
+  }
+});
+
+
+
+
 // Catch-all route for invalid paths
 app.use((req, res) => {
     res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 // // Start the server
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-
-const PORT = process.env.PORT || 8080;
-const HOST = '0.0.0.0';
-
-app.listen(PORT, HOST, () => {
-    console.log(`Server is running on http://${HOST}:${PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
+
+// const PORT = process.env.PORT || 8080;
+// const HOST = '0.0.0.0';
+
+// app.listen(PORT, HOST, () => {
+//     console.log(`Server is running on http://${HOST}:${PORT}`);
+// });
